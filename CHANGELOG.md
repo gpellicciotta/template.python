@@ -14,7 +14,7 @@ A summarized overview of all changes, per version of this project.
 
 ## v2.0.0-pre
 - **[breaking]** DevEx: Renamed the distribution to `template-python` and the repository to `template.python`; update install URLs and pins.
-- **[breaking]** DevEx: Replaced the `hinolugi-support` dependency with `support-python` (`support_python`); the CI secret is now `SUPPORT_PYTHON_TOKEN`.
+- **[breaking]** DevEx: Replaced the `hinolugi-support` dependency with `support-python` (`support_python`).
 - DevEx: Fixed `create` failing to find the template root, and made it scaffold `PLAN.md` and `.plan/tasks/` instead of `TODO.md` and `tasks/`.
 - DevEx: Added `scripts/devops.py` with lint, test, build, check, and clean actions.
 - Build: Declared the license as an SPDX expression and raised the setuptools floor to 77.

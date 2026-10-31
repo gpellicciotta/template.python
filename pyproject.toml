@@ -12,7 +12,7 @@ license = "MIT"
 license-files = ["LICENSE.md"]
 requires-python = ">=3.10"
 dependencies = [
-    "support-python @ git+https://github.com/gpellicciotta/support.python.git@v2.0.1",
+    "support-python @ git+https://github.com/gpellicciotta/support.python.git@v1.0.0",
 ]
 classifiers = [
     "Programming Language :: Python :: 3",
