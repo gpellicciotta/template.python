@@ -12,6 +12,8 @@ A summarized overview of all changes, per version of this project.
 
 ---
 
+## v2.0.1-pre
+
 ## v2.0.0 [released: 2026-10-31]
 - **[breaking]** DevEx: Renamed the distribution to `template-python` and the repository to `template.python`; update install URLs and pins.
 - **[breaking]** DevEx: Replaced the `hinolugi-support` dependency with `support-python` (`support_python`).
