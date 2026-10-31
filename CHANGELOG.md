@@ -19,7 +19,7 @@ A summarized overview of all changes, per version of this project.
 - DevEx: Added `scripts/devops.py` with lint, test, build, check, and clean actions.
 - Build: Declared the license as an SPDX expression and raised the setuptools floor to 77.
 - Docs: Replaced `TODO.md` references with `PLAN.md` and dropped `hinolugi` from project prose.
-- DevEx: Improved `scripts/create-github-release.py` with pre-flight quality and state checks.
+- DevEx: Improved `scripts/create-github-release.py` with pre-flight quality and state checks, and fixed its crash on Windows cp1252 consoles.
 
 ## v1.4.0 [released: 2026-09-10]
 - DevEx: Added scaffolded `scripts/deploy-to-production.py` example for services deployed from this template.

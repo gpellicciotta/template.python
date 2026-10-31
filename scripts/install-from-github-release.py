@@ -80,7 +80,7 @@ def install_version(version: str, global_install: bool) -> int:
             print("Installing globally with pipx (isolated environment)...")
             cmd = ["pipx", "install", url, "--force"]
         else:
-            print("pipx not found — falling back to 'pip install --user'...")
+            print("pipx not found - falling back to 'pip install --user'...")
             print("Tip: install pipx with 'pip install --user pipx' for better isolation.")
             cmd = [sys.executable, "-m", "pip", "install", "--user", url]
     else:

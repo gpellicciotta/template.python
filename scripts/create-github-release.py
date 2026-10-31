@@ -176,12 +176,12 @@ def _validate_preconditions(release_ver: str, needs_finalize: bool) -> int:
     try:
         _run_capture(["gh", "--version"])
     except Exception:
-        print("[ERROR] 'gh' CLI is not installed — see https://cli.github.com/")
+        print("[ERROR] 'gh' CLI is not installed - see https://cli.github.com/")
         return 1
 
     auth_res = subprocess.run(["gh", "auth", "status"], capture_output=True, text=True, check=False)
     if auth_res.returncode != 0:
-        print("[ERROR] 'gh' CLI is not authenticated — run 'gh auth login' before releasing.")
+        print("[ERROR] 'gh' CLI is not authenticated - run 'gh auth login' before releasing.")
         return 1
 
     # 4. Check remote sync and tag existence
@@ -223,7 +223,7 @@ def _run_quality_checks() -> int:
             if res.stderr:
                 print(res.stderr.strip())
             return 1
-        print(f"  ✓ {name} passed")
+        print(f"  [OK] {name} passed")
     print()
     return 0
 
@@ -307,7 +307,7 @@ def release(dry_run: bool, skip_checks: bool = False) -> int:
     if dry_run:
         print("[DRY RUN] No changes were made.")
     else:
-        print(f"[OK] v{release_ver} released — https://github.com/{repo}/releases/tag/v{release_ver}")
+        print(f"[OK] v{release_ver} released - https://github.com/{repo}/releases/tag/v{release_ver}")
     return 0
 
 

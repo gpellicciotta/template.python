@@ -59,3 +59,8 @@ def test_devops_help():
     assert result.returncode == 0
     assert "lint" in result.stdout
     assert "Exit codes:" in result.stdout
+
+
+def test_scripts_are_ascii_only_for_legacy_windows_consoles():
+    offenders = [p.name for p in SCRIPTS_DIR.glob("*.py") if not p.read_text(encoding="utf-8").isascii()]
+    assert offenders == []
