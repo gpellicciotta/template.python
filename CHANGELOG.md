@@ -12,7 +12,7 @@ A summarized overview of all changes, per version of this project.
 
 ---
 
-## v2.0.0-pre
+## v2.0.0 [released: 2026-10-31]
 - **[breaking]** DevEx: Renamed the distribution to `template-python` and the repository to `template.python`; update install URLs and pins.
 - **[breaking]** DevEx: Replaced the `hinolugi-support` dependency with `support-python` (`support_python`).
 - DevEx: Fixed `create` failing to find the template root, and made it scaffold `PLAN.md` and `.plan/tasks/` instead of `TODO.md` and `tasks/`.
