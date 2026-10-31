@@ -14,6 +14,7 @@ A summarized overview of all changes, per version of this project.
 
 ## v3.0.0-pre
 - **[breaking]** DevEx: Merged `scripts/create-github-release.py` and `scripts/deploy-to-production.py` into `scripts/devops.py` as `release` and `deploy` actions.
+- **[breaking]** DevEx: Removed `scripts/install-from-github-release.py`; install releases with `pip` from the release wheel or Git tag.
 
 ## v2.0.0 [released: 2026-10-31]
 - **[breaking]** DevEx: Renamed the distribution to `template-python` and the repository to `template.python`; update install URLs and pins.

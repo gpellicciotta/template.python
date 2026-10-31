@@ -113,20 +113,6 @@ python scripts/devops.py release
 python scripts/devops.py release --skip-checks
 ```
 
-## Installing a Python Package
-
-To install a specific released version directly from GitHub releases without manual asset downloads, use `scripts/install-from-github-release.py`:
-
-```shell
-# Install a specific release into the current environment
-python scripts/install-from-github-release.py 3.1.1
-
-# Install globally using pipx (or pip --user fallback)
-python scripts/install-from-github-release.py 3.1.1 --global
-```
-
-The script determines the repository remote URL, resolves the release wheel asset on GitHub, and installs or upgrades the package using `pipx` (or `pip`).
-
 ### Purpose and Scope
 Use `scripts/` for operational tasks that support developers rather than packaged library users:
 - Environment bootstrapping and dev setup automation.
@@ -205,17 +191,6 @@ If releasing manually without the script:
    ```
 4. Commit the changes and tag the release commit.
 5. Publish a GitHub Release for the tag; `.github/workflows/publish.yml` builds distribution packages and attaches them to the release.
-
-### Installing Released Versions
-Use `scripts/install-from-github-release.py` to install a specific published release wheel directly from GitHub:
-
-```bash
-# Install globally via pipx
-python scripts/install-from-github-release.py 1.3.0 --global
-
-# Install into active virtual environment
-python scripts/install-from-github-release.py 1.3.0
-```
 
 ---
 
