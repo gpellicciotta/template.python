@@ -46,3 +46,16 @@ def test_deploy_help():
     assert "usage:" in result.stdout
     assert "--dry-run" in result.stdout
     assert "Exit codes:" in result.stdout
+
+
+def test_devops_version():
+    result = run_script("devops.py", "--version")
+    assert result.returncode == 0
+    assert "devops v" in result.stdout
+
+
+def test_devops_help():
+    result = run_script("devops.py", "help")
+    assert result.returncode == 0
+    assert "lint" in result.stdout
+    assert "Exit codes:" in result.stdout

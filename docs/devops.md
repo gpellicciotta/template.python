@@ -1,6 +1,6 @@
 # DevOps and Operations
 
-Practical guidance on development environment setup, testing, validation, builds, and operations for `python-project-template`.
+Practical guidance on development environment setup, testing, validation, builds, and operations for `template.python`.
 
 ---
 
@@ -36,13 +36,20 @@ source .venv/bin/activate
 pip install -e ".[dev]"
 ```
 
-### Task Coordination Protocol
-All active work follows the protocol defined in [Coordinating Work Guidelines](https://github.com/gpellicciotta/dev-guidelines/blob/main/guidelines/coordinating-work-guidelines.md):
-1. **Claim**: Fetch mainline, update `TODO.md` with `@owner` and `[~]`, commit, and push immediately (first fast-forward push wins).
-2. **Isolate** (full tasks `Tnnnn` only): Create a worktree at `./work/Tnnnn-slug` on branch `task/Tnnnn-slug` with a task file at `tasks/Tnnnn-slug.md`. Adhoc tasks (`Annnn`) skip this and work directly in the primary checkout.
-3. **Execute**: Develop and, for full tasks, document progress in the task file's Execution Log.
-4. **Finalize**: Run validation checks, update `CHANGELOG.md`, remove the task entry from `TODO.md`, integrate in a single mainline commit, and clean up any worktree/branch.
-5. **Review**: Satisfy the applicable tier before merging — PR approval, peer sign-off, solo-agent summary with human permission, or pre-authorized autonomous-loop integration.
+### Task Coordination
+All planned and active work is tracked in `PLAN.md` and `.plan/tasks/`, changed only through the `plan` CLI.
+See `AGENTS.md` and the `plan-task-usage-guidelines` skill for the workflow.
+
+### Common Operations
+After bootstrapping, `scripts/devops.py` runs the typical operations through the virtual environment:
+
+```bash
+python scripts/devops.py lint    # ruff check + ruff format --check
+python scripts/devops.py test    # pytest
+python scripts/devops.py build   # sdist + wheel into dist/
+python scripts/devops.py check   # lint + test + build
+python scripts/devops.py clean   # remove dist/ and build/
+```
 
 ---
 
@@ -68,7 +75,7 @@ All active work follows the protocol defined in [Coordinating Work Guidelines](h
 ## Development and Maintenance Scripts
 
 The root `scripts/` directory houses non-packaged development and maintenance tooling, including the
-`bootstrap-dev-environment.py` script used above. These standalone scripts remain separate from the
+`bootstrap-dev-environment.py` and `devops.py` scripts used above. These standalone scripts remain separate from the
 installable package and automated test suites. Projects such as `mail-utils` use this convention for
 bootstrap scripts, roundtrip testing, and migrations.
 

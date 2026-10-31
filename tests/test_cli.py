@@ -71,9 +71,9 @@ def test_create_scaffolds_renamed_project(tmp_path):
     assert 'sample_app = "sample_app.cli:main"' in pyproject
     assert "[tool.ruff.lint]" in pyproject
     assert 'select = ["E4", "E7", "E9", "F"]' in pyproject
-    assert 'license = {file = "LICENSE.md"}' in pyproject
+    assert 'license = "MIT"' in pyproject
     assert "https://github.com/gpellicciotta/sample-app" in pyproject
-    assert "python-template-project" not in pyproject
+    assert "template.python" not in pyproject and "template-python" not in pyproject
 
     readme = (destination / "README.md").read_text(encoding="utf-8")
     assert "Sample App" in readme
@@ -87,10 +87,9 @@ def test_create_scaffolds_renamed_project(tmp_path):
     assert "in development" not in changelog
     assert "ruff" not in changelog
 
-    todo = (destination / "TODO.md").read_text(encoding="utf-8")
-    assert "**Next ID:** 0001" in todo
-    assert "## Next Milestone" in todo
-    assert "## Backlog" in todo
+    plan = (destination / "PLAN.md").read_text(encoding="utf-8")
+    assert "## Next Milestone" in plan
+    assert "## Backlog" in plan
 
     assert (destination / "docs" / "requirements.md").is_file()
     assert (destination / "docs" / "devops.md").is_file()
@@ -98,8 +97,8 @@ def test_create_scaffolds_renamed_project(tmp_path):
     assert (destination / "docs" / "specs" / ".gitkeep").is_file()
     assert (destination / "docs" / "adrs" / ".gitkeep").is_file()
     assert (destination / "docs" / "issues" / ".gitkeep").is_file()
-    assert (destination / "tasks" / ".gitkeep").is_file()
-    assert [p.name for p in (destination / "tasks").iterdir()] == [".gitkeep"]
+    assert (destination / ".plan" / "tasks" / ".gitkeep").is_file()
+    assert [p.name for p in (destination / ".plan" / "tasks").iterdir()] == [".gitkeep"]
     assert (destination / ".github" / "workflows" / "publish.yml").is_file()
     assert "Installing from a release" in readme
 

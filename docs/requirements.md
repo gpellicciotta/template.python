@@ -1,6 +1,6 @@
 # Requirements
 
-Functional and technical requirements for the `python-project-template` repository.
+Functional and technical requirements for the `template.python` repository.
 
 ---
 
@@ -20,8 +20,8 @@ Functional and technical requirements for the `python-project-template` reposito
 - Include a built-in `create` subcommand (`myproject create <project-name> [-o <output-dir>]`) that:
   - Validates and derives valid Python package names from project slugs.
   - Copies template files while excluding cache/build artifacts.
-  - Rewrites placeholders (`template-project`, `python-template-project`, `myproject`, title) across documentation and configuration.
-  - Initializes fresh `CHANGELOG.md` and `TODO.md` files and resets version to `0.0.1-pre` in `pyproject.toml`.
+  - Rewrites placeholders (`template-python`, `template.python`, `myproject`, title) across documentation and configuration.
+  - Initializes fresh `CHANGELOG.md` and `PLAN.md` files and resets version to `0.0.1-pre` in `pyproject.toml`.
   - Refuses to overwrite existing target directories.
 
 ### Command Line Interface (CLI)
@@ -37,7 +37,7 @@ Functional and technical requirements for the `python-project-template` reposito
 
 ### Logging
 - Support operational and CLI logging adhering to cross-project guidelines (`general-guidelines.md`):
-  - Utilize `hinolugi-support`'s `hinolugi_support.logging.CliLogger` and `LogLevel` rather than reimplementing local logging utilities.
+  - Utilize `support-python`'s `support_python.logging.CliLogger` and `LogLevel` rather than reimplementing local logging utilities.
   - Support `--log-file`, dual-destination output, startup and completion lifecycle banners, padded severity indicators, and debug filtering.
 
 ---

@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import sys
 
-from hinolugi_support.cli import build_action_parser, print_help, print_version
+from support_python.cli import build_action_parser, print_help, print_version
 
 from . import __version__
 from .core import greet
@@ -10,7 +10,7 @@ from .scaffold import ScaffoldError, create_project
 
 TOOL_NAME = "myproject"
 AUTHOR = "2026 Giovanni Pellicciotta"
-DESCRIPTION = "Sample CLI for python-template-project providing greeting and project scaffolding."
+DESCRIPTION = "Sample CLI for template.python providing greeting and project scaffolding."
 ACTIONS = ["help", "version", "greet", "create"]
 EXIT_CODES = [
     (0, "Success"),
@@ -20,7 +20,7 @@ EXIT_CODES = [
 
 
 def build_parser():
-    """Build the argument parser on top of the shared hinolugi-support action/help/version template."""
+    """Build the argument parser on top of the shared support-python action/help/version template."""
     parser = build_action_parser(TOOL_NAME, DESCRIPTION, ACTIONS, default_action="help")
     parser.add_argument("target", nargs="?", default=None, help="Name to greet ('greet'), or project name ('create')")
     parser.add_argument(

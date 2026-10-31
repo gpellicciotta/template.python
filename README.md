@@ -1,15 +1,15 @@
-# Python Template Project
+# Template Python
 
 A minimal example project to get Python development started quickly using the src-layout.
 
 Includes pytest for testing, ruff for linting/formatting, build support with build/wheel, a GitHub Actions CI
-workflow, and the docs/versioning conventions (`CHANGELOG.md`, `TODO.md`, `CLAUDE.md`) following the cross-project
+workflow, and the docs/versioning conventions (`CHANGELOG.md`, `PLAN.md`, `CLAUDE.md`) following the cross-project
 [Development Guidelines](https://github.com/gpellicciotta/dev-guidelines) — see `CLAUDE.md` for the details Claude Code reads to follow them automatically.
 
 ## Directory Layout
 
 ```
-python-template-project/
+template.python/
   src/
     myproject/
       __init__.py
@@ -18,12 +18,13 @@ python-template-project/
       scaffold.py      # `create` subcommand: copies + renames this template into a new project
   scripts/
     bootstrap-dev-environment.py  # one-shot bootstrap: git init, venv, editable install, lint, tests, build
+    devops.py          # lint, test, build, check, and clean actions through the venv
     _cli_common.py     # shared version/help boilerplate for scripts/
   tests/
     test_core.py
     test_cli.py
-  tasks/
-    Tnnnn-slug.md      # full task tracking files (retained upon completion)
+  .plan/
+    tasks/             # task files, Tnnnn-slug.md (retained upon completion)
   docs/
     index.md           # documentation index
     requirements.md    # high-level goals, functional & technical requirements
@@ -41,7 +42,7 @@ python-template-project/
   .editorconfig        # indent/charset/line-length, mirrors the ruff config for non-Python files/editors
   CLAUDE.md
   CHANGELOG.md         # version history with status tags - top-level
-  TODO.md              # milestone task index (Next Milestone, Backlog) - top-level
+  PLAN.md              # task index (Next Milestone, Backlog) - top-level, managed with the `plan` CLI
 ```
 
 The "src" layout places your package code under `src/{{package name}}/`. This prevents tests from accidentally
@@ -122,20 +123,20 @@ attaching them as downloadable release assets.
 Install directly from a published GitHub release wheel asset:
 
 ```bash
-python -m pip install https://github.com/gpellicciotta/python-template-project/releases/download/vX.Y.Z/template-project-X.Y.Z-py3-none-any.whl
+python -m pip install https://github.com/gpellicciotta/template.python/releases/download/vX.Y.Z/template_python-X.Y.Z-py3-none-any.whl
 ```
 
 Or install directly from the Git release tag:
 
 ```bash
-python -m pip install git+https://github.com/gpellicciotta/python-template-project.git@vX.Y.Z
+python -m pip install git+https://github.com/gpellicciotta/template.python.git@vX.Y.Z
 ```
 
 Or declare it in downstream `pyproject.toml` dependencies:
 
 ```toml
 dependencies = [
-    "template-project @ git+https://github.com/gpellicciotta/python-template-project.git@vX.Y.Z",
+    "template-python @ git+https://github.com/gpellicciotta/template.python.git@vX.Y.Z",
 ]
 ```
 
@@ -150,7 +151,7 @@ they're easy to miss because nothing enforces consistency between them, and a le
 silently rather than loudly:
 
 - `src/myproject/` → `src/<your_package_name>/`
-- `pyproject.toml`: `name = "template-project"` and `[project.scripts]`'s `myproject = "myproject.cli:main"`
+- `pyproject.toml`: `name = "template-python"` and `[project.scripts]`'s `myproject = "myproject.cli:main"`
 - `tests/test_core.py`'s `from myproject...` imports
 - This README's title, and `CLAUDE.md`'s placeholder sections
 - `CHANGELOG.md` — replace the placeholder with your project's actual first entry once there's something real to release

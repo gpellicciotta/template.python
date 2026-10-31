@@ -7,11 +7,11 @@ import shutil
 from pathlib import Path
 
 PACKAGE_NAME = "myproject"
-PROJECT_SLUG = "template-project"
-REPO_SLUG = "python-template-project"
-TITLE_PLACEHOLDER = "Python Template Project"
+PROJECT_SLUG = "template-python"
+REPO_SLUG = "template.python"
+TITLE_PLACEHOLDER = "Template Python"
 
-_MARKER_FILES = ("pyproject.toml", "TODO.md", "CHANGELOG.md")
+_MARKER_FILES = ("pyproject.toml", "PLAN.md", "CHANGELOG.md")
 _EXCLUDED_NAMES = {
     ".git",
     ".venv",
@@ -42,7 +42,7 @@ def find_template_root(start: Path) -> Path:
         if has_markers and (candidate / "src" / PACKAGE_NAME).is_dir():
             return candidate
     raise ScaffoldError(
-        "Could not locate the template project root (expected pyproject.toml, TODO.md, CHANGELOG.md and "
+        "Could not locate the template project root (expected pyproject.toml, PLAN.md, CHANGELOG.md and "
         f"src/{PACKAGE_NAME}/ in a parent directory). `create` must be run against an editable install of "
         f"{REPO_SLUG}."
     )
@@ -91,29 +91,15 @@ def _fresh_changelog_md(title: str) -> str:
     )
 
 
-def _fresh_todo_md() -> str:
+def _fresh_plan_md() -> str:
     return (
-        "# TODO\n\n"
+        "# Project Planning\n"
         "An overview of all tasks and their planning.\n\n"
-        "> Tasks are listed by milestone.  \n"
-        "> See [coordinating work guidelines](https://github.com/gpellicciotta/dev-guidelines/blob/main/guidelines/coordinating-work-guidelines.md) for the full coordination protocol.\n\n"
-        "> Notation:\n"
-        "> - ID: \n"
-        ">   - `Tnnnn`: full task with `tasks/` file and branch/worktree\n"
-        ">   - `Annnn`: adhoc task with TODO.md line only\n"
-        "> - Status: \n"
-        ">   - `[ ]` available\n"
-        ">   - `[~]` active / in progress\n"
-        ">   - `[!]` blocked \n"
-        ">   - `[?]` needs-review\n"
-        "> - Metadata: `[label: value]` immediately following the task ID (e.g. `[owner: name]`, `[needs: Tnnnn]`, `[continue-after: YYYY-MM-DD]`, `[blocked: reason]`).\n"
-        "> - Description: Natural-language sentence ($\\le 20$ words once a task file exists; longer/multi-line permitted initially). Slugs are never used in TODO.md.\n\n"
-        "**Next ID:** 0001\n\n"
         "---\n\n"
-        "## Next Milestone\n\n"
+        "## Next Milestone\n"
         "*(Currently no tasks)*\n\n"
         "---\n\n"
-        "## Backlog\n\n"
+        "## Backlog\n"
         "*(Currently no tasks)*\n"
     )
 
@@ -139,8 +125,8 @@ def create_project(project_name: str, output_dir: str = ".", template_root: Path
     """Create a new project at `output_dir/project_name`, as a renamed copy of this template.
 
     Automates the manual steps documented in this template's README under "Starting a new project
-    from this template": copy the tree, rename the `myproject` package, replace the `template-project` /
-    `python-template-project` name placeholders throughout, and reset `CHANGELOG.md`, `TODO.md`, `tasks/`,
+    from this template": copy the tree, rename the `myproject` package, replace the `template-python` /
+    `template.python` name placeholders throughout, and reset `CHANGELOG.md`, `PLAN.md`, `.plan/tasks/`,
     and `pyproject.toml`'s `version` — the new project starts its own history rather than inheriting the
     template's.
     """
@@ -171,8 +157,8 @@ def create_project(project_name: str, output_dir: str = ".", template_root: Path
     )
 
     (destination / "CHANGELOG.md").write_text(_fresh_changelog_md(title), encoding="utf-8")
-    (destination / "TODO.md").write_text(_fresh_todo_md(), encoding="utf-8")
-    _reset_tasks_dir(destination / "tasks")
+    (destination / "PLAN.md").write_text(_fresh_plan_md(), encoding="utf-8")
+    _reset_tasks_dir(destination / ".plan" / "tasks")
     _reset_pyproject_version(destination / "pyproject.toml")
 
     return destination

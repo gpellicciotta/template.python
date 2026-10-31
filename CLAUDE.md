@@ -58,18 +58,18 @@ This repository and all projects scaffolded from this template follow the cross-
   `-h` / `--help`, `version` action / `--version`, `--verbose` option, and standardized `{name} v{version} - {copyright}`
   header with exit codes.
 - Logging: direct operational logging to a log file and standard streams per cross-project guidelines using
-  `hinolugi-support`'s `hinolugi_support.logging.CliLogger` and `LogLevel` (dual destination, `--log-file`,
+  `support-python`'s `support_python.logging.CliLogger` and `LogLevel` (dual destination, `--log-file`,
   startup/completion lifecycle banners via `log_start`/`log_end`, padded severity tags, and `--debug` filtering)
   instead of reimplementing a local starter module — see `## Logging` below.
 
 ## Logging
 
-Operational and CLI logging follows the cross-project [Development Guidelines](https://github.com/gpellicciotta/dev-guidelines) (`general-guidelines.md`'s Logging section). Projects scaffolded from this template inherit the `hinolugi-support` dependency (added by A0014 in `pyproject.toml`) and use `hinolugi_support.logging.CliLogger` and `LogLevel` instead of reimplementing a local starter module:
+Operational and CLI logging follows the cross-project [Development Guidelines](https://github.com/gpellicciotta/dev-guidelines) (`general-guidelines.md`'s Logging section). Projects scaffolded from this template inherit the `support-python` dependency (declared in `pyproject.toml`) and use `support_python.logging.CliLogger` and `LogLevel` instead of reimplementing a local starter module:
 
 ```python
 import sys
 from pathlib import Path
-from hinolugi_support.logging import CliLogger, LogLevel
+from support_python.logging import CliLogger, LogLevel
 
 logger = CliLogger(log_path=Path("logs/app.log"), verbose=True, debug=False, origin="myproject")
 logger.log_start("myproject", __version__, sys.argv, config={"output_dir": "."})
@@ -93,10 +93,8 @@ Key conventions:
 - `CHANGELOG.md` (top-level) tracks version history: active in-development versions use a `-pre` suffix
   (`vX.Y.Z-pre`), replaced on release with a status tag (`[YYYY-MM-DD]`, `[released: YYYY-MM-DD]`, `[broken]`).
   Bump `pyproject.toml`'s `version` for every user-facing change and add a matching entry to `CHANGELOG.md`.
-- `TODO.md` (top-level) is the shared task index for planned, active, and blocked work using
-  milestone sections (`## Next Milestone`, `## Backlog`) and task status markers
-  (`[ ]`, `[~]`, `[!]`, `[?]`). Completed tasks are removed immediately from `TODO.md`
-  (version control is the permanent record); their task file under `tasks/` is retained with `status: completed`.
+- `PLAN.md` (top-level) is the task index, changed only through the `plan` CLI (see `AGENTS.md`). Task files live
+  under `.plan/tasks/` and are retained with `status: completed`.
 - Mandatory docs: `docs/index.md`, `docs/requirements.md`, and `docs/devops.md`. Other documentation
   (design notes, ADRs, detailed specs) also lives under `docs/`.
 - Keep `README.md`'s setup/usage/layout sections in sync with the code as it evolves — treat drift there as a

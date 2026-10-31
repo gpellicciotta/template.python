@@ -14,11 +14,11 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: ${{ matrix.python-version }}
-      - name: Configure git auth for private hinolugi-support dependency
+      - name: Configure git auth for private support-python dependency
         env:
-          HINOLUGI_PACKAGES_TOKEN: ${{ secrets.HINOLUGI_PACKAGES_TOKEN }}
+          SUPPORT_PYTHON_TOKEN: ${{ secrets.SUPPORT_PYTHON_TOKEN }}
         run: |
-          git config --global url."https://x-access-token:${HINOLUGI_PACKAGES_TOKEN}@github.com/gpellicciotta/hinolugi-support.python".insteadOf "https://github.com/gpellicciotta/hinolugi-support.python"
+          git config --global url."https://x-access-token:${SUPPORT_PYTHON_TOKEN}@github.com/gpellicciotta/support.python".insteadOf "https://github.com/gpellicciotta/support.python"
       - name: Install project (editable, with dev extra)
         run: pip install -e ".[dev]"
       - name: Lint (ruff)

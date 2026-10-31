@@ -10,7 +10,7 @@ Overview of all documentation and specifications in this project.
 - [DevOps & Operations](devops.md): Development setup, testing, formatting, packaging, and CI operations.
 - [README](../README.md): Project overview, quick start, and directory layout.
 - [CHANGELOG](../CHANGELOG.md): Versioned changes and release history.
-- [TODO](../TODO.md): Shared task index by milestone.
+- [PLAN](../PLAN.md): Task index by milestone, managed with the `plan` CLI.
 - [LICENSE](../LICENSE.md): License terms (MIT).
 
 ---
