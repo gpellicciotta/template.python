@@ -49,6 +49,8 @@ python scripts/devops.py test    # pytest
 python scripts/devops.py build   # sdist + wheel into dist/
 python scripts/devops.py check   # lint + test + build
 python scripts/devops.py clean   # remove dist/ and build/
+python scripts/devops.py release # finalize, tag, push, and publish a GitHub release
+python scripts/devops.py deploy  # example production deployment
 ```
 
 ---
@@ -79,18 +81,18 @@ The root `scripts/` directory houses non-packaged development and maintenance to
 installable package and automated test suites. Projects such as `mail-utils` use this convention for
 bootstrap scripts, roundtrip testing, and migrations.
 
-`deploy-to-production.py` is scaffolded as an example for projects derived from this template that
+The `deploy` action of `devops.py` is scaffolded as an example for projects derived from this template that
 deploy a running service. This template itself has no deployment target, so its `deploy` action only
 validates preconditions (clean git tree, finalized release version) and reports what it would do;
 replace the marked section with the project's actual deployment mechanism:
 
 ```bash
-python scripts/deploy-to-production.py deploy --dry-run
+python scripts/devops.py deploy --dry-run
 ```
 
-### Creating a Release with `create-github-release.py`
+### Creating a Release with `devops.py release`
 
-The `scripts/create-github-release.py` script automates the complete release process end-to-end:
+The `release` action of `scripts/devops.py` automates the complete release process end-to-end:
 
 1. Validates preconditions (clean working tree, branch is `main`, `gh` CLI installed and authenticated, no existing remote tag or release).
 2. Runs pre-flight quality checks (`ruff check`, `ruff format --check`, `pytest`, `python -m build`).
@@ -102,13 +104,13 @@ The `scripts/create-github-release.py` script automates the complete release pro
 
 ```shell
 # Preview the release actions without making changes
-python scripts/create-github-release.py --dry-run
+python scripts/devops.py release --dry-run
 
 # Create and publish the release
-python scripts/create-github-release.py release
+python scripts/devops.py release
 
 # Create and publish while skipping pre-flight checks
-python scripts/create-github-release.py release --skip-checks
+python scripts/devops.py release --skip-checks
 ```
 
 ## Installing a Python Package
@@ -170,14 +172,14 @@ Ongoing work accumulates under the top `CHANGELOG.md` heading while it carries a
 `-pre` included.
 
 ### Automated Release
-Use `scripts/create-github-release.py` to automate the complete release flow:
+Use `scripts/devops.py release` to automate the complete release flow:
 
 ```bash
 # Validate and preview release actions
-python scripts/create-github-release.py release --dry-run
+python scripts/devops.py release --dry-run
 
 # Run automated release
-python scripts/create-github-release.py release
+python scripts/devops.py release
 ```
 
 The script performs the following operations:
