@@ -11,7 +11,11 @@ PROJECT_SLUG = "template-python"
 REPO_SLUG = "template.python"
 TITLE_PLACEHOLDER = "Template Python"
 
-_MARKER_FILES = ("pyproject.toml", "PLAN.md", "CHANGELOG.md")
+_MARKER_FILES = ("pyproject.toml", "CHANGELOG.md")
+# The template's plan data lives on a separate `plan` branch checked out at .plan/ (see .gitignore), so a clone
+# has none of it; a new project gets fresh plan files instead and must track them.
+_PLAN_STORE_NAMES = {".plan", "PLAN.md", "plan.code-workspace"}
+_PLAN_STORE_IGNORES = {".plan/", "/PLAN.md", "/plan.code-workspace"}
 _EXCLUDED_NAMES = {
     ".git",
     ".venv",
@@ -42,7 +46,7 @@ def find_template_root(start: Path) -> Path:
         if has_markers and (candidate / "src" / PACKAGE_NAME).is_dir():
             return candidate
     raise ScaffoldError(
-        "Could not locate the template project root (expected pyproject.toml, PLAN.md, CHANGELOG.md and "
+        "Could not locate the template project root (expected pyproject.toml, CHANGELOG.md and "
         f"src/{PACKAGE_NAME}/ in a parent directory). `create` must be run against an editable install of "
         f"{REPO_SLUG}."
     )
@@ -57,6 +61,23 @@ def _to_package_name(project_name: str) -> str:
 
 def _ignore(_dir: str, names: list[str]) -> set[str]:
     return {name for name in names if name in _EXCLUDED_NAMES or name.endswith(".egg-info") or name.startswith(".coverage")}
+
+
+def _ignore_with_plan_store(template_root: Path):
+    def ignore(directory: str, names: list[str]) -> set[str]:
+        ignored = _ignore(directory, names)
+        if Path(directory).resolve() == template_root.resolve():
+            ignored |= {name for name in names if name in _PLAN_STORE_NAMES}
+        return ignored
+
+    return ignore
+
+
+def _track_plan_files(gitignore_path: Path) -> None:
+    if not gitignore_path.is_file():
+        return
+    lines = gitignore_path.read_text(encoding="utf-8").splitlines(keepends=True)
+    gitignore_path.write_text("".join(line for line in lines if line.strip() not in _PLAN_STORE_IGNORES), encoding="utf-8")
 
 
 def _rewrite_text_files(root: Path, replacements: list[tuple[str, str]]) -> None:
@@ -110,14 +131,8 @@ def _reset_pyproject_version(pyproject_path: Path) -> None:
     pyproject_path.write_text(new_text, encoding="utf-8")
 
 
-def _reset_tasks_dir(tasks_dir: Path) -> None:
+def _create_tasks_dir(tasks_dir: Path) -> None:
     tasks_dir.mkdir(parents=True, exist_ok=True)
-    for path in tasks_dir.iterdir():
-        if path.name != ".gitkeep":
-            if path.is_file():
-                path.unlink()
-            elif path.is_dir():
-                shutil.rmtree(path)
     (tasks_dir / ".gitkeep").write_text("\n", encoding="utf-8")
 
 
@@ -141,7 +156,7 @@ def create_project(project_name: str, output_dir: str = ".", template_root: Path
     title = project_name.replace("-", " ").replace("_", " ").title()
 
     destination.parent.mkdir(parents=True, exist_ok=True)
-    shutil.copytree(template_root, destination, ignore=_ignore)
+    shutil.copytree(template_root, destination, ignore=_ignore_with_plan_store(template_root))
 
     if package_name != PACKAGE_NAME:
         (destination / "src" / PACKAGE_NAME).rename(destination / "src" / package_name)
@@ -158,7 +173,8 @@ def create_project(project_name: str, output_dir: str = ".", template_root: Path
 
     (destination / "CHANGELOG.md").write_text(_fresh_changelog_md(title), encoding="utf-8")
     (destination / "PLAN.md").write_text(_fresh_plan_md(), encoding="utf-8")
-    _reset_tasks_dir(destination / ".plan" / "tasks")
+    _create_tasks_dir(destination / ".plan" / "tasks")
     _reset_pyproject_version(destination / "pyproject.toml")
+    _track_plan_files(destination / ".gitignore")
 
     return destination

@@ -22,6 +22,7 @@ Functional and technical requirements for the `template.python` repository.
   - Copies template files while excluding cache/build artifacts.
   - Rewrites placeholders (`template-python`, `template.python`, `myproject`, title) across documentation and configuration.
   - Initializes fresh `CHANGELOG.md` and `PLAN.md` files and resets version to `0.0.1-pre` in `pyproject.toml`.
+  - Works from a fresh clone: skips the template's plan store (`.plan/`, `PLAN.md`, `plan.code-workspace`) and un-ignores new plan files.
   - Refuses to overwrite existing target directories.
 
 ### Command Line Interface (CLI)

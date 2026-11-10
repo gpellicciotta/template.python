@@ -159,5 +159,6 @@ silently rather than loudly:
 - `tests/test_core.py`'s `from myproject...` imports
 - This README's title, and `CLAUDE.md`'s placeholder sections
 - `CHANGELOG.md` — replace the placeholder with your project's actual first entry once there's something real to release
+- Skip `.plan/`, `PLAN.md`, and `plan.code-workspace` (the template's own plan store), and delete their lines from `.gitignore`
 
 Then follow **Quick Start** above to verify the rename didn't break anything before writing real code.
