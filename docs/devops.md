@@ -6,7 +6,7 @@ Practical guidance on development environment setup, testing, validation, builds
 
 ## Prerequisites and Environment
 
-- **Python**: Python 3.10+
+- **Python**: Python 3.15+, the latest stable release required by the Python guidelines
 - **Git**: Git 2.30+ supporting worktrees (`git worktree`)
 - **Shell**: PowerShell (Windows) or POSIX shell (Linux/macOS)
 

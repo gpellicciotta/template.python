@@ -86,7 +86,7 @@ def _rewrite_text_files(root: Path, replacements: list[tuple[str, str]]) -> None
             continue
         try:
             text = path.read_text(encoding="utf-8")
-        except (UnicodeDecodeError, ValueError):
+        except UnicodeDecodeError, ValueError:
             continue
         new_text = text
         for old, new in replacements:

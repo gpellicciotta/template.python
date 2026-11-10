@@ -45,7 +45,7 @@ Functional and technical requirements for the `template.python` repository.
 
 ## Technical Requirements
 
-- **Python Version**: Python >=3.10.
+- **Python Version**: Python >=3.15.
 - **Packaging**: Standard `pyproject.toml` with `setuptools.build_meta` backend.
 - **Code Quality**:
   - Code formatted and linted with `ruff` (132-character line length, rules pinned to `E4`, `E7`, `E9`, `F`).

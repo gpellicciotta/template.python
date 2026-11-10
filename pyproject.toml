@@ -4,18 +4,20 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "template-python"
-version = "3.0.0-pre"
+version = "3.0.1-pre"
 description = "A template to get Python projects started quickly"
 authors = [{name="Giovanni Pellicciotta", email="giovanni.pellicciotta@gmail.com"}]
 readme = "README.md"
 license = "MIT"
 license-files = ["LICENSE.md"]
-requires-python = ">=3.10"
+requires-python = ">=3.15"
 dependencies = [
     "support-python @ git+https://github.com/gpellicciotta/support.python.git@v2.0.0",
 ]
 classifiers = [
     "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3 :: Only",
+    "Programming Language :: Python :: 3.15",
     "Operating System :: OS Independent",
 ]
 

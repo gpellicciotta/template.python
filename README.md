@@ -66,11 +66,13 @@ Alternatives:
 - [The Hitchhiker's Guide to Python — Project structure](https://docs.python-guide.org/writing/structure/)
 
 ## Quick Start (Windows/Linux/macOS)
-Open a terminal in the project root and run:
+Install Python 3.15 or later, open a terminal in the project root, and run:
 
 ```bash
 python scripts/bootstrap-dev-environment.py
 ```
+
+When `python` on your `PATH` is older, run the bootstrap with a 3.15 interpreter, e.g. `py -3.15` on Windows.
 
 This initializes a git repo (if one doesn't already exist), creates a virtual environment, installs the
 project in editable mode with the `dev` extra (pytest), runs the test suite, and builds a wheel/sdist into
