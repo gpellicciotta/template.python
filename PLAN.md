@@ -27,7 +27,7 @@ An overview of all tasks and their planning.
 - [ ] T0034 Put one argument per line in every call or signature split across lines.
 - [ ] T0035 Change the greet default name from the Dutch wereld to the US English world.
 - [ ] T0036 Read the CLI author and copyright from package metadata instead of hardcoding them in cli.py and _cli_common.py.
-- [ ] T0037 Rewrite the active v3.0.0-pre CHANGELOG entries to follow the changelog entry style rules.
+- [ ] T0037 Rewrite the active -pre CHANGELOG entries to follow the changelog entry style rules.
 - [ ] T0038 Resolve __version__ with support_python.get_package_version so the CLI shows -pre instead of the rc0 form.
 
 ---
