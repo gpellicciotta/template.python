@@ -3,8 +3,8 @@
 A minimal example project to get Python development started quickly using the src-layout.
 
 Includes pytest for testing, ruff for linting/formatting, build support with build/wheel, a GitHub Actions CI
-workflow, and the docs/versioning conventions (`CHANGELOG.md`, `PLAN.md`, `CLAUDE.md`) following the cross-project
-[Development Guidelines](https://github.com/gpellicciotta/dev-guidelines) — see `CLAUDE.md` for the details Claude Code reads to follow them automatically.
+workflow, and the docs/versioning conventions (`CHANGELOG.md`, `PLAN.md`, `AGENTS.md`) following the cross-project
+[Development Guidelines](https://github.com/gpellicciotta/dev-guidelines) — see [AGENTS.md](AGENTS.md) for the project instructions coding agents read.
 
 ## Directory Layout
 
@@ -40,7 +40,8 @@ template.python/
   pyproject.toml       # project metadata, dependencies, dev extra, CLI entry point, ruff config
   .gitignore 
   .editorconfig        # indent/charset/line-length, mirrors the ruff config for non-Python files/editors
-  CLAUDE.md
+  AGENTS.md            # project instructions for AI coding agents
+  CLAUDE.md            # imports AGENTS.md for Claude Code
   CHANGELOG.md         # version history with status tags - top-level
   PLAN.md              # task index (Next Milestone, Backlog) - top-level, managed with the `plan` CLI
 ```
@@ -158,7 +159,7 @@ silently rather than loudly:
 - `src/myproject/` → `src/<your_package_name>/`
 - `pyproject.toml`: `name = "template-python"` and `[project.scripts]`'s `myproject = "myproject.cli:main"`
 - `tests/test_core.py`'s `from myproject...` imports
-- This README's title, and `CLAUDE.md`'s placeholder sections
+- This README's title, and `AGENTS.md`'s summary, Architecture, Project Conventions, and Boundaries sections
 - `CHANGELOG.md` — replace the placeholder with your project's actual first entry once there's something real to release
 - Skip `.plan/`, `PLAN.md`, and `plan.code-workspace` (the template's own plan store), and delete their lines from `.gitignore`
 
