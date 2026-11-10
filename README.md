@@ -17,9 +17,10 @@ template.python/
       cli.py           # entry point (registered in pyproject.toml's [project.scripts])
       scaffold.py      # `create` subcommand: copies + renames this template into a new project
   scripts/
-    bootstrap-dev-environment.py  # one-shot bootstrap: git init, venv, editable install, lint, tests, build
-    devops.py          # lint, test, build, check, and clean actions through the venv
-    _cli_common.py     # shared version/help boilerplate for scripts/
+    bootstrap-dev-environment.py  # one-shot bootstrap: git init, venv, script requirements, editable install, lint, tests, build
+    devops.py          # support-python DevopsCli: lint, test, build, check, release, deploy, ...
+    requirements.txt   # pins support-python for the scripts; installed into .venv by the bootstrap
+    _cli_common.py     # stdlib-only version/help boilerplate for the bootstrap script
   tests/
     test_core.py
     test_cli.py

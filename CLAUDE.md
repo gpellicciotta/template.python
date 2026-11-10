@@ -19,7 +19,8 @@ change doesn't casually cross them.>
 
 All commands use the project's venv (`.venv`, created via `python -m venv .venv` — or run
 `python scripts/bootstrap-dev-environment.py` for a one-shot, cross-platform bootstrap: creates the venv,
-installs editable + dev extras, runs tests, builds sdist/wheel).
+installs `scripts/requirements.txt` and the editable + dev extras, runs tests, builds sdist/wheel).
+`python scripts/devops.py help` lists the support-python `DevopsCli` actions (`lint`, `test`, `check`, `release`, ...).
 
 - Install in editable mode, with the `dev` extra (pytest, ruff, build):
   `.venv\Scripts\pip install -e ".[dev]"`
@@ -28,7 +29,8 @@ installs editable + dev extras, runs tests, builds sdist/wheel).
 - <Add the project's actual run command(s) here, e.g. `python -m mypackage.cli <command>`, or
   `mypackage <command>` once installed — see `pyproject.toml`'s `[project.scripts]`.>
 
-Dependencies are declared once, in `pyproject.toml` — there is no separate `requirements.txt` to keep in sync.
+Package dependencies are declared once, in `pyproject.toml`. `scripts/requirements.txt` pins only what the scripts
+under `scripts/` import (`support-python`), as the dev-guidelines project setup rules require.
 
 ## Architecture
 

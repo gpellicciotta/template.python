@@ -15,6 +15,12 @@ A summarized overview of all changes, per version of this project.
 ## v3.0.0-pre
 - **[breaking]** CLI: Rebuilt `myproject` on the `support-python` v2.0.0 `ToolHarness`; `-v` now means `--verbose`, so use `--version`.
 - Build: Upgraded the `support-python` dependency from v1.0.0 to v2.0.0.
+- **[breaking]** DevEx: Replaced `scripts/devops.py` with a thin support-python `DevopsCli` script that re-runs itself in `.venv`.
+  - `-v` now means `--verbose`; use `--version`. Exit code 2 now means invalid arguments, not a failed release step.
+  - `release` asks for the typed confirmation `release v<version>` (`--yes` skips it) and attaches the wheel and sdist.
+  - `release --dry-run` checks every precondition, including an authenticated `gh` and fresh tags.
+  - `deploy` needs the `v<version>` tag on `origin` at HEAD, a green CI run (`--skip-ci-check` skips it), and a typed confirmation.
+- DevEx: Added `format` and `versions` actions, and `scripts/requirements.txt`, which the bootstrap installs into `.venv`.
 - **[breaking]** DevEx: Merged `scripts/create-github-release.py` and `scripts/deploy-to-production.py` into `scripts/devops.py` as `release` and `deploy` actions.
 - **[breaking]** DevEx: Removed `scripts/install-from-github-release.py`; install releases with `pip` from the release wheel or Git tag.
 

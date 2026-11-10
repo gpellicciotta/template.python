@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Bootstraps a fresh checkout of this template: creates the virtual environment, installs the
+"""Bootstraps a fresh checkout of this template: creates the virtual environment, installs scripts/requirements.txt and the
 project in editable mode with the dev extra, lints, tests, and builds distributable artifacts.
 
 Cross-platform (Windows/Linux/macOS) - replaces the old Windows-only setup.ps1. Works on both
@@ -22,10 +22,12 @@ from _cli_common import build_action_parser, print_help, print_version
 
 PROG = "bootstrap-dev-environment"
 DESCRIPTION = (
-    "Creates the virtual environment, installs the project in editable mode, lints, tests, and builds distributable artifacts."
+    "Creates the virtual environment, installs scripts/requirements.txt and the project in editable mode, lints, tests,"
+    " and builds distributable artifacts."
 )
 EXIT_CODES = [(0, "Success"), (1, "One or more bootstrap steps failed")]
 REPO_ROOT = Path(__file__).resolve().parent.parent
+SCRIPTS_DIR = REPO_ROOT / "scripts"
 VENV_DIR = REPO_ROOT / ".venv"
 DIST_DIR = REPO_ROOT / "dist"
 
@@ -71,6 +73,9 @@ def setup() -> int:
 
     python = str(venv_python())
     all_ok &= run_step("Upgrading pip", [python, "-m", "pip", "install", "--upgrade", "pip"])
+    all_ok &= run_step(
+        "Installing script requirements", [python, "-m", "pip", "install", "-r", str(SCRIPTS_DIR / "requirements.txt")]
+    )
     all_ok &= run_step("Installing project (editable, dev extra)", [python, "-m", "pip", "install", "-e", ".[dev]"])
     all_ok &= run_step("Linting (ruff check)", [python, "-m", "ruff", "check", "."])
     all_ok &= run_step("Checking formatting (ruff format --check)", [python, "-m", "ruff", "format", "--check", "."])

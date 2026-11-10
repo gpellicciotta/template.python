@@ -41,17 +41,27 @@ All planned and active work is tracked in `PLAN.md` and `.plan/tasks/`, changed 
 See `AGENTS.md` and the `plan-task-usage-guidelines` skill for the workflow.
 
 ### Common Operations
-After bootstrapping, `scripts/devops.py` runs the typical operations through the virtual environment:
+`scripts/devops.py` is a thin script over `support-python`'s `DevopsCli` and `PythonProject`.
+`scripts/requirements.txt` pins `support-python`, and the bootstrap installs it into `.venv`.
+The script re-runs itself with the `.venv` interpreter, so plain `python` works:
 
 ```bash
-python scripts/devops.py lint    # ruff check + ruff format --check
-python scripts/devops.py test    # pytest
-python scripts/devops.py build   # sdist + wheel into dist/
-python scripts/devops.py check   # lint + test + build
-python scripts/devops.py clean   # remove dist/ and build/
-python scripts/devops.py release # finalize, tag, push, and publish a GitHub release
-python scripts/devops.py deploy  # example production deployment
+python scripts/devops.py help      # list every action; add --verbose for details
+python scripts/devops.py lint      # ruff check + ruff format --check
+python scripts/devops.py format    # ruff format
+python scripts/devops.py test      # pytest, or a selection: test tests/test_cli.py -- -k version
+python scripts/devops.py build     # sdist + wheel into dist/
+python scripts/devops.py check     # lint + test + build
+python scripts/devops.py clean     # remove dist/, build/, and src/*.egg-info
+python scripts/devops.py versions  # compare pyproject.toml's version with the CHANGELOG.md top heading
+python scripts/devops.py release   # freeze, tag, push, and publish a GitHub release
+python scripts/devops.py deploy    # example production deployment
 ```
+
+Add project-specific actions in `build_cli()` with `cli.add_action(name, summary, handler)`.
+The support-python [DevOps scripts tutorial][devops-tutorial] documents every option.
+
+[devops-tutorial]: https://github.com/gpellicciotta/support.python/blob/v2.0.0/docs/tutorials/devops-scripts.md
 
 ---
 
@@ -82,9 +92,10 @@ installable package and automated test suites. Projects such as `mail-utils` use
 bootstrap scripts, roundtrip testing, and migrations.
 
 The `deploy` action of `devops.py` is scaffolded as an example for projects derived from this template that
-deploy a running service. This template itself has no deployment target, so its `deploy` action only
-validates preconditions (clean git tree, finalized release version) and reports what it would do;
-replace the marked section with the project's actual deployment mechanism:
+deploy a running service. It checks the preconditions first: a clean tree, a version without `-pre`, the
+`v<version>` tag on `origin` at HEAD, and a successful CI run for HEAD. It then asks for the typed confirmation
+`deploy v<version>`. This template has no deployment target, so its single step, `no_deployment_target`, fails.
+Replace it in `build_cli()` with the project's `DeployStep`s:
 
 ```bash
 python scripts/devops.py deploy --dry-run
@@ -94,13 +105,14 @@ python scripts/devops.py deploy --dry-run
 
 The `release` action of `scripts/devops.py` automates the complete release process end-to-end:
 
-1. Validates preconditions (clean working tree, branch is `main`, `gh` CLI installed and authenticated, no existing remote tag or release).
-2. Runs pre-flight quality checks (`ruff check`, `ruff format --check`, `pytest`, `python -m build`).
-3. Extracts release notes for the target version from `CHANGELOG.md`.
-4. Finalizes the version in `pyproject.toml` and `CHANGELOG.md` (removing `-pre` and stamping the release date).
-5. Commits the finalized release files and creates the git tag (`v<version>`).
-6. Pushes the commit and tag to GitHub and creates the GitHub release.
-7. Opens the next patch development version (`-pre`) in `pyproject.toml` and `CHANGELOG.md` in a follow-up commit.
+1. Validates preconditions: clean working tree, branch `main`, `gh` authenticated, fresh tags, no existing tag or release,
+   and non-empty release notes.
+2. Runs `check` (lint, test, build) as the quality check, unless `--skip-checks` is given.
+3. Asks for the typed confirmation `release v<version>`, unless `--yes` is given.
+4. Finalizes the version in `pyproject.toml` and `CHANGELOG.md` (removing `-pre` and stamping the release date) and commits.
+5. Rebuilds `dist/` from the frozen version, then tags `v<version>`.
+6. Pushes the commit and tag and creates the GitHub release with the wheel and sdist attached.
+7. Opens the next patch development version (`-pre`) in `pyproject.toml` and `CHANGELOG.md` and pushes it.
 
 ```shell
 # Preview the release actions without making changes
@@ -109,8 +121,8 @@ python scripts/devops.py release --dry-run
 # Create and publish the release
 python scripts/devops.py release
 
-# Create and publish while skipping pre-flight checks
-python scripts/devops.py release --skip-checks
+# Create and publish while skipping pre-flight checks and the confirmation
+python scripts/devops.py release --skip-checks --yes
 ```
 
 ### Purpose and Scope
@@ -168,14 +180,7 @@ python scripts/devops.py release --dry-run
 python scripts/devops.py release
 ```
 
-The script performs the following operations:
-- Verifies a clean working tree and checks that the `gh` CLI is available.
-- Extracts release notes from `CHANGELOG.md` for the current version.
-- Finalizes the `-pre` heading in `CHANGELOG.md` and strips `-pre` in `pyproject.toml`.
-- Commits the finalized files and tags the release.
-- Pushes the mainline branch and tag to `origin`.
-- Creates a GitHub release using `gh release create` with the extracted release notes.
-- Opens the next development version in `CHANGELOG.md` and `pyproject.toml`, then commits and pushes.
+The steps are listed under **Creating a Release with `devops.py release`** above.
 
 ### Manual Release Steps
 If releasing manually without the script:
