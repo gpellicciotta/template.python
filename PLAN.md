@@ -16,7 +16,7 @@ An overview of all tasks and their planning.
 - [ ] T0023 Split the tests into fast and slow suites with pytest-xdist, pytest-timeout, a slow marker, and a CI slow run.
 - [ ] T0024 Add an autouse test fixture isolating HOME and configuration directories and failing on writes to real user state.
 - [ ] T0025 [needs: T0023] Add a subprocess end-to-end test that runs the installed myproject entry point with realistic arguments.
-- [ ] T0026 Move to Python 3.15 per the Python guidelines: requires-python >=3.15, the CI matrix, classifiers, and docs.
+- [x] T0026 Move to Python 3.15 per the Python guidelines: requires-python >=3.15, the CI matrix, classifiers, and docs.
 - [ ] T0027 Add the standard --format text|json option to the myproject greet and create actions.
 - [ ] T0028 [needs: T0027, T0029] Add --dry-run to myproject create, reporting every planned change without writing anything.
 - [ ] T0029 Make myproject create initialize the new project's plan store with plan init --store branch.
