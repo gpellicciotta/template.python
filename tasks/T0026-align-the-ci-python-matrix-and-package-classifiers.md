@@ -11,18 +11,17 @@ review: none
 preview: none
 protocol: adhoc
 ---
-# T0026: Align the CI Python matrix and package classifiers with requires-python >=3.10
+# T0026: Move to Python 3.15 per the Python guidelines: requires-python >=3.15, the CI matrix, classifiers, and docs.
 
 ## Goals
-Make the CI matrix cover every Python version the project supports, from `requires-python` up to the newest release.
-Add matching `Programming Language :: Python :: 3.x` classifiers to pyproject.toml.
-Decide with the user whether to raise `requires-python` above 3.10, which reached end of life in October 2026.
-Keep the prerequisites in docs/devops.md and README.md consistent with that decision.
+Follow the Python guidelines, which now require Python 3.15, the latest stable release.
+Set `requires-python = ">=3.15"` in pyproject.toml, add the matching `Programming Language :: Python :: 3.15` classifier, and run CI on 3.15.
+Use Python 3.15 features only where they simplify code; keep `create` producing projects with the same settings.
+Update the prerequisites in docs/devops.md, README.md, and docs/requirements.md.
 
 ## Task Execution Steps
-- [ ] **[Decide]**    Ask the user whether to keep Python 3.10 support.
-- [ ] **[Implement]** Update the CI matrix, classifiers, and requires-python.
-- [ ] **[Verify]**    Build the package and run the fast suite locally.
+- [ ] **[Implement]** Update requires-python, the classifiers, and the CI matrix to Python 3.15.
+- [ ] **[Verify]**    Recreate .venv with Python 3.15, then run the bootstrap and the fast suite.
 - [ ] **[Doc]**       Update the prerequisites and add a CHANGELOG.md entry.
 
 ## Execution Log

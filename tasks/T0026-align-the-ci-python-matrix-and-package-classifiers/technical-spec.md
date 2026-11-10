@@ -1,14 +1,15 @@
 ### Declared Files
-- .github/workflows/ci.yml
 - pyproject.toml
+- .github/workflows/ci.yml
 - docs/devops.md
+- docs/requirements.md
 - README.md
 - CHANGELOG.md
 
 ### Tests
 - Unit test: none (configuration only; no code changes)
-- Integration test: none (the CI run on every matrix version is the check, after the user pushes)
+- Integration: `python scripts/bootstrap-dev-environment.py` passes in a fresh `.venv` created with Python 3.15.
 
-Completion check: `python -m build` succeeds locally, and CI passes on every matrix version once the user pushes.
+Completion check: the bootstrap passes on Python 3.15 locally, and CI passes once the user pushes.
 
-Size estimate: 5 files, 30 lines
+Size estimate: 6 files, 30 lines
