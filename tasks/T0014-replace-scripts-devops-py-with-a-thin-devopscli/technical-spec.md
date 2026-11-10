@@ -18,10 +18,12 @@
 - `deploy` keeps refusing pre-release versions and a dirty tree, and keeps failing with the "no production deployment target" message.
 
 ### Design Decisions
-- **[Decided]** Install `scripts/requirements.txt` into the interpreter running the bootstrap script, as counters.server does.
+- **[Decided]** Install `scripts/requirements.txt` into `.venv`, and let `devops.py` re-run itself with the `.venv` interpreter.
+  The global interpreter holds support-python v1.0.0 for other sibling projects; a global v2 install would break them.
+  This replaces the earlier decision to install into the interpreter running the bootstrap script.
 - **[Decided]** Register the placeholder `deploy` with `DevopsCli.set_deploy` if it supports an empty step list, otherwise with `add_action`.
 - **[Decided]** Keep `_cli_common.py` while the bootstrap script still imports it.
-- **[Decided]** Keep `support-python` out of `pyproject.toml`; scripts pin it only in `scripts/requirements.txt`.
+- **[Decided]** Keep `support-python` in `pyproject.toml` as well: T0015 made the `myproject` package import it at runtime.
 
 ### Out of Scope
 - The `ci.yml` and `publish.yml` workflows, which call `ruff`, `pytest`, and `build` directly.
@@ -43,4 +45,5 @@ Author these before changing the scripts, and record their failing output:
 - `tests/test_scripts.py`
 - `docs/devops.md`
 - `README.md`
+- `CLAUDE.md`
 - `CHANGELOG.md`
