@@ -8,10 +8,10 @@ An overview of all tasks and their planning.
 - [x] T0016 Make myproject create and its tests work on a fresh clone, where the plan branch store leaves no PLAN.md.
 - [x] T0014 Replace scripts/devops.py with a thin DevopsCli script on the PythonProject adapter, pinning the released support-python v2.0.0.
 - [x] T0015 Migrate the myproject CLI from build_action_parser, print_help, and print_version to the support-python v2.0.0 ToolHarness.
-- [ ] T0018 Move project instructions into AGENTS.md per the agent-file layout, reducing CLAUDE.md to an @AGENTS.md import.
+- [x] T0018 Move project instructions into AGENTS.md per the agent-file layout, reducing CLAUDE.md to an @AGENTS.md import.
 - [ ] T0019 [needs: T0020] Restructure docs/devops.md into the required guideline sections and fix the manual release commit order.
 - [ ] T0020 Remove the always-failing placeholder deploy action from scripts/devops.py, its tests, and its docs.
-- [ ] T0021 [needs: T0018, T0019] Fix all lint-markdown issues, bold lead-ins, placeholder syntax, backslash paths, and stale references in the docs.
+- [ ] T0021 [needs: T0019] Fix all lint-markdown issues, bold lead-ins, placeholder syntax, backslash paths, and stale references in the docs.
 - [ ] T0022 [needs: T0021] Run lint-markdown check in CI and in devops.py check so Markdown violations fail the build.
 - [ ] T0023 Split the tests into fast and slow suites with pytest-xdist, pytest-timeout, a slow marker, and a CI slow run.
 - [ ] T0024 Add an autouse test fixture isolating HOME and configuration directories and failing on writes to real user state.
@@ -33,4 +33,4 @@ An overview of all tasks and their planning.
 ---
 
 ## Backlog
-*(Currently no tasks)*
+- [ ] T0039 Fix the pre-existing lint-markdown issues in README.md and CHANGELOG.md.
