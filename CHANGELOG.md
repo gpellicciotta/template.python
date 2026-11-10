@@ -13,6 +13,8 @@ A summarized overview of all changes, per version of this project.
 ---
 
 ## v3.0.0-pre
+- **[breaking]** CLI: Rebuilt `myproject` on the `support-python` v2.0.0 `ToolHarness`; `-v` now means `--verbose`, so use `--version`.
+- Build: Upgraded the `support-python` dependency from v1.0.0 to v2.0.0.
 - **[breaking]** DevEx: Merged `scripts/create-github-release.py` and `scripts/deploy-to-production.py` into `scripts/devops.py` as `release` and `deploy` actions.
 - **[breaking]** DevEx: Removed `scripts/install-from-github-release.py`; install releases with `pip` from the release wheel or Git tag.
 

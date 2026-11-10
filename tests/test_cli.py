@@ -1,46 +1,54 @@
 from myproject import __version__
 from myproject.cli import main
 
+VERSION_PREFIX = f"myproject v{__version__}"
+COPYRIGHT_SUFFIX = " - Copyright (c) 2026 Giovanni Pellicciotta"
+
 
 def test_help_exits_zero(capsys):
     assert main(["help"]) == 0
     out = capsys.readouterr().out
-    assert "myproject v" in out
-    assert "usage:" in out
-    assert "Exit codes:" in out
+    assert out.startswith(VERSION_PREFIX)
+    for text in ("Usage:", "Actions:", "Options:", "Exit codes:", "greet", "create"):
+        assert text in out
 
 
 def test_help_flags(capsys):
     assert main(["-h"]) == 0
-    assert "usage:" in capsys.readouterr().out
+    assert "Usage:" in capsys.readouterr().out
 
     assert main(["--help"]) == 0
-    assert "usage:" in capsys.readouterr().out
-
-
-def test_help_lists_actions_and_options(capsys):
-    assert main(["help"]) == 0
-    out = capsys.readouterr().out
-    assert "positional arguments:" in out
-    assert "options:" in out
-    assert "Exit codes:" in out
+    assert "Usage:" in capsys.readouterr().out
 
 
 def test_no_args_shows_help(capsys):
     assert main([]) == 0
     out = capsys.readouterr().out
-    assert "usage:" in out
+    assert "Usage:" in out
     assert "Exit codes:" in out
 
 
-def test_version_action_and_flag(capsys):
-    assert main(["version"]) == 0
-    out = capsys.readouterr().out.strip()
-    assert out == f"myproject v{__version__} - Copyright (c) 2026 Giovanni Pellicciotta"
+def test_action_help_lists_create_options(capsys):
+    assert main(["help", "create"]) == 0
+    out = capsys.readouterr().out
+    assert "myproject create PROJECT_NAME [-o DIR]" in out
+    assert "-o, --output-dir" in out
+    assert "PROJECT_NAME is the new project's name" in out
 
-    assert main(["--version"]) == 0
-    out = capsys.readouterr().out.strip()
-    assert out == f"myproject v{__version__} - Copyright (c) 2026 Giovanni Pellicciotta"
+
+def test_action_help_describes_greet_argument(capsys):
+    assert main(["help", "greet"]) == 0
+    out = capsys.readouterr().out
+    assert "myproject greet [NAME]" in out
+    assert "NAME defaults to 'wereld'" in out
+
+
+def test_version_action_and_flag(capsys):
+    for argv in (["version"], ["--version"]):
+        assert main(argv) == 0
+        out = capsys.readouterr().out.strip()
+        assert out.startswith(VERSION_PREFIX)
+        assert out.endswith(COPYRIGHT_SUFFIX)
 
 
 def test_greet(capsys):
@@ -50,17 +58,22 @@ def test_greet(capsys):
     assert main(["greet"]) == 0
     assert capsys.readouterr().out.strip() == "Hello, wereld"
 
-    assert main(["greet", "Gio", "--verbose"]) == 0
-    out = capsys.readouterr().out
-    assert "Greeting target: Gio" in out
-    assert "Hello, Gio" in out
+
+def test_greet_verbose(capsys):
+    for flag in ("--verbose", "-v"):
+        assert main(["greet", "Gio", flag]) == 0
+        out = capsys.readouterr().out
+        assert "Starting myproject v" in out
+        assert "Greeting target: Gio" in out
+        assert "Hello, Gio" in out
 
 
-def test_create_scaffolds_renamed_project(tmp_path):
+def test_create_scaffolds_renamed_project(tmp_path, capsys):
     project_name = "sample-app"
     assert main(["create", project_name, "-o", str(tmp_path)]) == 0
 
     destination = tmp_path / project_name
+    assert f"Created new project at {destination}" in capsys.readouterr().out
     assert destination.is_dir()
     assert (destination / "src" / "sample_app" / "cli.py").is_file()
     assert [p.name for p in (destination / "src").iterdir() if p.is_dir()] == ["sample_app"]
@@ -74,6 +87,7 @@ def test_create_scaffolds_renamed_project(tmp_path):
     assert 'license = "MIT"' in pyproject
     assert "https://github.com/gpellicciotta/sample-app" in pyproject
     assert "template.python" not in pyproject and "template-python" not in pyproject
+    assert "support.python.git@v2.0.0" in pyproject
 
     readme = (destination / "README.md").read_text(encoding="utf-8")
     assert "Sample App" in readme
@@ -103,17 +117,20 @@ def test_create_scaffolds_renamed_project(tmp_path):
     assert "Installing from a release" in readme
 
 
-def test_create_refuses_existing_destination(tmp_path):
+def test_create_refuses_existing_destination(tmp_path, capsys):
     project_name = "dup-app"
     (tmp_path / project_name).mkdir()
 
     assert main(["create", project_name, "-o", str(tmp_path)]) == 1
+    assert "already exists" in capsys.readouterr().err
 
 
 def test_create_missing_project_name(capsys):
     assert main(["create"]) == 2
-    assert "error:" in capsys.readouterr().err
+    assert "PROJECT_NAME" in capsys.readouterr().err
 
 
 def test_invalid_args():
     assert main(["--invalid-option"]) == 2
+    assert main(["unknown-action"]) == 2
+    assert main(["greet", "--invalid-option"]) == 2

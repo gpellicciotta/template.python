@@ -54,13 +54,16 @@ This repository and all projects scaffolded from this template follow the cross-
 - Use the same tools and techniques the rest of the Python ecosystem is using (src-layout, `pyproject.toml`,
   pytest, ruff, GitHub Actions) unless there's a concrete reason to deviate — and if you deviate, say why in
   this file rather than leaving it implicit.
-- CLI design: prefer action-oriented, subcommand-based CLIs (`tool action [options]`). Provide `help` action /
-  `-h` / `--help`, `version` action / `--version`, `--verbose` option, and standardized `{name} v{version} - {copyright}`
-  header with exit codes.
+- CLI design: prefer action-oriented, subcommand-based CLIs (`tool action [options]`) built on `support-python`'s
+  `support_python.cli.ToolHarness` (see `src/myproject/cli.py`). It provides the `help` action / `-h` / `--help`,
+  `version` action / `--version`, `-v`/`--verbose`, `--debug`, `--log-file`, the standardized
+  `{name} v{version} - {copyright}` header, and exit codes. Register actions with `add_action(name, summary, handler)`,
+  where `handler(args, logger)` returns the exit code and writes output through the `CliLogger` it receives.
 - Logging: direct operational logging to a log file and standard streams per cross-project guidelines using
   `support-python`'s `support_python.logging.CliLogger` and `LogLevel` (dual destination, `--log-file`,
-  startup/completion lifecycle banners via `log_start`/`log_end`, padded severity tags, and `--debug` filtering)
-  instead of reimplementing a local starter module — see `## Logging` below.
+  startup/completion lifecycle banners, padded severity tags, and `--debug` filtering)
+  instead of reimplementing a local starter module — see `## Logging` below. `ToolHarness` already prints the
+  banners for CLI actions; call `log_start`/`log_end` only in code that runs without the harness.
 
 ## Logging
 

@@ -1,70 +1,78 @@
 from __future__ import annotations
 
-import sys
+import argparse
+from typing import Optional, Sequence
 
-from support_python.cli import build_action_parser, print_help, print_version
+from support_python import CliLogger
+from support_python.cli import ToolHarness
 
 from . import __version__
 from .core import greet
 from .scaffold import ScaffoldError, create_project
 
 TOOL_NAME = "myproject"
-AUTHOR = "2026 Giovanni Pellicciotta"
+COPYRIGHT = "Copyright (c) 2026 Giovanni Pellicciotta"
 DESCRIPTION = "Sample CLI for template.python providing greeting and project scaffolding."
-ACTIONS = ["help", "version", "greet", "create"]
-EXIT_CODES = [
-    (0, "Success"),
-    (1, "Application or command execution error"),
-    (2, "Invalid command-line arguments"),
-]
 
 
-def build_parser():
-    """Build the argument parser on top of the shared support-python action/help/version template."""
-    parser = build_action_parser(TOOL_NAME, DESCRIPTION, ACTIONS, default_action="help")
-    parser.add_argument("target", nargs="?", default=None, help="Name to greet ('greet'), or project name ('create')")
+def _configure_greet(parser: argparse.ArgumentParser) -> None:
+    parser.add_argument("name", nargs="?", default="wereld", help="name to greet (default: wereld)")
+
+
+def _configure_create(parser: argparse.ArgumentParser) -> None:
+    parser.add_argument("project_name", metavar="PROJECT_NAME", help="name of the new project")
     parser.add_argument(
-        "-o", "--output-dir", default=".", help="Directory to create the new project under (default: current directory)"
+        "-o", "--output-dir", default=".", metavar="DIR", help="directory to create the new project under (default: .)"
     )
-    return parser
 
 
-def main(argv: list[str] | None = None) -> int:
-    """Entry point for the CLI."""
-    parser = build_parser()
-    try:
-        args = parser.parse_args(argv)
-    except SystemExit as exc:
-        return int(exc.code) if isinstance(exc.code, int) else 2
-
-    if args.version or args.action == "version":
-        print_version(TOOL_NAME, __version__, author=AUTHOR)
-        return 0
-
-    if args.help or args.action == "help":
-        print_help(TOOL_NAME, __version__, DESCRIPTION, parser, exit_codes=EXIT_CODES, author=AUTHOR)
-        return 0
-
-    if args.action == "greet":
-        name = args.target or "wereld"
-        if args.verbose:
-            print(f"Greeting target: {name}")
-        print(greet(name))
-        return 0
-
-    # only "create" remains, since args.action is constrained to ACTIONS
-    if not args.target:
-        print("error: project_name is required for create action", file=sys.stderr)
-        return 2
-    if args.verbose:
-        print(f"Scaffolding project '{args.target}' into '{args.output_dir}'...")
-    try:
-        destination = create_project(args.target, args.output_dir)
-    except ScaffoldError as exc:
-        print(f"error: {exc}", file=sys.stderr)
-        return 1
-    print(f"Created new project at {destination}")
+def run_greet(args: argparse.Namespace, logger: CliLogger) -> int:
+    """Print a greeting for the given name."""
+    logger.progress(f"Greeting target: {args.name}")
+    logger.emit(greet(args.name))
     return 0
+
+
+def run_create(args: argparse.Namespace, logger: CliLogger) -> int:
+    """Scaffold a new project as a renamed copy of this template."""
+    logger.progress(f"Scaffolding project '{args.project_name}' into '{args.output_dir}'...")
+    try:
+        destination = create_project(args.project_name, args.output_dir)
+    except ScaffoldError as exc:
+        logger.error(str(exc))
+        return 1
+    logger.emit(f"Created new project at {destination}")
+    return 0
+
+
+def build_harness() -> ToolHarness:
+    """Build the CLI on the shared support-python action, help, version, and logging harness."""
+    harness = ToolHarness(TOOL_NAME, DESCRIPTION, version=__version__, copyright=COPYRIGHT)
+    harness.add_action(
+        "greet",
+        "print a greeting",
+        run_greet,
+        detail="Prints 'Hello, NAME'; NAME defaults to 'wereld'.\nWith --verbose, also prints the greeting target.",
+        usage_suffix="[NAME]",
+        configure_parser=_configure_greet,
+    )
+    harness.add_action(
+        "create",
+        "scaffold a new project from this template",
+        run_create,
+        detail="Copies this template into DIR/PROJECT_NAME, renaming the package, project, and title.\n"
+        "PROJECT_NAME is the new project's name; DIR defaults to the current directory.\n"
+        "Needs an editable install of template.python.",
+        usage_suffix="PROJECT_NAME [-o DIR]",
+        configure_parser=_configure_create,
+    )
+    harness.set_examples([f"{TOOL_NAME} greet Gio", f"{TOOL_NAME} create my-app -o ../"])
+    return harness
+
+
+def main(argv: Optional[Sequence[str]] = None) -> int:
+    """Entry point for the CLI."""
+    return build_harness().run(argv)
 
 
 if __name__ == "__main__":

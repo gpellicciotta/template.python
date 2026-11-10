@@ -92,11 +92,14 @@ project in editable mode with the `dev` extra (pytest), runs the test suite, and
 ## CLI
 
 ```powershell
-myproject help                 # or -h / --help (add --verbose for full option details)
+myproject help [<action>]      # or -h / --help (add --verbose for full option details)
 myproject version              # or --version
-myproject greet <name>         # sample business logic
+myproject greet [<name>]       # sample business logic
 myproject create <project-name> [-o <output-dir>]
 ```
+
+The CLI runs on `support-python`'s `ToolHarness`, so every action also accepts `-v`/`--verbose`, `--debug`,
+`--log-file <path>`, and `--log-level <level>`. Exit codes: `0` success, `1` failure, `2` invalid arguments.
 
 `create` scaffolds a new project as a copy of this template at `<output-dir>/<project-name>` (current directory
 if `-o` is omitted), automating the renames described below in **Starting a new project from this template**.
