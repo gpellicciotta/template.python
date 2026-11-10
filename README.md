@@ -36,7 +36,6 @@ template.python/
   .github/
     workflows/
       ci.yml           # editable install + ruff + pytest + build, on push/PR
-      publish.yml      # build and attach sdist/wheel to GitHub releases
   LICENSE.md           # MIT license
   pyproject.toml       # project metadata, dependencies, dev extra, CLI entry point, ruff config
   .gitignore 
@@ -119,8 +118,8 @@ The built packages will be in the `dist/` directory — the same location `scrip
 
 ## Installation and Releases
 
-When a release is published on GitHub, `.github/workflows/publish.yml` builds source and wheel packages,
-attaching them as downloadable release assets.
+`python scripts/devops.py release` builds the source and wheel packages from the released version and
+attaches them to the GitHub release as downloadable assets.
 
 ### Installing from a release
 

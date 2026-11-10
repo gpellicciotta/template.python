@@ -113,7 +113,8 @@ def test_create_scaffolds_renamed_project(tmp_path, capsys):
     assert (destination / "docs" / "issues" / ".gitkeep").is_file()
     assert (destination / ".plan" / "tasks" / ".gitkeep").is_file()
     assert [p.name for p in (destination / ".plan" / "tasks").iterdir()] == [".gitkeep"]
-    assert (destination / ".github" / "workflows" / "publish.yml").is_file()
+    assert (destination / ".github" / "workflows" / "ci.yml").is_file()
+    assert not (destination / ".github" / "workflows" / "publish.yml").exists()
     gitignore = {line.strip() for line in (destination / ".gitignore").read_text(encoding="utf-8").splitlines()}
     assert ".venv/" in gitignore
     assert not gitignore & {".plan/", ".plan", "/.plan/", "/PLAN.md", "PLAN.md", "/plan.code-workspace"}

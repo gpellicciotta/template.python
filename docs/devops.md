@@ -190,12 +190,20 @@ If releasing manually without the script:
    heading above it, but leave `pyproject.toml`'s `version` at the bare frozen version — bumping it to the next
    `-pre` now would make the following publish step publish the wrong version. Only bump `pyproject.toml` to the next
    `-pre` in the first real commit of the next dev cycle.
-3. Perform a clean verification build:
-   ```powershell
-   .venv\Scripts\python -m pytest && .venv\Scripts\python -m build
+3. Run lint, tests, and a clean build; `build` empties `dist/` first, so it holds only this version's packages:
+   ```bash
+   python scripts/devops.py check
    ```
-4. Commit the changes and tag the release commit.
-5. Publish a GitHub Release for the tag; `.github/workflows/publish.yml` builds distribution packages and attaches them to the release.
+4. Commit the changes, tag the release commit, and push both:
+   ```bash
+   git commit -am "Released version <version>."
+   git tag v<version>
+   git push origin main v<version>
+   ```
+5. Publish a GitHub Release for the pushed tag, attaching the wheel and sdist built in step 3:
+   ```bash
+   gh release create v<version> --verify-tag dist/*-<version>-py3-none-any.whl dist/*-<version>.tar.gz
+   ```
 
 ---
 
@@ -208,4 +216,4 @@ The GitHub Actions workflow in `.github/workflows/ci.yml` runs on every push and
 - Automated test suite execution via `pytest`.
 - Package build via `build`.
 
-When a release is published on GitHub, `.github/workflows/publish.yml` triggers to build sdist and wheel packages and attach them as downloadable release assets.
+No workflow runs on release: `devops.py release` attaches the wheel and sdist itself.
