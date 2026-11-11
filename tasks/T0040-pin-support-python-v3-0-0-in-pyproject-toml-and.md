@@ -1,15 +1,16 @@
 ---
 id: T0040
-owner: ~
+owner: "@claude-code"
 needs: []
 branch: —
 worktree: —
-status: ready
-started_at: —
-ended_at: —
+status: completed
+started_at: "2026-11-11T09:13:40Z"
+ended_at: "2026-11-11T09:17:00Z"
 review: none
 preview: none
 protocol: adhoc
+completion-commit: 7f08f067fc5ee16d579c0dc74b16dbf2e7ed09c5
 ---
 # T0040: Pin support-python v3.0.0 in pyproject.toml and scripts/requirements.txt, and set the DevopsCli banner copyright it no longer defaults
 
@@ -22,12 +23,28 @@ No other v3 breaking change affects this template: it uses no `agent-files`, `li
 Specifications: [technical-spec.md](T0040-pin-support-python-v3-0-0-in-pyproject-toml-and/technical-spec.md).
 
 ## Task Execution Steps
-- [ ] **[Implement]** Write the tests listed in the technical spec.
-- [ ] **[Verify]**    Run the new tests and capture the expected failures.
-- [ ] **[Implement]** Implement the change until the new tests pass.
-- [ ] **[Verify]**    Run the fast suite and the completion check; record output in validation-proof.md.
-- [ ] **[Doc]**       Update docs/devops.md and add a CHANGELOG.md entry.
+- [x] **[Implement]** Write the tests listed in the technical spec.
+- [x] **[Verify]**    Run the new tests and capture the expected failures.
+- [x] **[Implement]** Implement the change until the new tests pass.
+- [x] **[Verify]**    Run the fast suite and the completion check; record output in validation-proof.md.
+- [x] **[Doc]**       Update docs/devops.md and add a CHANGELOG.md entry.
 
 ## Execution Log
 - [2026-11-11] **[Doc]**
   Task file created after reading the support-python v3.0.0 changelog and migration guide.
+
+- [2026-11-11] **[Verify]**
+  Pinned v3.0.0, set the devops banner copyright, added pytest-timeout and a slow marker; check passes.
+  - Files touched: 7.
+  - Lines touched: 32.
+  - Reopenings: 0.
+
+- [2026-11-11] **[Implement]**
+  Undeclared scope: v3 check needs pytest-timeout and one slow test; T0023 keeps the rest.
+
+- [2026-11-11] **[Doc]**
+  Updated docs link and CHANGELOG entry.
+
+- [2026-11-11] **[Complete]**
+  Task completed successfully.
+

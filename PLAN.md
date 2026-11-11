@@ -11,12 +11,12 @@ An overview of all tasks and their planning.
 - [ ] T0030 Start scaffolded projects at version 0.1.0-pre with an area-prefixed first CHANGELOG entry.
 - [ ] T0035 Change the greet default name from the Dutch wereld to the US English world.
 - [ ] T0037 Rewrite the active -pre CHANGELOG entries to follow the changelog entry style rules.
-- [ ] T0040 [protocol: adhoc] Pin support-python v3.0.0 in pyproject.toml and scripts/requirements.txt, and set the DevopsCli banner copyright it no longer defaults.
-- [ ] T0038 [needs: T0040] Resolve __version__ with support_python.get_package_version so the CLI shows -pre instead of the rc0 form.
+- [x] T0040 Pin support-python v3.0.0 in pyproject.toml and scripts/requirements.txt, and set the DevopsCli banner copyright it no longer defaults.
+- [ ] T0038 Resolve __version__ with support_python.get_package_version so the CLI shows -pre instead of the rc0 form.
 - [ ] T0034 Put one argument per line in every call or signature split across lines.
 - [ ] T0031 Scaffold and index docs/tutorials/ alongside the other standard documentation subdirectories.
 - [ ] T0020 Remove the always-failing placeholder deploy action from scripts/devops.py, its tests, and its docs.
-- [ ] T0023 [needs: T0040] Split the tests into fast and slow suites with pytest-xdist, pytest-timeout, a slow marker, and a CI slow run.
+- [ ] T0023 Split the tests into fast and slow suites with pytest-xdist, pytest-timeout, a slow marker, and a CI slow run.
 - [ ] T0025 [needs: T0023] Add a subprocess end-to-end test that runs the installed myproject entry point with realistic arguments.
 - [ ] T0027 Add the standard --format text|json option to the myproject greet and create actions.
 - [ ] T0028 [needs: T0027, T0029] Add --dry-run to myproject create, reporting every planned change without writing anything.
