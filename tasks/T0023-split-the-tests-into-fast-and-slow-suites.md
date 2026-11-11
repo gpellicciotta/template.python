@@ -1,7 +1,7 @@
 ---
 id: T0023
 owner: ~
-needs: []
+needs: ['T0040']
 branch: —
 worktree: —
 status: ready
@@ -18,7 +18,7 @@ Add `pytest-xdist` and `pytest-timeout` to the `dev` extra.
 Register the `slow` marker and set `addopts = "-n auto --timeout=30 -m 'not slow'"`, as the Python guidelines show.
 Mark integration, end-to-end, subprocess, git, and build tests as `slow`.
 Run the fast suite and `pytest -m slow --timeout=120` as separate CI steps.
-Make releases run the slow suite too, for example by extending `check()` in a `PythonProject` subclass in scripts/devops.py.
+Rely on support-python v3.0.0: `devops.py test --slow` runs `pytest -m slow --timeout=120`, and `check` runs both suites, so scripts/devops.py needs no change.
 Document both suite commands in docs/devops.md and README.md.
 
 ## Task Execution Steps

@@ -1,7 +1,6 @@
 ### Declared Files
 - pyproject.toml
 - .github/workflows/ci.yml
-- scripts/devops.py
 - tests/test_scripts.py
 - tests/test_cli.py
 - docs/devops.md

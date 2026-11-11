@@ -17,6 +17,7 @@ protocol: adhoc
 Add tests/conftest.py with an autouse fixture that redirects `HOME`, `USERPROFILE`, `APPDATA`, `LOCALAPPDATA`, and `XDG_CONFIG_HOME` to per-test `tmp_path` directories through `monkeypatch`.
 Fail the session when a test writes into the real home directory or the repository working tree, for example by comparing `git status --porcelain` before and after the run.
 Keep the fixture safe under pytest-xdist parallel runs.
+Model it on the session fixture in support.python v3.0.0, tests/conftest.py.
 
 ## Task Execution Steps
 - [ ] **[Implement]** Write the tests listed in the technical spec.

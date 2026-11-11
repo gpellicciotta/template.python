@@ -1,7 +1,7 @@
 ---
 id: T0038
 owner: ~
-needs: []
+needs: ['T0040']
 branch: —
 worktree: —
 status: ready
@@ -14,7 +14,7 @@ protocol: adhoc
 # T0038: Resolve __version__ with support_python.get_package_version so the CLI shows -pre instead of the rc0 form
 
 ## Goals
-`myproject --version` prints `v3.0.0rc0+0a59a6f` because packaging normalizes `3.0.0-pre` to `3.0.0rc0` in installed metadata.
+Installed metadata shows `3.0.0-pre` as `3.0.0rc0`, so `myproject.__version__` is the rc0 form; support-python v3.0.0 `ToolHarness` already maps it back for `--version`.
 Resolve `__version__` in src/myproject/__init__.py with `support_python.get_package_version("template-python")`, which maps `rc0` back to `-pre` and falls back to `0.0.0+unknown`.
 Make sure `create` still rewrites the distribution name in new projects.
 
