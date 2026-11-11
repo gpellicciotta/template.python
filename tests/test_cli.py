@@ -1,7 +1,8 @@
-from myproject import __version__
+from support_python import get_package_version
+
 from myproject.cli import main
 
-VERSION_PREFIX = f"myproject v{__version__}"
+VERSION_PREFIX = f"myproject v{get_package_version('template-python')}"
 COPYRIGHT_SUFFIX = " - Copyright (c) 2026 Giovanni Pellicciotta"
 
 
@@ -87,7 +88,7 @@ def test_create_scaffolds_renamed_project(tmp_path, capsys):
     assert 'license = "MIT"' in pyproject
     assert "https://github.com/gpellicciotta/sample-app" in pyproject
     assert "template.python" not in pyproject and "template-python" not in pyproject
-    assert "support.python.git@v2.0.0" in pyproject
+    assert "support.python.git@v3.0.0" in pyproject
 
     readme = (destination / "README.md").read_text(encoding="utf-8")
     assert "Sample App" in readme

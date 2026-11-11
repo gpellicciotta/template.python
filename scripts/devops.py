@@ -25,6 +25,7 @@ from typing import Any, Optional, Sequence
 REPO_ROOT = Path(__file__).resolve().parent.parent
 VENV_DIR = REPO_ROOT / ".venv"
 DESCRIPTION = "Runs the lint, format, test, build, check, clean, versions, release, and deploy operations of this project."
+COPYRIGHT = "Copyright (c) 2026 Giovanni Pellicciotta"
 REEXEC_ENV = "DEVOPS_REEXECUTED"
 BOOTSTRAP_HINT = "run `python scripts/bootstrap-dev-environment.py` first."
 
@@ -47,7 +48,7 @@ def build_cli(root: Path = REPO_ROOT) -> Any:
     """Build the devops command line: the standard DevopsCli actions plus the placeholder deploy."""
     from support_python.devops import DeployStep, DevopsCli, PythonProject
 
-    cli = DevopsCli(PythonProject(root), description=DESCRIPTION)
+    cli = DevopsCli(PythonProject(root), description=DESCRIPTION, copyright=COPYRIGHT)
     cli.set_deploy([DeployStep("deploy to production", action=no_deployment_target)])
     return cli
 

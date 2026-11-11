@@ -61,7 +61,7 @@ python scripts/devops.py deploy    # example production deployment
 Add project-specific actions in `build_cli()` with `cli.add_action(name, summary, handler)`.
 The support-python [DevOps scripts tutorial][devops-tutorial] documents every option.
 
-[devops-tutorial]: https://github.com/gpellicciotta/support.python/blob/v2.0.0/docs/tutorials/devops-scripts.md
+[devops-tutorial]: https://github.com/gpellicciotta/support.python/blob/v3.0.0/docs/tutorials/devops-scripts.md
 
 ---
 

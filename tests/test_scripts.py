@@ -10,6 +10,7 @@ import sys
 from pathlib import Path
 from types import SimpleNamespace
 
+import pytest
 from support_python import CliLogger
 from support_python.devops import DevopsCli, PythonProject
 
@@ -47,9 +48,9 @@ def test_bootstrap_help():
     assert "Exit codes:" in result.stdout
 
 
-def test_requirements_pin_support_python_v2():
+def test_requirements_pin_support_python_v3():
     requirements = (SCRIPTS_DIR / "requirements.txt").read_text(encoding="utf-8")
-    assert "support-python @ git+https://github.com/gpellicciotta/support.python.git@v2.0.0" in requirements
+    assert "support-python @ git+https://github.com/gpellicciotta/support.python.git@v3.0.0" in requirements
 
 
 def test_devops_builds_devops_cli_over_python_project():
@@ -73,6 +74,7 @@ def test_devops_version():
     assert result.stdout.startswith("devops v")
 
 
+@pytest.mark.slow
 def test_devops_deploy_refuses_pre_release_version(tmp_path, capsys):
     (tmp_path / "pyproject.toml").write_text('[project]\nname = "demo"\nversion = "1.0.0-pre"\n', encoding="utf-8")
     git = [

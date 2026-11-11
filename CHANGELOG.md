@@ -12,11 +12,12 @@ A summarized overview of all changes, per version of this project.
 
 ---
 
-## v3.0.1-pre
+## v3.0.3-pre
 - Docs: Moved the project instructions into `AGENTS.md` and reduced `CLAUDE.md` to an `@AGENTS.md` import.
 - Build: **[breaking]** Required Python 3.15, raising `requires-python` from 3.10 and running CI on 3.15 only.
 - **[breaking]** CLI: Rebuilt `myproject` on the `support-python` v2.0.0 `ToolHarness`; `-v` now means `--verbose`, so use `--version`.
-- Build: Upgraded the `support-python` dependency from v1.0.0 to v2.0.0.
+- Build: Upgraded the `support-python` dependency from v1.0.0 to v3.0.0, passing the `devops.py` copyright banner that v3.0.0 no longer defaults.
+- Test: Added `pytest-timeout` and a registered `slow` marker, since v3.0.0 `check` runs `pytest -m slow --timeout=120` and fails on an empty slow suite.
 - **[breaking]** DevEx: Replaced `scripts/devops.py` with a thin support-python `DevopsCli` script that re-runs itself in `.venv`.
   - `-v` now means `--verbose`; use `--version`. Exit code 2 now means invalid arguments, not a failed release step.
   - `release` asks for the typed confirmation `release v<version>` (`--yes` skips it) and attaches the wheel and sdist.
