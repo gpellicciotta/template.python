@@ -11,6 +11,9 @@ ended_at: —
 review: none
 preview: none
 protocol: adhoc
+usage:
+  worker: {turns: 2, duration_s: 282.4, input: 75716, output: 6686, cache_read: 975104, cache_write: 0}
+work_duration: 153.0
 ---
 # T0031: Scaffold and index docs/tutorials/ alongside the other standard documentation subdirectories
 
@@ -36,6 +39,16 @@ Make new projects scaffolded by `create` include it.
   - Lines touched: 3.
   - Reopenings: 0.
 
+- [2026-11-12] **[Implement]**
+  Extended the existing CLI scaffold test with a tutorial placeholder assertion. Confirmed its expected failure before adding the directory.
+
+- [2026-11-12] **[Doc]**
+  Added the tutorial placeholder, README layout entry, documentation index link, and changelog entry. Committed the changes locally as c6c7df9.
+
+- [2026-11-12] **[Verify]**
+  Completion validation found 1 errors; pending fix turn 1 of 2.
+  - TF020.
+
 - [2026-11-12] **[Complete]**
-  Added the tutorial placeholder, documentation links, changelog entry, and scaffold regression assertion. Recorded verification evidence and completed all execution steps; ready for orchestrator completion.
+  Recorded missing execution-log coverage using existing implementation and verification evidence. Completed all execution steps for orchestrator finalization.
 
