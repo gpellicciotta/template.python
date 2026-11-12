@@ -5,12 +5,16 @@ session: claude-20261112-3035aa
 needs: []
 branch: task/T0022-run-lint-markdown-check-in-ci-and-in
 worktree: .plan/work/T0022-run-lint-markdown-check-in-ci-and-in
-status: active
+status: completed
 started_at: "2026-11-12T10:59:45Z"
-ended_at: —
+ended_at: "2026-11-12T11:03:36Z"
 review: none
 preview: none
 protocol: adhoc
+usage:
+  worker: {turns: 2, duration_s: 434.4, input: 100, output: 20448, cache_read: 2469804, cache_write: 92178}
+work_duration: 230.4
+completion-commit: 8eb1103f4949a910daf35c6a4d697e4c6fcd41e7
 ---
 # T0022: Run lint-markdown check in CI and in devops.py check so Markdown violations fail the build
 
@@ -30,14 +34,23 @@ Document the check in docs/devops.md.
 ## Execution Log
 - [2026-11-10] **[Doc]**
   Companion task file scaffolded at task creation.
+
 - [2026-11-12] **[Implement]**
   Added a slow test that `build_cli(tmp_path).project.lint()` fails on a `*` bullet and passes on a `-` bullet.
+
 - [2026-11-12] **[Verify]**
   The new test failed before the change: `lint()` returned True on the violation.
+
 - [2026-11-12] **[Implement]**
   Added `build_project()` in scripts/devops.py; its `PythonProject` subclass runs `lint-markdown check` after ruff.
   CI now installs scripts/requirements.txt and runs `lint-markdown check`.
+
 - [2026-11-12] **[Verify]**
   `python scripts/devops.py check` exited 0, and 1 with a seeded MD005 violation; see validation-proof.md.
+
 - [2026-11-12] **[Doc]**
   Updated docs/devops.md and added a CHANGELOG.md entry.
+
+- [2026-11-12] **[Complete]**
+  Task completed successfully.
+

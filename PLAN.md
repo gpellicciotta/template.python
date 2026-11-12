@@ -23,7 +23,7 @@ An overview of all tasks and their planning.
 - [x] T0019 Restructure docs/devops.md into the required guideline sections and fix the manual release commit order.
 - [x] T0036 Read the CLI author and copyright from package metadata instead of hardcoding them in cli.py and _cli_common.py.
 - [x] T0021 Fix all lint-markdown issues, bold lead-ins, placeholder syntax, backslash paths, and stale references in the docs.
-- [ ] T0022 Run lint-markdown check in CI and in devops.py check so Markdown violations fail the build.
+- [x] T0022 Run lint-markdown check in CI and in devops.py check so Markdown violations fail the build.
 
 ---
 
