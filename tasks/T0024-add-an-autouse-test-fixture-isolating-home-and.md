@@ -5,12 +5,16 @@ session: codex-20261112-b82ce9
 needs: []
 branch: task/T0024-add-an-autouse-test-fixture-isolating-home-and
 worktree: .plan/work/T0024-add-an-autouse-test-fixture-isolating-home-and
-status: active
+status: completed
 started_at: "2026-11-12T08:48:51Z"
-ended_at: —
+ended_at: "2026-11-12T08:56:38Z"
 review: none
 preview: none
 protocol: adhoc
+usage:
+  worker: {turns: 2, duration_s: 915.6, input: 106050, output: 24482, cache_read: 2398976, cache_write: 0}
+work_duration: 466.2
+completion-commit: 4c31af922c15137b1810711dc15175747c822a8a
 ---
 # T0024: Add an autouse test fixture isolating HOME and configuration directories and failing on writes to real user state
 
