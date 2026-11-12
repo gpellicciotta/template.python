@@ -21,7 +21,7 @@ An overview of all tasks and their planning.
 - [x] T0028 Add --dry-run to myproject create, reporting every planned change without writing anything.
 - [x] T0032 Make the bootstrap script CLI follow the CLI guidelines: -v as --verbose, help --verbose, errors on stderr.
 - [x] T0019 Restructure docs/devops.md into the required guideline sections and fix the manual release commit order.
-- [ ] T0036 Read the CLI author and copyright from package metadata instead of hardcoding them in cli.py and _cli_common.py.
+- [x] T0036 Read the CLI author and copyright from package metadata instead of hardcoding them in cli.py and _cli_common.py.
 - [ ] T0021 Fix all lint-markdown issues, bold lead-ins, placeholder syntax, backslash paths, and stale references in the docs.
 - [ ] T0022 [needs: T0021] Run lint-markdown check in CI and in devops.py check so Markdown violations fail the build.
 

@@ -5,15 +5,16 @@ session: claude-20261112-5639c1
 needs: []
 branch: task/T0036-read-the-cli-author-and-copyright-from-package
 worktree: .plan/work/T0036-read-the-cli-author-and-copyright-from-package
-status: active
+status: completed
 started_at: "2026-11-12T10:42:16Z"
-ended_at: —
+ended_at: "2026-11-12T10:49:05Z"
 review: none
 preview: none
 protocol: adhoc
 usage:
-  worker: {turns: 2, duration_s: 586.4, input: 108, output: 36184, cache_read: 3050186, cache_write: 117674}
-work_duration: 318.6
+  worker: {turns: 4, duration_s: 698.0, input: 140, output: 40254, cache_read: 4150792, cache_write: 131418}
+work_duration: 408.1
+completion-commit: 0882cc61536fe9ed76dde1a6f1aa673dca903168
 ---
 # T0036: Read the CLI author and copyright from package metadata instead of hardcoding them in cli.py and _cli_common.py
 
@@ -61,4 +62,7 @@ Record whether the copyright year stays a literal or moves into configuration.
 - [2026-11-12] **[Verify]**
   Completion validation found 1 errors; pending fix turn 1 of 2.
   - TF016.
+
+- [2026-11-12] **[Complete]**
+  Task completed successfully.
 
