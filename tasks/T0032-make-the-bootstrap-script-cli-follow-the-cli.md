@@ -11,6 +11,9 @@ ended_at: —
 review: none
 preview: none
 protocol: adhoc
+usage:
+  worker: {turns: 2, duration_s: 559.0, input: 108, output: 37596, cache_read: 2888262, cache_write: 135304}
+work_duration: 289.7
 ---
 # T0032: Make the bootstrap script CLI follow the CLI guidelines: -v as --verbose, help --verbose, errors on stderr
 
@@ -43,4 +46,17 @@ Use the same copyright line as `myproject`, and remove the unused duplicate `get
   - Files touched: 6.
   - Lines touched: 305.
   - Reopenings: 0.
+
+- [2026-11-12] **[Verify]**
+  Completion validation found 1 errors; pending fix turn 1 of 2.
+  - TF020.
+
+- [2026-11-12] **[Implement]**
+  Wrote 10 failing tests in tests/test_scripts.py covering -v, --version, help --verbose, stderr errors, and the devops fallback.
+
+- [2026-11-12] **[Verify]**
+  Red run before implementation: 10 failed, 12 passed; output is in validation-proof.md.
+
+- [2026-11-12] **[Doc]**
+  Updated docs/devops.md, README.md, and CHANGELOG.md with the bootstrap verbose, help, and stderr behavior.
 
