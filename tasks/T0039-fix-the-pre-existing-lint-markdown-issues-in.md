@@ -1,11 +1,12 @@
 ---
 id: T0039
-owner: ~
+owner: "@codex"
+session: codex-20261112-64fafb
 needs: []
-branch: —
-worktree: —
-status: ready
-started_at: —
+branch: task/T0039-fix-the-pre-existing-lint-markdown-issues-in
+worktree: .plan/work/T0039-fix-the-pre-existing-lint-markdown-issues-in
+status: active
+started_at: "2026-11-12T09:17:37Z"
 ended_at: —
 review: agent
 preview: none
@@ -16,12 +17,25 @@ protocol: standard
 ## Goals
 Fix the pre-existing lint-markdown issues in README.md and CHANGELOG.md.
 
+- Declared files: [README.md](../../README.md) and [CHANGELOG.md](../../CHANGELOG.md).
+- Completion check: `lint-markdown check README.md CHANGELOG.md` must pass.
+- **[Estimation]** One counted file, 60 changed lines; changelog and plan artifacts are excluded.
+- Unit test: none (documentation-only changes contain no executable logic).
+- Integration: Run the Markdown linter against both documents, including link validation.
+- Existing linter checks provide failing-first regression coverage; no new test code applies.
+
 ## Task Execution Steps
-- [ ] **[Implement]** Implement required changes for T0039.
-- [ ] **[Verify]**    Verify implementation with automated test suites.
-- [ ] **[Doc]**       Update documentation and CHANGELOG.md.
+- [x] **[Implement]** Implement required changes for T0039.
+- [x] **[Verify]**    Verify implementation with automated test suites.
+- [x] **[Doc]**       Update documentation and CHANGELOG.md.
 - [ ] **[Review]**    Obtain review approval of the finished work before completion.
 
 ## Execution Log
 - [2026-11-10] **[Doc]**
   Companion task file scaffolded at task creation.
+
+- [2026-11-12] **[Verify]**
+  Repaired formatting and links; both documents passed lint-markdown. Evidence: companion validation-proof.md.
+  - Counted scope: README.md, 21 changed lines; CHANGELOG.md excluded.
+  - Reopenings: 0. No executable changes; no unit tests apply.
+
