@@ -2,6 +2,104 @@
 
 ## Walkthrough & Validation
 
+### Review rework verification
+The following results supersede the earlier runs using a machine-specific PYTHONPATH override.
+No external PYTHONPATH override was used for these commands.
+The regression first reproduced PermissionError while removing committed Git objects on Windows.
+One fast run detected changed real-home metadata; the subsequent fast run and full suite passed.
+
+Command: `python -m pytest tests/test_scaffold.py -k 'missing_git or failed_plan_after_commit' -q --tb=short`; exit code: 1.
+
+```text
+.F                                                                       [100%]
+================================== FAILURES ===================================
+_________ test_failed_plan_after_commit_removes_readonly_git_objects __________
+src\myproject\scaffold.py:122: in _initialize_plan_store
+    subprocess.run([plan, "init", "--store", "branch"], cwd=destination, check=True, capture_output=True, text=True)
+C:\Users\giova\AppData\Local\Programs\Python\Python315\Lib\subprocess.py:692: in run
+    raise CalledProcessError(retcode, process.args,
+E   subprocess.CalledProcessError: Command ['C:\\Users\\giova\\AppData\\Local\\Temp\\pytest-of-giova\\pytest-8457\\test_failed_plan_after_commit_0\\tools\\plan.CMD', 'init', '--store', 'branch'] returned non-zero exit status 1.
+
+During handling of the above exception, another exception occurred:
+tests\test_scaffold.py:113: in test_failed_plan_after_commit_removes_readonly_git_objects
+    create_project("demo", str(tmp_path / "out"), template_root=root)
+src\myproject\scaffold.py:171: in create_project
+    _initialize_plan_store(destination, git, plan)
+src\myproject\scaffold.py:125: in _initialize_plan_store
+    shutil.rmtree(destination)
+C:\Users\giova\AppData\Local\Programs\Python\Python315\Lib\shutil.py:859: in rmtree
+    _rmtree_impl(path, dir_fd, onexc)
+C:\Users\giova\AppData\Local\Programs\Python\Python315\Lib\shutil.py:705: in _rmtree_unsafe
+    onexc(os.unlink, fullname, err)
+C:\Users\giova\AppData\Local\Programs\Python\Python315\Lib\shutil.py:701: in _rmtree_unsafe
+    os.unlink(fullname)
+E   PermissionError: [WinError 5] Access is denied: 'C:\\Users\\giova\\AppData\\Local\\Temp\\pytest-of-giova\\pytest-8457\\test_failed_plan_after_commit_0\\out\\demo\\.git\\objects\\09\\69ee7b5ad280582389551f84e52ec0b16d163c'
+=========================== short test summary info ===========================
+FAILED tests/test_scaffold.py::test_failed_plan_after_commit_removes_readonly_git_objects
+1 failed, 1 passed, 9 deselected in 1.78s
+```
+
+Command: `python -m pytest tests/test_scaffold.py tests/test_cli.py -q`; exit code: 0.
+
+```text
+........................                                                 [100%]
+24 passed in 10.67s
+```
+
+Command: `python -m pytest -m 'not slow' -q`; exit code: 1.
+
+```text
+................................E                                        [100%]
+=================================== ERRORS ====================================
+_ ERROR at teardown of test_scripts_are_ascii_only_for_legacy_windows_consoles _
+Real-state write guard failed:
+real home entries changed
+=========================== short test summary info ===========================
+ERROR tests/test_scripts.py::test_scripts_are_ascii_only_for_legacy_windows_consoles
+32 passed, 13 deselected, 1 error in 4.46s
+```
+
+Command: `python -m pytest -q`; exit code: 0.
+
+```text
+.............................................                            [100%]
+45 passed in 20.82s
+```
+
+Command: `python -m ruff check .`; exit code: 0.
+
+```text
+All checks passed!
+```
+
+Command: `python -m ruff format --check .`; exit code: 0.
+
+```text
+21 files already formatted
+```
+
+Command: `git diff --check`; exit code: 0.
+
+```text
+
+```
+
+Command: `lint-markdown check --offline AGENTS.md`; exit code: 0.
+
+```text
+All 1 markdown files passed linting.
+```
+
+Command: `python -m pytest -m 'not slow' -q`; exit code: 0.
+
+```text
+................................                                         [100%]
+32 passed, 13 deselected in 3.31s
+```
+
+### Earlier evidence (superseded)
+
+
 Command: `python -m pytest tests/test_scaffold.py tests/test_cli.py -m 'not slow' -q`; exit code: 1.
 
 ```text

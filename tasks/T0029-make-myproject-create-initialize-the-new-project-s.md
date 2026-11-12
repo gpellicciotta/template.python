@@ -13,9 +13,11 @@ preview: none
 protocol: standard
 usage:
   worker: {turns: 4, duration_s: 973.6, input: 112554, output: 20696, cache_read: 3097088, cache_write: 0}
-work_duration: 443.3
-review_status: pending
+  review: {turns: 2, duration_s: 423.6, input: 84, output: 22220, cache_read: 2379238, cache_write: 111790}
+work_duration: 764.8
+review_status: rejected
 review_round: 1
+reviewed_by: "@claude"
 ---
 # T0029: Make myproject create initialize the new project's plan store with plan init --store branch
 
@@ -61,4 +63,14 @@ Update README.md and docs/requirements.md.
 
 - [2026-11-12] **[Review]**
   Round 1 requested (mode: agent).
+
+- [2026-11-12] **[Review]**
+  Round 1 rejected by @claude: The core change works.
+  - Findings: [review-findings-1.md](T0029-make-myproject-create-initialize-the-new-project-s/review-findings-1.md).
+
+- [2026-11-12] **[Implement]**
+  Addressed review findings with read-only Git cleanup, resolved test executables, missing-Git coverage, and corrected inherited project instructions.
+
+- [2026-11-12] **[Verify]**
+  Corrected earlier completion evidence: it required a PYTHONPATH override. The revised completion command passes 24 tests without that override; the full suite passes 45.
 
