@@ -1,11 +1,12 @@
 ---
 id: T0019
-owner: ~
-needs: ['T0020']
-branch: —
-worktree: —
-status: ready
-started_at: —
+owner: "@claude"
+session: claude-20261112-911a7f
+needs: []
+branch: task/T0019-restructure-docs-devops-md-into-the-required-guideline
+worktree: .plan/work/T0019-restructure-docs-devops-md-into-the-required-guideline
+status: active
+started_at: "2026-11-12T10:38:30Z"
 ended_at: —
 review: none
 preview: none
@@ -27,10 +28,16 @@ Completion check: `lint-markdown check docs/devops.md` reports no issues.
 Size estimate: 1 file, 150 lines
 
 ## Task Execution Steps
-- [ ] **[Read]**      Read the devops.md rules in the project setup and change management guidelines.
-- [ ] **[Doc]**       Restructure docs/devops.md and rewrite the manual release steps.
-- [ ] **[Verify]**    Run lint-markdown check on docs/devops.md.
+- [x] **[Read]**      Read the devops.md rules in the project setup and change management guidelines.
+- [x] **[Doc]**       Restructure docs/devops.md and rewrite the manual release steps.
+- [x] **[Verify]**    Run lint-markdown check on docs/devops.md.
 
 ## Execution Log
 - [2026-11-10] **[Doc]**
   Companion task file scaffolded at task creation.
+- [2026-11-12] **[Doc]**
+  Restructured docs/devops.md into Development Environment and Versioning and Releasing first; dropped mail-utils.
+  Manual release now freezes as `[released: <date>]` in its own commit and reopens `-pre` in a separate commit after tagging.
+  Added a Docs entry to CHANGELOG.md; committed 0b261f4 on the task branch.
+- [2026-11-12] **[Verify]**
+  `lint-markdown check docs/devops.md` and `CHANGELOG.md`: passed. Fast tests not run: the worktree has no .venv; docs-only change.
