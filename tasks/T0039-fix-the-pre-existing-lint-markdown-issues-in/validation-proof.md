@@ -1,6 +1,14 @@
 # Validation Proof
 
 ## Walkthrough & Validation
+### Review Round 1 Rework
+Restored historical changelog meaning and removed the duplicate resource link.
+Command: `lint-markdown check README.md CHANGELOG.md` (exit code 0).
+
+```text
+All 2 markdown files passed linting.
+```
+
 Documentation-only changes require no unit tests; the Markdown linter checks formatting and link validity.
 The linter uses a modern browser User-Agent for external requests.
 

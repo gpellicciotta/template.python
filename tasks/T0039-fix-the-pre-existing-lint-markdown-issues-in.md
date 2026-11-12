@@ -13,9 +13,11 @@ preview: none
 protocol: standard
 usage:
   worker: {turns: 4, duration_s: 290.6, input: 75686, output: 6444, cache_read: 1289472, cache_write: 0}
-work_duration: 119.8
-review_status: pending
+  review: {turns: 2, duration_s: 251.4, input: 52, output: 11618, cache_read: 1034210, cache_write: 59116}
+work_duration: 306.3
+review_status: rejected
 review_round: 1
+reviewed_by: "@claude"
 ---
 # T0039: Fix the pre-existing lint-markdown issues in README.md and CHANGELOG.md
 
@@ -56,4 +58,15 @@ Fix the pre-existing lint-markdown issues in README.md and CHANGELOG.md.
 
 - [2026-11-12] **[Review]**
   Round 1 requested (mode: agent).
+
+- [2026-11-12] **[Review]**
+  Round 1 rejected by @claude: Rejected; the mechanical lint fixes are correct, but two released changelog entries now misstate history.
+  - Findings: [review-findings-1.md](T0039-fix-the-pre-existing-lint-markdown-issues-in/review-findings-1.md).
+
+- [2026-11-12] **[Implement]**
+  Addressed review findings by restoring historical changelog meaning and removing the duplicate README resource link.
+
+- [2026-11-12] **[Verify]**
+  Both documents passed lint-markdown after review corrections. Completion validation passed, resolving TF020; verbatim linter evidence appears in validation-proof.md.
+  - Earlier Implement and Doc entries retrospectively recorded work completed before the first Verify entry.
 
