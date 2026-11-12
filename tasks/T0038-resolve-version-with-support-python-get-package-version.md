@@ -11,6 +11,9 @@ ended_at: —
 review: none
 preview: none
 protocol: adhoc
+usage:
+  worker: {turns: 2, duration_s: 301.6, input: 154332, output: 7348, cache_read: 878848, cache_write: 0}
+work_duration: 157.9
 ---
 # T0038: Resolve __version__ with support_python.get_package_version so the CLI shows -pre instead of the rc0 form
 
@@ -38,4 +41,14 @@ Make sure `create` still rewrites the distribution name in new projects.
 
 - [2026-11-12] **[Implement]**
   Committed the verified resolver change locally. All execution steps passed; the orchestrator retains lifecycle completion.
+
+- [2026-11-12] **[Verify]**
+  Completion validation found 1 errors; pending fix turn 1 of 2.
+  - TF020.
+
+- [2026-11-12] **[Implement]**
+  Added regression tests for prerelease normalization, release preservation, missing metadata, and scaffold distribution-name rewriting before implementation.
+
+- [2026-11-12] **[Doc]**
+  Added the user-facing changelog entry and recorded failing-first and passing verification output in the validation proof.
 

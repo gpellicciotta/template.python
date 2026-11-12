@@ -101,3 +101,11 @@ Exit code: 0
 The first CLI suite run detected changed real-home entries; the repeated run passed without code changes.
 The shared environment contains older installed template metadata; source execution confirmed normalization without changing that environment.
 
+Command: `plan tasks validate --completion C:/Dev-Projects/template.python/.plan/tasks/T0038-resolve-version-with-support-python-get-package-version.md --project C:/Dev-Projects/template.python`
+
+Exit code: 0
+
+```text
+All 1 task file passed validation.
+```
+
