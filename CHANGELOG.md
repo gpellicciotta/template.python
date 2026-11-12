@@ -12,6 +12,8 @@ A summarized overview of all changes, per version of this project.
 
 ---
 
+## v3.0.1-pre
+
 ## v3.0.0 [released: 2026-11-12]
 - DevEx: Made `devops.py lint`, `check`, and CI run `lint-markdown check`, failing the build on Markdown violations.
 - Docs: Fixed Markdown lint issues, `{{placeholder}}` syntax, cross-platform commands, and stale guideline links and layout.
