@@ -12,12 +12,11 @@ review: agent
 preview: none
 protocol: standard
 usage:
-  worker: {turns: 4, duration_s: 290.6, input: 75686, output: 6444, cache_read: 1289472, cache_write: 0}
+  worker: {turns: 6, duration_s: 401.8, input: 87612, output: 8500, cache_read: 1949952, cache_write: 0}
   review: {turns: 2, duration_s: 251.4, input: 52, output: 11618, cache_read: 1034210, cache_write: 59116}
 work_duration: 306.3
-review_status: rejected
-review_round: 1
-reviewed_by: "@claude"
+review_status: pending
+review_round: 2
 ---
 # T0039: Fix the pre-existing lint-markdown issues in README.md and CHANGELOG.md
 
@@ -69,4 +68,7 @@ Fix the pre-existing lint-markdown issues in README.md and CHANGELOG.md.
 - [2026-11-12] **[Verify]**
   Both documents passed lint-markdown after review corrections. Completion validation passed, resolving TF020; verbatim linter evidence appears in validation-proof.md.
   - Earlier Implement and Doc entries retrospectively recorded work completed before the first Verify entry.
+
+- [2026-11-12] **[Review]**
+  Round 2 requested (mode: agent).
 
