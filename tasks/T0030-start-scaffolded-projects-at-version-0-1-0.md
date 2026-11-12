@@ -5,15 +5,16 @@ session: codex-20261112-cd7f40
 needs: []
 branch: task/T0030-start-scaffolded-projects-at-version-0-1-0
 worktree: .plan/work/T0030-start-scaffolded-projects-at-version-0-1-0
-status: active
+status: completed
 started_at: "2026-11-12T09:31:43Z"
-ended_at: —
+ended_at: "2026-11-12T09:36:14Z"
 review: none
 preview: none
 protocol: adhoc
 usage:
-  worker: {turns: 2, duration_s: 348.8, input: 85750, output: 8122, cache_read: 1101568, cache_write: 0}
-work_duration: 182.9
+  worker: {turns: 4, duration_s: 432.6, input: 99840, output: 9436, cache_read: 1724928, cache_write: 0}
+work_duration: 268.7
+completion-commit: d9ba4f3567bbe291626257c2568619a1942b60a5
 ---
 # T0030: Start scaffolded projects at version 0.1.0-pre with an area-prefixed first CHANGELOG entry
 
@@ -51,4 +52,7 @@ Update docs/requirements.md to match.
 
 - [2026-11-12] **[Doc]**
   Updated requirements and scaffold conventions to 0.1.0-pre, and added the user-facing changelog entry in commit 516417f.
+
+- [2026-11-12] **[Complete]**
+  Task completed successfully.
 
