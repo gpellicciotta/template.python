@@ -1,11 +1,12 @@
 ---
 id: T0027
-owner: ~
+owner: "@claude"
+session: claude-20261112-bd3fd9
 needs: []
-branch: —
-worktree: —
-status: ready
-started_at: —
+branch: task/T0027-add-the-standard-format-text-json-option-to
+worktree: .plan/work/T0027-add-the-standard-format-text-json-option-to
+status: active
+started_at: "2026-11-12T10:06:40Z"
 ended_at: —
 review: agent
 preview: none
@@ -20,13 +21,25 @@ Keep the `text` output unchanged as the default.
 Document the option and its JSON fields in README.md and docs/requirements.md.
 
 ## Task Execution Steps
-- [ ] **[Implement]** Write the tests listed in the technical spec.
-- [ ] **[Verify]**    Run the new tests and capture the expected failures.
-- [ ] **[Implement]** Implement the change until the new tests pass.
-- [ ] **[Verify]**    Run the fast suite and the completion check; record output in validation-proof.md.
-- [ ] **[Doc]**       Update the affected documentation and add a CHANGELOG.md entry.
+- [x] **[Implement]** Write the tests listed in the technical spec.
+- [x] **[Verify]**    Run the new tests and capture the expected failures.
+- [x] **[Implement]** Implement the change until the new tests pass.
+- [x] **[Verify]**    Run the fast suite and the completion check; record output in validation-proof.md.
+- [x] **[Doc]**       Update the affected documentation and add a CHANGELOG.md entry.
 - [ ] **[Review]**    Obtain review approval of the finished work before completion.
 
 ## Execution Log
 - [2026-11-10] **[Doc]**
   Companion task file scaffolded at task creation.
+
+- [2026-11-12] **[Implement]**
+  Added --format text|json to greet and create; json mode emits one object on stdout, logs on stderr.
+  - Failed create prints no JSON document.
+
+- [2026-11-12] **[Verify]**
+  Ran the completion check and devops check; all lint, fast, slow, and build steps passed.
+  - Proof recorded in validation-proof.md.
+  - Files touched: 4.
+  - Lines touched: 112.
+  - Reopenings: 0.
+
