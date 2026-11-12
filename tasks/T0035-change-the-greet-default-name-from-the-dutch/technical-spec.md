@@ -2,6 +2,7 @@
 - src/myproject/cli.py
 - tests/test_cli.py
 - README.md
+- docs/requirements.md
 - CHANGELOG.md
 
 ### Tests
