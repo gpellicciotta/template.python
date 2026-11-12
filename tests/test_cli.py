@@ -1,5 +1,7 @@
+import importlib.metadata
 import os
 from pathlib import Path
+import runpy
 import shutil
 import subprocess
 import sys
@@ -12,6 +14,18 @@ from test_scaffold import installed_plan as installed_plan
 
 VERSION_PREFIX = f"myproject v{get_package_version('template-python')}"
 COPYRIGHT_SUFFIX = " - Copyright (c) 2026 Giovanni Pellicciotta"
+
+
+@pytest.mark.parametrize("installed, expected", [("3.0.0rc0", "3.0.0-pre"), ("3.0.0", "3.0.0"), (None, "0.0.0+unknown")])
+def test_package_version(installed, expected, monkeypatch):
+    def metadata_version(distribution):
+        assert distribution == "template-python"
+        if installed is None:
+            raise importlib.metadata.PackageNotFoundError(distribution)
+        return installed
+
+    monkeypatch.setattr(importlib.metadata, "version", metadata_version)
+    assert runpy.run_module("myproject.__init__")["__version__"] == expected
 
 
 def test_help_exits_zero(capsys):
@@ -96,6 +110,9 @@ def test_create_scaffolds_renamed_project(tmp_path, capsys, installed_plan):
     assert f"Created new project at {destination}" in result.stdout
     assert destination.is_dir()
     assert (destination / "src" / "sample_app" / "cli.py").is_file()
+    package_init = (destination / "src" / "sample_app" / "__init__.py").read_text(encoding="utf-8")
+    assert 'get_package_version("sample-app")' in package_init
+    assert "template-python" not in package_init
     assert [p.name for p in (destination / "src").iterdir() if p.is_dir()] == ["sample_app"]
 
     pyproject = (destination / "pyproject.toml").read_text(encoding="utf-8")
