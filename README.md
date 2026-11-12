@@ -79,9 +79,22 @@ project in editable mode with the `dev` extra (pytest), runs the test suite, and
 `dist/`.
 
 ## Running Tests
+Run the parallel fast suite with a 30-second timeout per test:
+
 ```powershell
 .venv\Scripts\python -m pytest
 ```
+
+Run integration, subprocess, Git, and build tests separately with a 120-second timeout:
+
+```bash
+python scripts/devops.py test --slow
+# Or, with the virtual environment active:
+python -m pytest -m slow --timeout=120
+```
+
+`python scripts/devops.py test` runs the fast suite; `python scripts/devops.py check` runs lint, both suites, and build.
+CI runs both suites separately. Mark new integration tests and tests exceeding five seconds with `@pytest.mark.slow`.
 
 ## Linting
 ```powershell

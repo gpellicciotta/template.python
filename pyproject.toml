@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "template-python"
-version = "3.0.14-pre"
+version = "3.0.15-pre"
 description = "A template to get Python projects started quickly"
 authors = [{name="Giovanni Pellicciotta", email="giovanni.pellicciotta@gmail.com"}]
 readme = "README.md"
@@ -27,7 +27,7 @@ Repository = "https://github.com/gpellicciotta/template.python.git"
 Changelog = "https://github.com/gpellicciotta/template.python/blob/main/CHANGELOG.md"
 
 [project.optional-dependencies]
-dev = ["pytest>=8.0.0", "pytest-timeout>=2.3.0", "ruff>=0.6.0", "build>=1.0.0"]
+dev = ["pytest>=8.0.0", "pytest-xdist>=3.6.0", "pytest-timeout>=2.3.0", "ruff>=0.6.0", "build>=1.0.0"]
 
 [project.scripts]
 myproject = "myproject.cli:main"
@@ -41,5 +41,6 @@ select = ["E4", "E7", "E9", "F"]
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 pythonpath = ["src"]
-markers = ["slow: integration tests that run git or subprocesses; run with pytest -m slow"]
+addopts = "-n auto --timeout=30 -m 'not slow'"
+markers = ["slow: integration, end-to-end, subprocess, git, browser, build, or tests taking over 5 seconds"]
 

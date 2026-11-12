@@ -47,9 +47,10 @@ The script re-runs itself with the `.venv` interpreter, so plain `python` works:
 python scripts/devops.py help      # list every action; add --verbose for details
 python scripts/devops.py lint      # ruff check + ruff format --check
 python scripts/devops.py format    # ruff format
-python scripts/devops.py test      # pytest, or a selection: test tests/test_cli.py -- -k version
+python scripts/devops.py test      # fast suite; selection: test tests/test_cli.py -- -k version
+python scripts/devops.py test --slow # slow suite with 120-second per-test timeouts
 python scripts/devops.py build     # sdist + wheel into dist/
-python scripts/devops.py check     # lint + test + build
+python scripts/devops.py check     # lint + fast tests + slow tests + build
 python scripts/devops.py clean     # remove dist/, build/, and src/*.egg-info
 python scripts/devops.py versions  # compare pyproject.toml's version with the CHANGELOG.md top heading
 python scripts/devops.py release   # freeze, tag, push, and publish a GitHub release
@@ -64,9 +65,23 @@ The support-python [DevOps scripts tutorial][devops-tutorial] documents every op
 
 ## Testing and Code Quality
 ### Running Tests
+The default suite runs in parallel, excludes `slow` tests, and applies a 30-second timeout per test.
+
 ```bash
 .venv\Scripts\python -m pytest
 ```
+
+Run the slow suite with the virtual environment active:
+
+```bash
+python -m pytest -m slow --timeout=120
+# Equivalent devops command:
+python scripts/devops.py test --slow
+```
+
+Mark integration, end-to-end, subprocess, Git, browser, build, and tests exceeding five seconds with `@pytest.mark.slow`.
+Keep unit tests isolated and safe for parallel execution. The fast suite should finish within two minutes.
+`python scripts/devops.py check` and release checks run both suites before building.
 
 ### Linting and Formatting
 ```bash
@@ -195,7 +210,7 @@ The GitHub Actions workflow in [ci.yml](../.github/workflows/ci.yml) runs on eve
 - Python environment setup.
 - Editable installation with dev dependencies.
 - Code linting and formatting via `ruff`.
-- Automated test suite execution via `pytest`.
+- Separate fast and slow suite execution via `pytest`, with 30-second and 120-second per-test timeouts.
 - Package build via `build`.
 
 No workflow runs on release: `devops.py release` attaches the wheel and sdist itself.

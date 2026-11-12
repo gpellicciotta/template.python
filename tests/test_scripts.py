@@ -7,12 +7,45 @@ subprocesses (pip, ruff, pytest, git, gh) that `bootstrap-dev-environment.py` an
 import importlib.util
 import subprocess
 import sys
+import tomllib
 from pathlib import Path
 
+import pytest
 from support_python.devops import DevopsCli, PythonProject
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 SCRIPTS_DIR = REPO_ROOT / "scripts"
+
+
+def test_parallel_test_dependencies():
+    manifest = tomllib.loads((REPO_ROOT / "pyproject.toml").read_text(encoding="utf-8"))
+    dependencies = manifest["project"]["optional-dependencies"]["dev"]
+    assert any(item.startswith("pytest-xdist>=") for item in dependencies)
+    assert any(item.startswith("pytest-timeout>=") for item in dependencies)
+
+
+@pytest.mark.slow
+@pytest.mark.parametrize(
+    "selection, expected, excluded", [((), "test_fast", "test_slow"), (("-m", "slow"), "test_slow", "test_fast")]
+)
+def test_suite_collection_selection(tmp_path, selection, expected, excluded):
+    manifest = tomllib.loads((REPO_ROOT / "pyproject.toml").read_text(encoding="utf-8"))
+    options = manifest["tool"]["pytest"]["ini_options"]
+    (tmp_path / "pytest.ini").write_text(
+        "[pytest]\naddopts = " + options.get("addopts", "") + "\nmarkers = slow: integration tests\n", encoding="utf-8"
+    )
+    (tmp_path / "test_selection.py").write_text(
+        "import pytest\ndef test_fast(): pass\n@pytest.mark.slow\ndef test_slow(): pass\n", encoding="utf-8"
+    )
+    result = subprocess.run(
+        [sys.executable, "-m", "pytest", "--collect-only", "-q", "-n", "0", *selection],
+        cwd=tmp_path,
+        capture_output=True,
+        text=True,
+    )
+    assert result.returncode == 0, result.stdout + result.stderr
+    assert f"test_selection.py::{expected}" in result.stdout
+    assert f"test_selection.py::{excluded}" not in result.stdout
 
 
 def run_script(name: str, *args: str) -> subprocess.CompletedProcess:
@@ -32,12 +65,14 @@ def load_devops():
     return module
 
 
+@pytest.mark.slow
 def test_bootstrap_version():
     result = run_script("bootstrap-dev-environment.py", "--version")
     assert result.returncode == 0
     assert "bootstrap-dev-environment v" in result.stdout
 
 
+@pytest.mark.slow
 def test_bootstrap_help():
     result = run_script("bootstrap-dev-environment.py", "help")
     assert result.returncode == 0
@@ -58,6 +93,7 @@ def test_devops_builds_devops_cli_over_python_project():
     assert cli.run(["deploy"]) == 2
 
 
+@pytest.mark.slow
 def test_devops_help_lists_actions():
     result = run_script("devops.py", "help")
     assert result.returncode == 0
@@ -67,12 +103,14 @@ def test_devops_help_lists_actions():
     assert "deploy" not in result.stdout
 
 
+@pytest.mark.slow
 def test_devops_version():
     result = run_script("devops.py", "--version")
     assert result.returncode == 0
     assert result.stdout.startswith("devops v")
 
 
+@pytest.mark.slow
 def test_devops_rejects_unconfigured_deploy():
     result = run_script("devops.py", "deploy")
     assert result.returncode == 2
