@@ -11,6 +11,9 @@ ended_at: —
 review: agent
 preview: none
 protocol: standard
+usage:
+  worker: {turns: 2, duration_s: 1209.2, input: 200, output: 80718, cache_read: 8875188, cache_write: 213688}
+work_duration: 628.5
 ---
 # T0028: Add --dry-run to myproject create, reporting every planned change without writing anything
 
@@ -42,4 +45,11 @@ Document the option in README.md and docs/requirements.md.
 
 - [2026-11-12] **[Implement]**
   Size note: 6 counted files, 427 lines exceed the typical line; one feature, the planner and flag cannot merge apart usefully.
+
+- [2026-11-12] **[Verify]**
+  Completion validation found 1 errors; pending fix turn 1 of 2.
+  - TF020.
+
+- [2026-11-12] **[Doc]**
+  Documented create --dry-run in README.md and docs/requirements.md and added a CHANGELOG.md entry.
 
