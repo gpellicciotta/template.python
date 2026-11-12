@@ -7,10 +7,16 @@ from __future__ import annotations
 
 import argparse
 import sys
+import tomllib
+from pathlib import Path
 from typing import NoReturn, Optional, Sequence
 
-#: Copyright notice displayed in version banners; matches myproject.cli.COPYRIGHT.
-COPYRIGHT = "Copyright (c) 2026 Giovanni Pellicciotta"
+#: Project manifest supplying the copyright holder.
+PYPROJECT = Path(__file__).resolve().parent.parent / "pyproject.toml"
+#: First publication year in the copyright notice; matches myproject.cli.COPYRIGHT_YEAR.
+COPYRIGHT_YEAR = 2026
+#: Copyright holder named when the manifest has no authors; matches myproject.cli.FALLBACK_AUTHOR.
+FALLBACK_AUTHOR = "the template-python authors"
 #: Severity tag prefixing error messages on stderr.
 ERROR_TAG = "**[ERROR]** "
 #: Width of the name column in help listings.
@@ -44,9 +50,24 @@ def build_action_parser(prog: str, actions: Sequence[str], default_action: str) 
     return parser
 
 
+def read_author(pyproject: Path = PYPROJECT) -> str:
+    """Return the author names from pyproject.toml, or `FALLBACK_AUTHOR` when it is missing or unreadable."""
+    try:
+        manifest = tomllib.loads(pyproject.read_text(encoding="utf-8"))
+    except OSError, tomllib.TOMLDecodeError:
+        return FALLBACK_AUTHOR
+    authors = manifest.get("project", {}).get("authors", [])
+    return ", ".join(author.get("name") or author.get("email", "") for author in authors) or FALLBACK_AUTHOR
+
+
+def copyright_notice(pyproject: Path = PYPROJECT) -> str:
+    """Return the copyright notice displayed in version banners."""
+    return f"Copyright (c) {COPYRIGHT_YEAR} {read_author(pyproject)}"
+
+
 def print_version(prog: str, version: str) -> None:
     """Print the program name, version, and shared copyright notice."""
-    print(f"{prog} v{version} - {COPYRIGHT}")
+    print(f"{prog} v{version} - {copyright_notice()}")
 
 
 def _print_section(title: str, rows: Sequence[tuple], width: int = NAME_WIDTH) -> None:

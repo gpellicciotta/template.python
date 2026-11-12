@@ -12,7 +12,8 @@ A summarized overview of all changes, per version of this project.
 
 ---
 
-## v3.0.20-pre
+## v3.0.21-pre
+- CLI: Read the version banner's copyright holder from the `pyproject.toml` authors instead of hardcoding it.
 - Docs: Restructured [devops.md](docs/devops.md) into the standard sections, releasing manually with a separate reopen commit.
 - DevEx: **[breaking]** Made bootstrap `-v` mean `--verbose`, printing step commands; `--version` still prints the version.
 - DevEx: Added bootstrap `help --verbose` with the standard help sections, and moved script errors to stderr as `**[ERROR]**`.

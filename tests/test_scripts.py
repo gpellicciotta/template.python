@@ -89,11 +89,11 @@ def test_bootstrap_short_v_means_verbose_not_version(bootstrap, capsys):
 
 
 def test_bootstrap_version_uses_myproject_copyright(bootstrap, capsys):
-    from myproject.cli import COPYRIGHT
+    from myproject.cli import copyright_notice
 
     assert bootstrap.main(["--version"]) == 0
     assert bootstrap.main(["version"]) == 0
-    expected = f"bootstrap-dev-environment v{bootstrap.get_project_version()} - {COPYRIGHT}\n"
+    expected = f"bootstrap-dev-environment v{bootstrap.get_project_version()} - {copyright_notice()}\n"
     assert capsys.readouterr().out == expected * 2
     assert bootstrap.setup_calls == []
 
@@ -153,6 +153,30 @@ def test_cli_common_has_no_duplicate_version_reader(monkeypatch):
     import _cli_common
 
     assert not hasattr(_cli_common, "get_project_version")
+
+
+@pytest.mark.parametrize(
+    "content, expected",
+    [
+        (
+            '[project]\nauthors = [{name = "Ada Lovelace", email = "ada@example.com"}, {email = "alan@example.com"}]\n',
+            "Ada Lovelace, alan@example.com",
+        ),
+        ('[project]\nname = "sample"\n', "the template-python authors"),
+        ("[project\n", "the template-python authors"),
+        (None, "the template-python authors"),
+    ],
+)
+def test_cli_common_reads_author_from_pyproject(content, expected, tmp_path, monkeypatch):
+    monkeypatch.syspath_prepend(str(SCRIPTS_DIR))
+    import _cli_common
+
+    pyproject = tmp_path / "pyproject.toml"
+    if content is not None:
+        pyproject.write_text(content, encoding="utf-8")
+    assert _cli_common.read_author(pyproject) == expected
+    assert _cli_common.copyright_notice(pyproject) == f"Copyright (c) 2026 {expected}"
+    assert not hasattr(_cli_common, "COPYRIGHT")
 
 
 @pytest.mark.slow

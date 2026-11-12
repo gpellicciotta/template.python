@@ -3,6 +3,8 @@
 from __future__ import annotations
 
 import argparse
+from email.utils import getaddresses
+import importlib.metadata
 from typing import Optional, Sequence
 
 from support_python import CliLogger
@@ -14,10 +16,30 @@ from .scaffold import ScaffoldError, ScaffoldPlan, create_project, plan_project
 
 #: Command name used in CLI help, examples, and version output.
 TOOL_NAME = "myproject"
-#: Copyright notice displayed by the CLI harness.
-COPYRIGHT = "Copyright (c) 2026 Giovanni Pellicciotta"
+#: Distribution whose metadata supplies the copyright holder.
+DISTRIBUTION = "template-python"
+#: First publication year in the copyright notice, matching LICENSE.md.
+COPYRIGHT_YEAR = 2026
+#: Copyright holder named when package metadata has no author.
+FALLBACK_AUTHOR = f"the {DISTRIBUTION} authors"
 #: Summary displayed in CLI help.
 DESCRIPTION = "Sample CLI for template.python providing greeting and project scaffolding."
+
+
+def read_author() -> str:
+    """Return the installed distribution's author names, or `FALLBACK_AUTHOR` when metadata is unavailable."""
+    try:
+        metadata = importlib.metadata.metadata(DISTRIBUTION)
+    except importlib.metadata.PackageNotFoundError:
+        return FALLBACK_AUTHOR
+    names = [metadata.get("Author") or ""]
+    names += [name or address for name, address in getaddresses([metadata.get("Author-email") or ""])]
+    return ", ".join(name for name in names if name) or FALLBACK_AUTHOR
+
+
+def copyright_notice() -> str:
+    """Return the copyright notice displayed by the CLI harness."""
+    return f"Copyright (c) {COPYRIGHT_YEAR} {read_author()}"
 
 
 def _configure_greet(parser: argparse.ArgumentParser) -> None:
@@ -100,7 +122,7 @@ def run_create(args: argparse.Namespace, logger: CliLogger) -> int:
 
 def build_harness() -> ToolHarness:
     """Build the CLI on the shared support-python action, help, version, and logging harness."""
-    harness = ToolHarness(TOOL_NAME, DESCRIPTION, version=__version__, copyright=COPYRIGHT)
+    harness = ToolHarness(TOOL_NAME, DESCRIPTION, version=__version__, copyright=copyright_notice())
     harness.add_action(
         "greet",
         "print a greeting",

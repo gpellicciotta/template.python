@@ -4,6 +4,7 @@ from pathlib import Path
 import shutil
 import subprocess
 import sys
+import tomllib
 
 import pytest
 from support_python import get_package_version
@@ -14,7 +15,8 @@ pytestmark = [pytest.mark.slow, pytest.mark.timeout(120)]
 
 SCRIPTS_DIR = Path(sys.executable).parent
 VERSION_PREFIX = f"myproject v{get_package_version('template-python')}"
-COPYRIGHT_SUFFIX = " - Copyright (c) 2026 Giovanni Pellicciotta"
+PROJECT = tomllib.loads((Path(__file__).resolve().parents[1] / "pyproject.toml").read_text(encoding="utf-8"))["project"]
+COPYRIGHT_SUFFIX = f" - Copyright (c) 2026 {', '.join(author['name'] for author in PROJECT['authors'])}"
 
 
 @pytest.fixture

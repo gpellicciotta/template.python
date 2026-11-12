@@ -1,3 +1,4 @@
+from email.message import Message
 import importlib.metadata
 import json
 import os
@@ -6,6 +7,7 @@ import runpy
 import shutil
 import subprocess
 import sys
+import tomllib
 
 import pytest
 from support_python import get_package_version
@@ -14,7 +16,9 @@ from myproject.cli import main
 from test_scaffold import installed_plan as installed_plan
 
 VERSION_PREFIX = f"myproject v{get_package_version('template-python')}"
-COPYRIGHT_SUFFIX = " - Copyright (c) 2026 Giovanni Pellicciotta"
+PROJECT = tomllib.loads((Path(__file__).resolve().parents[1] / "pyproject.toml").read_text(encoding="utf-8"))["project"]
+COPYRIGHT_SUFFIX = f" - Copyright (c) 2026 {', '.join(author['name'] for author in PROJECT['authors'])}"
+FALLBACK_AUTHOR = "the template-python authors"
 
 
 @pytest.mark.parametrize("installed, expected", [("3.0.0rc0", "3.0.0-pre"), ("3.0.0", "3.0.0"), (None, "0.0.0+unknown")])
@@ -73,6 +77,32 @@ def test_version_action_and_flag(capsys):
         out = capsys.readouterr().out.strip()
         assert out.startswith(VERSION_PREFIX)
         assert out.endswith(COPYRIGHT_SUFFIX)
+
+
+@pytest.mark.parametrize(
+    "fields, expected",
+    [
+        ({"Author-email": "Ada Lovelace <ada@example.com>"}, "Ada Lovelace"),
+        ({"Author-email": "Ada Lovelace <ada@example.com>, Alan Turing <alan@example.com>"}, "Ada Lovelace, Alan Turing"),
+        ({"Author-email": "grace@example.com"}, "grace@example.com"),
+        ({"Author": "Ada Lovelace", "Author-email": "alan@example.com"}, "Ada Lovelace, alan@example.com"),
+        ({}, FALLBACK_AUTHOR),
+        (None, FALLBACK_AUTHOR),
+    ],
+)
+def test_version_names_metadata_author(fields, expected, monkeypatch, capsys):
+    def metadata(distribution):
+        assert distribution == "template-python"
+        if fields is None:
+            raise importlib.metadata.PackageNotFoundError(distribution)
+        message = Message()
+        for name, value in fields.items():
+            message[name] = value
+        return message
+
+    monkeypatch.setattr(importlib.metadata, "metadata", metadata)
+    assert main(["--version"]) == 0
+    assert capsys.readouterr().out.strip().endswith(f" - Copyright (c) 2026 {expected}")
 
 
 def test_greet(capsys):

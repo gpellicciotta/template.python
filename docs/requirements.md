@@ -35,6 +35,7 @@ Functional and technical requirements for the `template.python` repository.
 - Provide an action-oriented, subcommand-based CLI built on `support-python`'s `ToolHarness`:
   - `myproject help [<action>]` / `-h` / `--help`: displays standardized multi-line help with usage, subcommands, options, and exit codes (supports `--verbose` for detailed usage).
   - `myproject version` / `--version`: outputs `{name} v{version} - {copyright}` and exits with code 0.
+    The copyright names the `pyproject.toml` authors through package metadata, after a literal first-publication year.
   - `myproject greet [<name>]`: sample business logic command; prints `Hello, world` when the name is omitted.
   - `myproject create <project-name>`: project scaffolding subcommand.
 - Accept `--format text|json` on `greet` and `create`, defaulting to `text`:
