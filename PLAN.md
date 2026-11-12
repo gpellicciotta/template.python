@@ -5,7 +5,7 @@ An overview of all tasks and their planning.
 
 ## Next Milestone
 - [x] T0024 Add an autouse test fixture isolating HOME and configuration directories and failing on writes to real user state.
-- [ ] T0029 Make myproject create initialize the new project's plan store with plan init --store branch.
+- [x] T0029 Make myproject create initialize the new project's plan store with plan init --store branch.
 - [ ] T0039 Fix the pre-existing lint-markdown issues in README.md and CHANGELOG.md.
 - [ ] T0033 Add module docstrings to the myproject modules and docstrings to the public script helper functions.
 - [ ] T0038 Resolve __version__ with support_python.get_package_version so the CLI shows -pre instead of the rc0 form.
@@ -18,7 +18,7 @@ An overview of all tasks and their planning.
 - [ ] T0023 Split the tests into fast and slow suites with pytest-xdist, pytest-timeout, a slow marker, and a CI slow run.
 - [ ] T0025 [needs: T0023] Add a subprocess end-to-end test that runs the installed myproject entry point with realistic arguments.
 - [ ] T0027 Add the standard --format text|json option to the myproject greet and create actions.
-- [ ] T0028 [needs: T0027, T0029] Add --dry-run to myproject create, reporting every planned change without writing anything.
+- [ ] T0028 [needs: T0027] Add --dry-run to myproject create, reporting every planned change without writing anything.
 - [ ] T0032 Make the bootstrap script CLI follow the CLI guidelines: -v as --verbose, help --verbose, errors on stderr.
 - [ ] T0019 [needs: T0020] Restructure docs/devops.md into the required guideline sections and fix the manual release commit order.
 - [ ] T0036 Read the CLI author and copyright from package metadata instead of hardcoding them in cli.py and _cli_common.py.
