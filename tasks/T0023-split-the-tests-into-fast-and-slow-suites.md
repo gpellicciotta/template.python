@@ -11,6 +11,10 @@ ended_at: —
 review: agent
 preview: none
 protocol: standard
+usage:
+  worker: {turns: 2, duration_s: 682.0, input: 117232, output: 12118, cache_read: 2738688, cache_write: 0}
+review_status: pending
+review_round: 1
 ---
 # T0023: Split the tests into fast and slow suites with pytest-xdist, pytest-timeout, a slow marker, and a CI slow run
 
@@ -53,4 +57,7 @@ Document both suite commands in docs/devops.md and README.md.
   Passed 33 fast tests, 19 slow tests, devops check, standalone slow command, Markdown lint, and diff checks.
   - Counted files touched: 5; lines touched: 83; reopenings: 0.
   - Verbatim command output: companion validation-proof.md.
+
+- [2026-11-12] **[Review]**
+  Round 1 requested (mode: agent).
 
