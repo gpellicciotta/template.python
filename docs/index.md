@@ -20,6 +20,7 @@ Overview of all documentation and specifications in this project.
 - [Specifications](specs/): Interface, format, and protocol specifications.
 - [Architecture Decision Records](adrs/): Architectural decision records explaining key choices.
 - [Issue Records](issues/): Root cause analysis and resolution records for complex bugs.
+- [Tutorials](tutorials/): Step-by-step guides for using the project and its tools.
 
 ---
 

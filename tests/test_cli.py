@@ -148,6 +148,7 @@ def test_create_scaffolds_renamed_project(tmp_path, capsys, installed_plan):
     assert (destination / "docs" / "specs" / ".gitkeep").is_file()
     assert (destination / "docs" / "adrs" / ".gitkeep").is_file()
     assert (destination / "docs" / "issues" / ".gitkeep").is_file()
+    assert (destination / "docs" / "tutorials" / ".gitkeep").is_file()
     assert (destination / ".plan" / "tasks").is_dir()
     assert (destination / "PLAN.md").samefile(destination / ".plan" / "PLAN.md")
     assert (

@@ -32,6 +32,7 @@ template.python/
     specs/             # interface, format, and protocol specifications
     adrs/              # architectural decision records
     issues/            # root cause analysis and resolution records
+    tutorials/         # step-by-step guides for using the project and its tools
   .github/
     workflows/
       ci.yml           # editable install + ruff + pytest + build, on push/PR
