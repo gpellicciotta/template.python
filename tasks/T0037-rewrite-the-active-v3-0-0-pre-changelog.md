@@ -5,12 +5,16 @@ session: codex-20261112-1bba55
 needs: []
 branch: task/T0037-rewrite-the-active-v3-0-0-pre-changelog
 worktree: .plan/work/T0037-rewrite-the-active-v3-0-0-pre-changelog
-status: active
+status: completed
 started_at: "2026-11-12T09:39:20Z"
-ended_at: —
+ended_at: "2026-11-12T09:41:50Z"
 review: none
 preview: none
 protocol: adhoc
+usage:
+  worker: {turns: 2, duration_s: 268.0, input: 47412, output: 8482, cache_read: 705024, cache_write: 0}
+work_duration: 149.3
+completion-commit: 783f54c2e44415ec1a5e1c7470992322f0bcf13c
 ---
 # T0037: Rewrite the active -pre CHANGELOG entries to follow the changelog entry style rules.
 
