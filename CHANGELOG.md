@@ -12,29 +12,27 @@ A summarized overview of all changes, per version of this project.
 
 ---
 
-## v3.0.10-pre
+## v3.0.11-pre
 - CLI: Changed the default greeting target to `world`; pass `wereld` explicitly to retain the previous greeting.
-- CLI: Started scaffolded projects at `0.1.0-pre` with an area-prefixed initial changelog entry.
+- CLI: **[breaking]** Scaffolded `0.1.0-pre` projects with area-prefixed changelogs, Git, and branch-backed plan stores, requiring `git` and `plan`.
+- CLI: Removed partially initialized projects even when Git object files were read-only.
 - CLI: Restored the `-pre` suffix in the public package version using the shared version resolver.
 - Docs: Documented module responsibilities, public constants, and development script helpers.
 - Docs: Corrected Markdown formatting and repaired links in [README.md](README.md) and [CHANGELOG.md](CHANGELOG.md).
-- CLI: Removed partially initialized projects even when Git object files were read-only.
-- CLI: **[breaking]** Initialized scaffolded projects with Git and branch-backed plan stores, requiring `git` and `plan` on `PATH`.
 - DevEx: Isolated test home and configuration directories and added guards against writes to persistent user and repository state.
-- Docs: Moved the project instructions into `AGENTS.md` and reduced `CLAUDE.md` to an `@AGENTS.md` import.
+- Docs: Moved project instructions into [AGENTS.md](AGENTS.md) and reduced [CLAUDE.md](CLAUDE.md) to an `@AGENTS.md` import.
 - Build: **[breaking]** Required Python 3.15, raising `requires-python` from 3.10 and running CI on 3.15 only.
-- **[breaking]** CLI: Rebuilt `myproject` on the `support-python` v2.0.0 `ToolHarness`; `-v` now means `--verbose`, so use `--version`.
-- Build: Upgraded the `support-python` dependency from v1.0.0 to v3.0.0, passing the `devops.py` copyright banner that v3.0.0 no longer defaults.
-- Test: Added `pytest-timeout` and a registered `slow` marker, since v3.0.0 `check` runs `pytest -m slow --timeout=120` and fails on an empty slow suite.
-- **[breaking]** DevEx: Replaced [devops.py](scripts/devops.py) with a thin support-python `DevopsCli` script that re-runs itself in `.venv`.
-  - `-v` now means `--verbose`; use `--version`. Exit code 2 now means invalid arguments, not a failed release step.
-  - `release` asks for the typed confirmation `release v<version>` (`--yes` skips it) and attaches the wheel and sdist.
-  - `release --dry-run` checks every precondition, including an authenticated `gh` and fresh tags.
-  - `deploy` needs the `v<version>` tag on `origin` at HEAD, a green CI run (`--skip-ci-check` skips it), and a typed confirmation.
-- **[breaking]** Build: Removed `.github/workflows/publish.yml`; `devops.py release` attaches the wheel and sdist instead.
-- DevEx: Added `format` and `versions` actions, and `scripts/requirements.txt`, which the bootstrap installs into `.venv`.
-- **[breaking]** DevEx: Merged `scripts/create-github-release.py` and `scripts/deploy-to-production.py` into [devops.py](scripts/devops.py) as `release` and `deploy` actions.
-- **[breaking]** DevEx: Removed `scripts/install-from-github-release.py`; install releases with `pip` from the release wheel or Git tag.
+- CLI: **[breaking]** Rebuilt `myproject` on `support-python`'s `ToolHarness`; `-v` now means `--verbose`, so use `--version`.
+- Build: Upgraded `support-python` from v1.0.0 to v3.0.0 and explicitly supplied the copyright banner in [devops.py](scripts/devops.py).
+- DevEx: Added `pytest-timeout` and a `slow` marker; `check` now requires slow tests passing `pytest -m slow --timeout=120`.
+- DevEx: **[breaking]** Replaced `scripts/create-github-release.py` and `scripts/deploy-to-production.py` with [devops.py](scripts/devops.py)'s `DevopsCli` actions, automatically using `.venv`.
+- DevEx: **[breaking]** Changed [devops.py](scripts/devops.py) flags: `-v` means `--verbose`; use `--version`; exit code 2 indicates invalid arguments.
+- Build: **[breaking]** Replaced `.github/workflows/publish.yml` with [devops.py](scripts/devops.py)'s `release` action, attaching wheel and sdist assets.
+- DevEx: Required typed `release v{{version}}` confirmation for `release`; `--yes` skips confirmation.
+- DevEx: Made `release --dry-run` validate all preconditions, including authenticated `gh` and fresh tags.
+- DevEx: Required deployment tags on `origin` at HEAD, green CI, and typed confirmation; `--skip-ci-check` bypasses CI checks.
+- DevEx: Added `format` and `versions` actions and bootstrap installation of [requirements.txt](scripts/requirements.txt) into `.venv`.
+- DevEx: **[breaking]** Removed `scripts/install-from-github-release.py`; install releases with `pip` from the release wheel or Git tag.
 
 ## v2.0.0 [released: 2026-10-31]
 - **[breaking]** DevEx: Renamed the distribution to `template-python` and the repository to `template.python`; update install URLs and pins.
