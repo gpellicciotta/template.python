@@ -1,11 +1,12 @@
 ---
 id: T0037
-owner: ~
+owner: "@codex"
+session: codex-20261112-1bba55
 needs: []
-branch: —
-worktree: —
-status: ready
-started_at: —
+branch: task/T0037-rewrite-the-active-v3-0-0-pre-changelog
+worktree: .plan/work/T0037-rewrite-the-active-v3-0-0-pre-changelog
+status: active
+started_at: "2026-11-12T09:39:20Z"
 ended_at: —
 review: none
 preview: none
@@ -28,9 +29,22 @@ Completion check: `lint-markdown check CHANGELOG.md` reports no issue in the act
 Size estimate: 1 file, 30 lines
 
 ## Task Execution Steps
-- [ ] **[Doc]**       Rewrite the active -pre entries.
-- [ ] **[Verify]**    Run lint-markdown check on CHANGELOG.md.
+- [x] **[Doc]**       Rewrite the active -pre entries.
+- [x] **[Verify]**    Run lint-markdown check on CHANGELOG.md.
 
 ## Execution Log
 - [2026-11-10] **[Doc]**
   Companion task file scaffolded at task creation.
+
+- [2026-11-12] **[Decided]**
+  Consolidated active entries while preserving migration guidance and finalized versions.
+
+- [2026-11-12] **[Verify]**
+  Markdown lint and diff checks passed; active entries met word limits, and local links resolved.
+  Evidence: [validation-proof.md](T0037-rewrite-the-active-v3-0-0-pre-changelog/validation-proof.md).
+
+- [2026-11-12] **[Complete]**
+  Rewrote the active changelog entries and preserved finalized history.
+  - Files touched: 1; counted files: 0.
+  - Lines touched: 30; counted lines: 0.
+  - Reopenings: 0.
