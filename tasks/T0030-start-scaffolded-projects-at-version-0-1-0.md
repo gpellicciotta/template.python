@@ -11,6 +11,9 @@ ended_at: —
 review: none
 preview: none
 protocol: adhoc
+usage:
+  worker: {turns: 2, duration_s: 348.8, input: 85750, output: 8122, cache_read: 1101568, cache_write: 0}
+work_duration: 182.9
 ---
 # T0030: Start scaffolded projects at version 0.1.0-pre with an area-prefixed first CHANGELOG entry
 
@@ -41,4 +44,11 @@ Update docs/requirements.md to match.
 
 - [2026-11-12] **[Complete]**
   Implemented and locally committed the scaffold version and changelog updates. Completed execution steps; lifecycle completion remains with the orchestrator.
+
+- [2026-11-12] **[Verify]**
+  Completion validation found 1 errors; pending fix turn 1 of 2.
+  - TF020.
+
+- [2026-11-12] **[Doc]**
+  Updated requirements and scaffold conventions to 0.1.0-pre, and added the user-facing changelog entry in commit 516417f.
 
