@@ -117,7 +117,7 @@ def test_create_scaffolds_renamed_project(tmp_path, capsys, installed_plan):
 
     pyproject = (destination / "pyproject.toml").read_text(encoding="utf-8")
     assert 'name = "sample-app"' in pyproject
-    assert 'version = "0.0.1-pre"' in pyproject
+    assert 'version = "0.1.0-pre"' in pyproject
     assert 'sample_app = "sample_app.cli:main"' in pyproject
     assert "[tool.ruff.lint]" in pyproject
     assert 'select = ["E4", "E7", "E9", "F"]' in pyproject
@@ -133,8 +133,8 @@ def test_create_scaffolds_renamed_project(tmp_path, capsys, installed_plan):
     assert license_file.is_file()
 
     changelog = (destination / "CHANGELOG.md").read_text(encoding="utf-8")
-    assert "Initial scaffold of the Sample App project." in changelog
-    assert "## v0.0.1-pre" in changelog
+    assert "- DevEx: Created the initial scaffold for the Sample App project." in changelog
+    assert "## v0.1.0-pre" in changelog
     assert "in development" not in changelog
     assert "ruff" not in changelog
 

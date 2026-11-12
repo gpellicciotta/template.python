@@ -105,14 +105,14 @@ def _fresh_changelog_md(title: str) -> str:
         "> - `[released: {{date}}]` - released to package manager or production on {{date}}\n"
         "> - `[broken]` - considered broken and not be used\n\n"
         "---\n\n"
-        "## v0.0.1-pre\n"
-        f"- Initial scaffold of the {title} project.\n"
+        "## v0.1.0-pre\n"
+        f"- DevEx: Created the initial scaffold for the {title} project.\n"
     )
 
 
 def _reset_pyproject_version(pyproject_path: Path) -> None:
     text = pyproject_path.read_text(encoding="utf-8")
-    new_text = re.sub(r'(?m)^version = ".*"$', 'version = "0.0.1-pre"', text, count=1)
+    new_text = re.sub(r'(?m)^version = ".*"$', 'version = "0.1.0-pre"', text, count=1)
     pyproject_path.write_text(new_text, encoding="utf-8")
 
 

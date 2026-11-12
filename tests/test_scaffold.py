@@ -9,6 +9,18 @@ from myproject import scaffold
 from myproject.scaffold import _ignore, create_project, find_template_root
 
 
+def test_reset_pyproject_version_starts_at_first_minor(tmp_path):
+    manifest = tmp_path / "pyproject.toml"
+    manifest.write_text('[project]\nname = "demo"\nversion = "3.0.0-pre"\n', encoding="utf-8")
+    scaffold._reset_pyproject_version(manifest)
+    assert manifest.read_text(encoding="utf-8") == '[project]\nname = "demo"\nversion = "0.1.0-pre"\n'
+
+
+def test_fresh_changelog_starts_at_first_minor_with_area_prefixed_entry():
+    changelog = scaffold._fresh_changelog_md("Sample App")
+    assert changelog.split("\n## ")[1:] == ["v0.1.0-pre\n- DevEx: Created the initial scaffold for the Sample App project.\n"]
+
+
 @pytest.fixture
 def installed_plan(monkeypatch):
     """Select an installed launcher that works with the isolated test home."""

@@ -21,7 +21,7 @@ Functional and technical requirements for the `template.python` repository.
   - Validates and derives valid Python package names from project slugs.
   - Copies template files while excluding cache/build artifacts.
   - Rewrites placeholders (`template-python`, `template.python`, `myproject`, title) across documentation and configuration.
-  - Initializes a fresh changelog and resets the project version to `0.0.1-pre`.
+  - Resets the project version to `0.1.0-pre` and initializes a fresh changelog with an area-prefixed first entry.
   - Requires `git` and `plan` on `PATH`; runs `git init` followed by `plan init --store branch`.
   - Skips the template's plan store and preserves `.plan/`, `/PLAN.md`, and `/plan.code-workspace` ignore rules.
   - Creates a branch-backed plan store, an ignored root `PLAN.md` link, and exactly one plan-managed instructions block.

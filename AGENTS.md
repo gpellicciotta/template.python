@@ -36,7 +36,7 @@ The `devops.py` script re-runs itself with the `.venv` interpreter, so plain `py
 ## Project Conventions
 - Keep the placeholder names `myproject`, `template-python`, `template.python`, and `Template Python` intact.
   [scaffold.py](src/myproject/scaffold.py) rewrites them literally in every text file of a new project.
-- Scaffolded projects start at `0.0.1-pre` with a fresh changelog; `plan init --store branch` creates their plan store.
+- Scaffolded projects start at `0.1.0-pre` with a fresh changelog; `plan init --store branch` creates their plan store.
 - Mark breaking changes `**[breaking]**` in [CHANGELOG.md](CHANGELOG.md), even before `1.0.0`.
 - Keep `.editorconfig` and `pyproject.toml`'s `[tool.ruff]` in sync: 4-space indent, 132-character lines.
 - This template keeps its plan store on the orphan `plan` branch checked out at `.plan/`.
