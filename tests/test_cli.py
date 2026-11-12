@@ -1,6 +1,14 @@
+import os
+from pathlib import Path
+import shutil
+import subprocess
+import sys
+
+import pytest
 from support_python import get_package_version
 
 from myproject.cli import main
+from test_scaffold import installed_plan as installed_plan
 
 VERSION_PREFIX = f"myproject v{get_package_version('template-python')}"
 COPYRIGHT_SUFFIX = " - Copyright (c) 2026 Giovanni Pellicciotta"
@@ -69,12 +77,23 @@ def test_greet_verbose(capsys):
         assert "Hello, Gio" in out
 
 
-def test_create_scaffolds_renamed_project(tmp_path, capsys):
+@pytest.mark.slow
+@pytest.mark.skipif(shutil.which("plan") is None, reason="plan is not installed")
+def test_create_scaffolds_renamed_project(tmp_path, capsys, installed_plan):
     project_name = "sample-app"
-    assert main(["create", project_name, "-o", str(tmp_path)]) == 0
+    result = subprocess.run(
+        [sys.executable, "-m", "myproject.cli", "create", project_name, "-o", str(tmp_path)],
+        capture_output=True,
+        text=True,
+        env={
+            **os.environ,
+            "PYTHONPATH": str(Path(__file__).resolve().parents[1] / "src") + os.pathsep + os.environ.get("PYTHONPATH", ""),
+        },
+    )
+    assert result.returncode == 0, result.stderr
 
     destination = tmp_path / project_name
-    assert f"Created new project at {destination}" in capsys.readouterr().out
+    assert f"Created new project at {destination}" in result.stdout
     assert destination.is_dir()
     assert (destination / "src" / "sample_app" / "cli.py").is_file()
     assert [p.name for p in (destination / "src").iterdir() if p.is_dir()] == ["sample_app"]
@@ -112,13 +131,23 @@ def test_create_scaffolds_renamed_project(tmp_path, capsys):
     assert (destination / "docs" / "specs" / ".gitkeep").is_file()
     assert (destination / "docs" / "adrs" / ".gitkeep").is_file()
     assert (destination / "docs" / "issues" / ".gitkeep").is_file()
-    assert (destination / ".plan" / "tasks" / ".gitkeep").is_file()
-    assert [p.name for p in (destination / ".plan" / "tasks").iterdir()] == [".gitkeep"]
+    assert (destination / ".plan" / "tasks").is_dir()
+    assert (destination / "PLAN.md").samefile(destination / ".plan" / "PLAN.md")
+    assert (
+        subprocess.check_output(
+            [shutil.which("git"), "branch", "--list", "plan", "--format=%(refname:short)"], cwd=destination, text=True
+        ).strip()
+        == "plan"
+    )
+    subprocess.run([shutil.which("git"), "check-ignore", "PLAN.md"], cwd=destination, check=True, capture_output=True)
+    subprocess.run([shutil.which("plan"), "tasks", "list"], cwd=destination, check=True, capture_output=True)
+    agents = (destination / "AGENTS.md").read_text(encoding="utf-8")
+    assert agents.count("<!-- BEGIN plan") == agents.count("<!-- END plan -->") == 1
     assert (destination / ".github" / "workflows" / "ci.yml").is_file()
     assert not (destination / ".github" / "workflows" / "publish.yml").exists()
     gitignore = {line.strip() for line in (destination / ".gitignore").read_text(encoding="utf-8").splitlines()}
     assert ".venv/" in gitignore
-    assert not gitignore & {".plan/", ".plan", "/.plan/", "/PLAN.md", "PLAN.md", "/plan.code-workspace"}
+    assert {".plan/", "/PLAN.md", "/plan.code-workspace"} <= gitignore
     assert "Installing from a release" in readme
 
 
@@ -133,6 +162,13 @@ def test_create_refuses_existing_destination(tmp_path, capsys):
 def test_create_missing_project_name(capsys):
     assert main(["create"]) == 2
     assert "PROJECT_NAME" in capsys.readouterr().err
+
+
+def test_create_missing_plan_exits_one(tmp_path, monkeypatch, capsys):
+    monkeypatch.setenv("PATH", "")
+    assert main(["create", "demo", "-o", str(tmp_path)]) == 1
+    assert "plan" in capsys.readouterr().err
+    assert not (tmp_path / "demo").exists()
 
 
 def test_invalid_args():

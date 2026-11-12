@@ -12,7 +12,9 @@ A summarized overview of all changes, per version of this project.
 
 ---
 
-## v3.0.4-pre
+## v3.0.5-pre
+- CLI: Removed partially initialized projects even when Git object files were read-only.
+- CLI: **[breaking]** Initialized scaffolded projects with Git and branch-backed plan stores, requiring `git` and `plan` on `PATH`.
 - DevEx: Isolated test home and configuration directories and added guards against writes to persistent user and repository state.
 - Docs: Moved the project instructions into `AGENTS.md` and reduced `CLAUDE.md` to an `@AGENTS.md` import.
 - Build: **[breaking]** Required Python 3.15, raising `requires-python` from 3.10 and running CI on 3.15 only.
@@ -24,7 +26,6 @@ A summarized overview of all changes, per version of this project.
   - `release` asks for the typed confirmation `release v<version>` (`--yes` skips it) and attaches the wheel and sdist.
   - `release --dry-run` checks every precondition, including an authenticated `gh` and fresh tags.
   - `deploy` needs the `v<version>` tag on `origin` at HEAD, a green CI run (`--skip-ci-check` skips it), and a typed confirmation.
-- DevEx: Fixed `create` and its tests failing on a fresh clone, which has no `PLAN.md`; new projects now track their plan files.
 - **[breaking]** Build: Removed `.github/workflows/publish.yml`; `devops.py release` attaches the wheel and sdist instead.
 - DevEx: Added `format` and `versions` actions, and `scripts/requirements.txt`, which the bootstrap installs into `.venv`.
 - **[breaking]** DevEx: Merged `scripts/create-github-release.py` and `scripts/deploy-to-production.py` into `scripts/devops.py` as `release` and `deploy` actions.

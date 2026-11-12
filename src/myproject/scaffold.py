@@ -4,6 +4,8 @@ from __future__ import annotations
 
 import re
 import shutil
+import stat
+import subprocess
 from pathlib import Path
 
 PACKAGE_NAME = "myproject"
@@ -13,9 +15,8 @@ TITLE_PLACEHOLDER = "Template Python"
 
 _MARKER_FILES = ("pyproject.toml", "CHANGELOG.md")
 # The template's plan data lives on a separate `plan` branch checked out at .plan/ (see .gitignore), so a clone
-# has none of it; a new project gets fresh plan files instead and must track them.
+# has none of it; plan initializes a fresh branch-backed store in each new project.
 _PLAN_STORE_NAMES = {".plan", "PLAN.md", "plan.code-workspace"}
-_PLAN_STORE_IGNORES = {".plan/", "/PLAN.md", "/plan.code-workspace"}
 _EXCLUDED_NAMES = {
     ".git",
     ".venv",
@@ -73,13 +74,6 @@ def _ignore_with_plan_store(template_root: Path):
     return ignore
 
 
-def _track_plan_files(gitignore_path: Path) -> None:
-    if not gitignore_path.is_file():
-        return
-    lines = gitignore_path.read_text(encoding="utf-8").splitlines(keepends=True)
-    gitignore_path.write_text("".join(line for line in lines if line.strip() not in _PLAN_STORE_IGNORES), encoding="utf-8")
-
-
 def _rewrite_text_files(root: Path, replacements: list[tuple[str, str]]) -> None:
     for path in root.rglob("*"):
         if path.is_dir():
@@ -112,28 +106,33 @@ def _fresh_changelog_md(title: str) -> str:
     )
 
 
-def _fresh_plan_md() -> str:
-    return (
-        "# Project Planning\n"
-        "An overview of all tasks and their planning.\n\n"
-        "---\n\n"
-        "## Next Milestone\n"
-        "*(Currently no tasks)*\n\n"
-        "---\n\n"
-        "## Backlog\n"
-        "*(Currently no tasks)*\n"
-    )
-
-
 def _reset_pyproject_version(pyproject_path: Path) -> None:
     text = pyproject_path.read_text(encoding="utf-8")
     new_text = re.sub(r'(?m)^version = ".*"$', 'version = "0.0.1-pre"', text, count=1)
     pyproject_path.write_text(new_text, encoding="utf-8")
 
 
-def _create_tasks_dir(tasks_dir: Path) -> None:
-    tasks_dir.mkdir(parents=True, exist_ok=True)
-    (tasks_dir / ".gitkeep").write_text("\n", encoding="utf-8")
+def _initialize_plan_store(destination: Path, git: str, plan: str) -> None:
+    agents = destination / "AGENTS.md"
+    if agents.is_file():
+        text = agents.read_text(encoding="utf-8")
+        text = re.sub(r"<!-- BEGIN plan(?:\s[^>]*?)? -->.*?<!-- END plan -->\s*", "", text, flags=re.DOTALL)
+        agents.write_text(text, encoding="utf-8")
+    try:
+        subprocess.run([git, "init"], cwd=destination, check=True, capture_output=True, text=True)
+        subprocess.run([plan, "init", "--store", "branch"], cwd=destination, check=True, capture_output=True, text=True)
+    except (OSError, subprocess.CalledProcessError) as exc:
+        detail = exc.stderr if isinstance(exc, subprocess.CalledProcessError) else str(exc)
+        shutil.rmtree(destination, onexc=_remove_readonly)
+        raise ScaffoldError(f"Could not initialize the new project's plan store: {detail}") from exc
+
+
+def _remove_readonly(function, path: str, exc: OSError) -> None:
+    """Retry removal after clearing Git's read-only object-file attribute."""
+    if not isinstance(exc, PermissionError):
+        raise exc
+    Path(path).chmod(stat.S_IRUSR | stat.S_IWUSR)
+    function(path)
 
 
 def create_project(project_name: str, output_dir: str = ".", template_root: Path | None = None) -> Path:
@@ -141,9 +140,8 @@ def create_project(project_name: str, output_dir: str = ".", template_root: Path
 
     Automates the manual steps documented in this template's README under "Starting a new project
     from this template": copy the tree, rename the `myproject` package, replace the `template-python` /
-    `template.python` name placeholders throughout, and reset `CHANGELOG.md`, `PLAN.md`, `.plan/tasks/`,
-    and `pyproject.toml`'s `version` — the new project starts its own history rather than inheriting the
-    template's.
+    `template.python` name placeholders throughout, reset the changelog and version, and initialize
+    Git and a fresh branch-backed plan store.
     """
     if template_root is None:
         template_root = find_template_root(Path(__file__).resolve())
@@ -154,6 +152,12 @@ def create_project(project_name: str, output_dir: str = ".", template_root: Path
 
     package_name = _to_package_name(project_name)
     title = project_name.replace("-", " ").replace("_", " ").title()
+    plan = shutil.which("plan")
+    if plan is None:
+        raise ScaffoldError("The plan executable must be on PATH to create a project.")
+    git = shutil.which("git")
+    if git is None:
+        raise ScaffoldError("The git executable must be on PATH to create a project.")
 
     destination.parent.mkdir(parents=True, exist_ok=True)
     shutil.copytree(template_root, destination, ignore=_ignore_with_plan_store(template_root))
@@ -172,9 +176,7 @@ def create_project(project_name: str, output_dir: str = ".", template_root: Path
     )
 
     (destination / "CHANGELOG.md").write_text(_fresh_changelog_md(title), encoding="utf-8")
-    (destination / "PLAN.md").write_text(_fresh_plan_md(), encoding="utf-8")
-    _create_tasks_dir(destination / ".plan" / "tasks")
     _reset_pyproject_version(destination / "pyproject.toml")
-    _track_plan_files(destination / ".gitignore")
+    _initialize_plan_store(destination, git, plan)
 
     return destination

@@ -108,6 +108,10 @@ The CLI runs on `support-python`'s `ToolHarness`, so every action also accepts `
 if `-o` is omitted), automating the renames described below in **Starting a new project from this template**.
 Run it from an editable install of this template (i.e. after `python scripts/bootstrap-dev-environment.py` or
 `pip install -e ".[dev]"` in this repo).
+Install `git` and `plan` on `PATH` before running `create`.
+The command runs `git init` and `plan init --store branch` in the new project.
+Its plan store lives on the `plan` branch at `.plan/`, with an ignored root `PLAN.md` link.
+Initialization failures remove the generated directory and return exit code `1`.
 
 ## Building the Packages
 
@@ -161,6 +165,7 @@ silently rather than loudly:
 - `tests/test_core.py`'s `from myproject...` imports
 - This README's title, and `AGENTS.md`'s summary, Architecture, Project Conventions, and Boundaries sections
 - `CHANGELOG.md` — replace the placeholder with your project's actual first entry once there's something real to release
-- Skip `.plan/`, `PLAN.md`, and `plan.code-workspace` (the template's own plan store), and delete their lines from `.gitignore`
+- Skip `.plan/`, `PLAN.md`, and `plan.code-workspace` when copying; preserve their ignore rules.
+- Run `git init` and `plan init --store branch` in the new project to initialize its own plan store.
 
 Then follow **Quick Start** above to verify the rename didn't break anything before writing real code.
