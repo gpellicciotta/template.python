@@ -11,6 +11,9 @@ ended_at: —
 review: agent
 preview: none
 protocol: standard
+usage:
+  worker: {turns: 2, duration_s: 658.8, input: 136, output: 26940, cache_read: 4522060, cache_write: 142556}
+work_duration: 344.3
 ---
 # T0027: Add the standard --format text|json option to the myproject greet and create actions
 
@@ -42,4 +45,17 @@ Document the option and its JSON fields in README.md and docs/requirements.md.
   - Files touched: 4.
   - Lines touched: 112.
   - Reopenings: 0.
+
+- [2026-11-12] **[Verify]**
+  Completion validation found 1 errors; pending fix turn 1 of 2.
+  - TF020.
+
+- [2026-11-12] **[Implement]**
+  Wrote seven test_cli.py tests for greet and create JSON output, help text, failures, and invalid formats.
+
+- [2026-11-12] **[Verify]**
+  Ran the new tests before implementation; six failed as expected and the invalid-format guard already passed.
+
+- [2026-11-12] **[Doc]**
+  Documented --format and its JSON fields in README.md and docs/requirements.md; added a CHANGELOG.md entry.
 
