@@ -11,6 +11,9 @@ ended_at: —
 review: agent
 preview: none
 protocol: standard
+usage:
+  worker: {turns: 2, duration_s: 854.4, input: 102630, output: 18878, cache_read: 2370816, cache_write: 0}
+work_duration: 443.3
 ---
 # T0029: Make myproject create initialize the new project's plan store with plan init --store branch
 
@@ -37,4 +40,20 @@ Update README.md and docs/requirements.md.
   Verified 43 tests, Ruff, formatting, and isolated package build; recorded red and green evidence.
   - Markdown lint reports existing formatting and external-link issues.
   - Completion check passed 22 tests, including real CLI and plan initialization.
+
+- [2026-11-12] **[Verify]**
+  Completion validation found 1 errors; pending fix turn 1 of 2.
+  - TF020.
+
+- [2026-11-12] **[Implement]**
+  Added command-order, missing-plan, failure-cleanup, fake-executable, and real CLI integration tests.
+
+- [2026-11-12] **[Verify]**
+  Confirmed five expected failures before implementing plan initialization; captured terminal output in validation-proof.md.
+
+- [2026-11-12] **[Implement]**
+  Replaced generated plan files with Git and branch-store initialization, preserving ignore rules and refreshing the managed instructions block.
+
+- [2026-11-12] **[Doc]**
+  Documented required tools and branch-store behavior; added the breaking CLI changelog entry.
 
