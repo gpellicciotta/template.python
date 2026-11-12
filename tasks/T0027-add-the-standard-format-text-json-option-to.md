@@ -5,17 +5,20 @@ session: claude-20261112-bd3fd9
 needs: []
 branch: task/T0027-add-the-standard-format-text-json-option-to
 worktree: .plan/work/T0027-add-the-standard-format-text-json-option-to
-status: active
+status: completed
 started_at: "2026-11-12T10:06:40Z"
-ended_at: —
+ended_at: "2026-11-12T10:14:55Z"
 review: agent
 preview: none
 protocol: standard
 usage:
   worker: {turns: 4, duration_s: 730.4, input: 160, output: 29740, cache_read: 5439962, cache_write: 153694}
-work_duration: 344.3
-review_status: pending
+  review: {turns: 2, duration_s: 166.8, input: 36, output: 6432, cache_read: 595964, cache_write: 59090}
+work_duration: 495.1
+review_status: approved
 review_round: 1
+reviewed_by: "@claude-2"
+completion-commit: d60d432954a22111dc388f32c48c87da36b2b3e0
 ---
 # T0027: Add the standard --format text|json option to the myproject greet and create actions
 
@@ -31,7 +34,7 @@ Document the option and its JSON fields in README.md and docs/requirements.md.
 - [x] **[Implement]** Implement the change until the new tests pass.
 - [x] **[Verify]**    Run the fast suite and the completion check; record output in validation-proof.md.
 - [x] **[Doc]**       Update the affected documentation and add a CHANGELOG.md entry.
-- [ ] **[Review]**    Obtain review approval of the finished work before completion.
+- [x] **[Review]**    Obtain review approval of the finished work before completion.
 
 ## Execution Log
 - [2026-11-10] **[Doc]**
@@ -63,4 +66,11 @@ Document the option and its JSON fields in README.md and docs/requirements.md.
 
 - [2026-11-12] **[Review]**
   Round 1 requested (mode: agent).
+
+- [2026-11-12] **[Review]**
+  Round 1 approved by @claude-2: The work meets every goal and follows the CLI guidelines.
+  - Findings: [review-findings-1.md](T0027-add-the-standard-format-text-json-option-to/review-findings-1.md).
+
+- [2026-11-12] **[Complete]**
+  Task completed successfully.
 

@@ -17,8 +17,8 @@ An overview of all tasks and their planning.
 - [x] T0020 Remove the always-failing placeholder deploy action from scripts/devops.py, its tests, and its docs.
 - [x] T0023 Split the tests into fast and slow suites with pytest-xdist, pytest-timeout, a slow marker, and a CI slow run.
 - [x] T0025 Add a subprocess end-to-end test that runs the installed myproject entry point with realistic arguments.
-- [ ] T0027 Add the standard --format text|json option to the myproject greet and create actions.
-- [ ] T0028 [needs: T0027] Add --dry-run to myproject create, reporting every planned change without writing anything.
+- [x] T0027 Add the standard --format text|json option to the myproject greet and create actions.
+- [ ] T0028 Add --dry-run to myproject create, reporting every planned change without writing anything.
 - [ ] T0032 Make the bootstrap script CLI follow the CLI guidelines: -v as --verbose, help --verbose, errors on stderr.
 - [ ] T0019 Restructure docs/devops.md into the required guideline sections and fix the manual release commit order.
 - [ ] T0036 Read the CLI author and copyright from package metadata instead of hardcoding them in cli.py and _cli_common.py.

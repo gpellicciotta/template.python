@@ -3,7 +3,7 @@ task: T0027
 round: 1
 verdict: approved
 reviewer: "@claude-2"
-reviewed_at: 2026-11-12T10:13:25Z
+reviewed_at: 2026-11-12T10:14:53Z
 reviewed_commit: "53169c2"
 base_commit: "e35716a"
 branch: task/T0027-add-the-standard-format-text-json-option-to
