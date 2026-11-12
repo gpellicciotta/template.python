@@ -11,6 +11,9 @@ ended_at: —
 review: none
 preview: none
 protocol: adhoc
+usage:
+  worker: {turns: 2, duration_s: 777.0, input: 260, output: 56008, cache_read: 9662338, cache_write: 168992}
+work_duration: 415.2
 ---
 # T0021: Fix all lint-markdown issues, bold lead-ins, placeholder syntax, backslash paths, and stale references in the docs
 
@@ -47,22 +50,38 @@ Size estimate: 7 files, 150 lines
   Companion task file scaffolded at task creation.
 
 - [2026-11-12] **[Doc]**
-  Ran `lint-markdown fix`: blank lines after subheadings and README table alignment.
-  The private `dev-guidelines` repo returned HTTP 404 to anonymous link checks.
-  Added `.lint-markdown.json` with `github-owners: ["gpellicciotta"]`, resolving those links to sibling checkouts.
-  Replaced the missing `coordinating-work-guidelines.md` link with the plan task usage skill URL.
-  Linked the logging and CLI guidelines; dropped the dangling `../PLAN.md` index link.
-  Removed bold lead-ins in requirements.md and devops.md and bold section references in README.md.
-  Converted `<...>`, `v<version>`, `X.Y.Z`, and `{{package_name}}` placeholders to `{{kebab-case}}`.
-  Replaced `.venv\Scripts\...` commands with `devops.py` or active-venv commands.
-  Refreshed the README layout: all test modules, `.plan/`, `.lint-markdown.json`, and `PLAN.md` as an ignored link.
-  Dropped the stale root `work/` ignore rule; worktrees live under the ignored `.plan/work/`.
-  **[Decided]** Skipped the CHANGELOG raw-URL exclusion: no such URL fails, and the config has no URL exclusions.
-  Synced the scaffold's fresh changelog preamble (`v{{version}}-pre`) with the template's, test first.
-  Committed e8eaf76 on the task branch.
+  Ran `lint-markdown fix`, then added `.lint-markdown.json` with `github-owners`.
+  Private `dev-guidelines` links now resolve to sibling checkouts instead of failing with HTTP 404.
+
+- [2026-11-12] **[Doc]**
+  Replaced the missing coordinating-work link with the plan skill URL and linked the logging and CLI guidelines.
+  Dropped the dangling `../PLAN.md` index link and refreshed the README layout.
+
+- [2026-11-12] **[Doc]**
+  Removed bold lead-ins, converted placeholders to `{{kebab-case}}`, and replaced backslash `.venv` commands with cross-platform ones.
+
+- [2026-11-12] **[Decided]**
+  Skipped the CHANGELOG raw-URL exclusion: no such URL fails, and `.lint-markdown.json` has no URL exclusion setting.
+
+- [2026-11-12] **[Implement]**
+  Synced the scaffold's fresh changelog preamble with the template's, test first.
+  Undeclared files touched: `src/myproject/scaffold.py` and `tests/test_scaffold.py`; the recount stays below the typical line.
+
+- [2026-11-12] **[Implement]**
+  Restored the `work/` ignore rule that plan task usage guidelines require, with a corrected comment.
 
 - [2026-11-12] **[Verify]**
-  New test `test_fresh_changelog_keeps_the_template_preamble` failed first on preamble drift, then passed.
-  `lint-markdown check` (online): "All 8 markdown files passed linting.", exit code 0.
-  `ruff check .` and `ruff format --check .` passed; fast suite 72 passed; slow suite 26 passed.
-  `devops.py check` could not run: the worktree has no `.venv`; ran its steps with the main `.venv` instead, minus the build.
+  Lint, ruff, and both test suites passed; outputs are in `validation-proof.md`.
+  `devops.py check` refused to run without a worktree `.venv`, so the build step was skipped.
+
+- [2026-11-12] **[Verify]**
+  Completion validation found 3 errors; pending fix turn 1 of 2.
+  - TF016.
+  - TF018.
+
+- [2026-11-12] **[Verify]**
+  Recorded task outcomes.
+  - Files touched: 7.
+  - Lines touched: 222.
+  - Reopenings: 0.
+
