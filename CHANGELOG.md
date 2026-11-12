@@ -12,7 +12,8 @@ A summarized overview of all changes, per version of this project.
 
 ---
 
-## v3.0.15-pre
+## v3.0.16-pre
+- DevEx: Added slow end-to-end tests that run the installed `myproject` console script.
 - DevEx: Split parallel fast and slow test suites with per-test timeouts and separate CI runs.
 - DevEx: **[breaking]** Removed the placeholder `deploy` action; deploying projects enable it with `DevopsCli.set_deploy`.
 - Docs: Added and indexed the tutorials directory, included automatically in newly scaffolded projects.

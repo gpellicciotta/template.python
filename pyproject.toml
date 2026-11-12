@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "template-python"
-version = "3.0.15-pre"
+version = "3.0.16-pre"
 description = "A template to get Python projects started quickly"
 authors = [{name="Giovanni Pellicciotta", email="giovanni.pellicciotta@gmail.com"}]
 readme = "README.md"
