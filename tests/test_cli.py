@@ -152,7 +152,9 @@ def test_create_scaffolds_renamed_project(tmp_path, capsys, installed_plan):
     assert (destination / "PLAN.md").samefile(destination / ".plan" / "PLAN.md")
     assert (
         subprocess.check_output(
-            [shutil.which("git"), "branch", "--list", "plan", "--format=%(refname:short)"], cwd=destination, text=True
+            [shutil.which("git"), "branch", "--list", "plan", "--format=%(refname:short)"],
+            cwd=destination,
+            text=True,
         ).strip()
         == "plan"
     )

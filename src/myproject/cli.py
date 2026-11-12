@@ -27,7 +27,11 @@ def _configure_greet(parser: argparse.ArgumentParser) -> None:
 def _configure_create(parser: argparse.ArgumentParser) -> None:
     parser.add_argument("project_name", metavar="PROJECT_NAME", help="name of the new project")
     parser.add_argument(
-        "-o", "--output-dir", default=".", metavar="DIR", help="directory to create the new project under (default: .)"
+        "-o",
+        "--output-dir",
+        default=".",
+        metavar="DIR",
+        help="directory to create the new project under (default: .)",
     )
 
 

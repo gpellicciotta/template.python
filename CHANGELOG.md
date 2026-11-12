@@ -12,7 +12,8 @@ A summarized overview of all changes, per version of this project.
 
 ---
 
-## v3.0.11-pre
+## v3.0.12-pre
+- DevEx: Formatted multiline Python calls with one argument per line and trailing commas.
 - CLI: Changed the default greeting target to `world`; pass `wereld` explicitly to retain the previous greeting.
 - CLI: **[breaking]** Scaffolded `0.1.0-pre` projects with area-prefixed changelogs, Git, and branch-backed plan stores, requiring `git` and `plan`.
 - CLI: Removed partially initialized projects even when Git object files were read-only.

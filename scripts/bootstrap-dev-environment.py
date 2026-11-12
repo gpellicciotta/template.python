@@ -82,7 +82,8 @@ def setup() -> int:
     python = str(venv_python())
     all_ok &= run_step("Upgrading pip", [python, "-m", "pip", "install", "--upgrade", "pip"])
     all_ok &= run_step(
-        "Installing script requirements", [python, "-m", "pip", "install", "-r", str(SCRIPTS_DIR / "requirements.txt")]
+        "Installing script requirements",
+        [python, "-m", "pip", "install", "-r", str(SCRIPTS_DIR / "requirements.txt")],
     )
     all_ok &= run_step("Installing project (editable, dev extra)", [python, "-m", "pip", "install", "-e", ".[dev]"])
     all_ok &= run_step("Linting (ruff check)", [python, "-m", "ruff", "check", "."])
