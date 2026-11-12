@@ -1,0 +1,8 @@
+{
+  "plan-version": "3.0.268-pre",
+  "work-size-overrun-factor": 8.0,
+  "work-agents": [
+    "codex",
+    "claude"
+  ]
+}

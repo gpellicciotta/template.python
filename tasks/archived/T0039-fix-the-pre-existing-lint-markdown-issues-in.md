@@ -25,7 +25,7 @@ completion-commit: 0028fe892059138344eceacf03b7c489a5ed5d30
 ## Goals
 Fix the pre-existing lint-markdown issues in README.md and CHANGELOG.md.
 
-- Declared files: [README.md](../../README.md) and [CHANGELOG.md](../../CHANGELOG.md).
+- Declared files: [README.md](../../../README.md) and [CHANGELOG.md](../../../CHANGELOG.md).
 - Completion check: `lint-markdown check README.md CHANGELOG.md` must pass.
 - **[Estimation]** One counted file, 60 changed lines; changelog and plan artifacts are excluded.
 - Unit test: none (documentation-only changes contain no executable logic).
