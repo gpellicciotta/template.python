@@ -12,7 +12,8 @@ A summarized overview of all changes, per version of this project.
 
 ---
 
-## v3.0.3-pre
+## v3.0.4-pre
+- DevEx: Isolated test home and configuration directories and added guards against writes to persistent user and repository state.
 - Docs: Moved the project instructions into `AGENTS.md` and reduced `CLAUDE.md` to an `@AGENTS.md` import.
 - Build: **[breaking]** Required Python 3.15, raising `requires-python` from 3.10 and running CI on 3.15 only.
 - **[breaking]** CLI: Rebuilt `myproject` on the `support-python` v2.0.0 `ToolHarness`; `-v` now means `--verbose`, so use `--version`.
