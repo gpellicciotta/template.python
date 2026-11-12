@@ -1,11 +1,12 @@
 ---
 id: T0038
-owner: ~
-needs: ['T0040']
-branch: —
-worktree: —
-status: ready
-started_at: —
+owner: "@codex"
+session: codex-20261112-acac25
+needs: []
+branch: task/T0038-resolve-version-with-support-python-get-package-version
+worktree: .plan/work/T0038-resolve-version-with-support-python-get-package-version
+status: active
+started_at: "2026-11-12T09:27:49Z"
 ended_at: —
 review: none
 preview: none
@@ -19,12 +20,22 @@ Resolve `__version__` in src/myproject/__init__.py with `support_python.get_pack
 Make sure `create` still rewrites the distribution name in new projects.
 
 ## Task Execution Steps
-- [ ] **[Implement]** Write the tests listed in the technical spec.
-- [ ] **[Verify]**    Run the new tests and capture the expected failures.
-- [ ] **[Implement]** Implement the change until the new tests pass.
-- [ ] **[Verify]**    Run the fast suite and the completion check; record output in validation-proof.md.
-- [ ] **[Doc]**       Add a CHANGELOG.md entry.
+- [x] **[Implement]** Write the tests listed in the technical spec.
+- [x] **[Verify]**    Run the new tests and capture the expected failures.
+- [x] **[Implement]** Implement the change until the new tests pass.
+- [x] **[Verify]**    Run the fast suite and the completion check; record output in validation-proof.md.
+- [x] **[Doc]**       Add a CHANGELOG.md entry.
 
 ## Execution Log
 - [2026-11-10] **[Doc]**
   Companion task file scaffolded at task creation.
+
+- [2026-11-12] **[Verify]**
+  Normalized prerelease versions and preserved release and missing-metadata behavior; scaffold rewriting passed. Validation evidence records the initial guard failure.
+  - Files touched: 2.
+  - Lines touched: 25.
+  - Reopenings: 0.
+
+- [2026-11-12] **[Implement]**
+  Committed the verified resolver change locally. All execution steps passed; the orchestrator retains lifecycle completion.
+
