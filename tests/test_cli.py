@@ -1,4 +1,5 @@
 import importlib.metadata
+import json
 import os
 from pathlib import Path
 import runpy
@@ -89,6 +90,69 @@ def test_greet_verbose(capsys):
         assert "Starting myproject v" in out
         assert "Greeting target: Gio" in out
         assert "Hello, Gio" in out
+
+
+def test_greet_json(capsys):
+    assert main(["greet", "Gio", "--format", "json"]) == 0
+    assert json.loads(capsys.readouterr().out) == {"name": "Gio", "greeting": "Hello, Gio"}
+
+    assert main(["greet", "--format", "text"]) == 0
+    assert capsys.readouterr().out.strip() == "Hello, world"
+
+
+def test_greet_json_verbose_logs_to_stderr(capsys):
+    assert main(["greet", "Gio", "--format", "json", "--verbose"]) == 0
+    captured = capsys.readouterr()
+    assert json.loads(captured.out) == {"name": "Gio", "greeting": "Hello, Gio"}
+    assert "Starting myproject v" in captured.err
+    assert "Greeting target: Gio" in captured.err
+
+
+def test_action_help_lists_format_option(capsys):
+    for action in ("greet", "create"):
+        assert main(["help", action]) == 0
+        assert "--format {text,json}" in capsys.readouterr().out
+
+
+def test_create_json(tmp_path, monkeypatch, capsys):
+    destination = tmp_path / "demo"
+    monkeypatch.setattr("myproject.cli.create_project", lambda project_name, output_dir: destination)
+    assert main(["create", "demo", "-o", str(tmp_path), "--format", "json"]) == 0
+    assert json.loads(capsys.readouterr().out) == {"project_name": "demo", "path": str(destination)}
+
+
+def test_create_json_failure_prints_no_document(tmp_path, capsys):
+    (tmp_path / "dup-app").mkdir()
+    assert main(["create", "dup-app", "-o", str(tmp_path), "--format", "json"]) == 1
+    captured = capsys.readouterr()
+    assert captured.out == ""
+    assert "already exists" in captured.err
+
+
+def test_invalid_format_exits_two(capsys):
+    assert main(["create", "demo", "--format", "xml"]) == 2
+    assert "--format" in capsys.readouterr().err
+    assert main(["greet", "--format", "xml"]) == 2
+
+
+@pytest.mark.slow
+@pytest.mark.skipif(shutil.which("plan") is None, reason="plan is not installed")
+def test_create_json_verbose_keeps_stdout_machine_readable(tmp_path, installed_plan):
+    result = subprocess.run(
+        [sys.executable, "-m", "myproject.cli", "create", "demo", "-o", str(tmp_path), "--format", "json", "--verbose"],
+        capture_output=True,
+        text=True,
+        env={
+            **os.environ,
+            "PYTHONPATH": str(Path(__file__).resolve().parents[1] / "src") + os.pathsep + os.environ.get("PYTHONPATH", ""),
+        },
+    )
+    assert result.returncode == 0, result.stderr
+    destination = tmp_path / "demo"
+    assert json.loads(result.stdout) == {"project_name": "demo", "path": str(destination)}
+    assert "Scaffolding project 'demo'" in result.stderr
+    assert "Starting myproject v" in result.stderr
+    assert (destination / "src" / "demo" / "cli.py").is_file()
 
 
 @pytest.mark.slow

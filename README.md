@@ -106,12 +106,25 @@ CI runs both suites separately. Mark new integration tests and tests exceeding f
 ```powershell
 myproject help [<action>]      # or -h / --help (add --verbose for full option details)
 myproject version              # or --version
-myproject greet [<name>]       # prints Hello, world when name is omitted
-myproject create <project-name> [-o <output-dir>]
+myproject greet [<name>] [--format text|json]   # prints Hello, world when name is omitted
+myproject create <project-name> [-o <output-dir>] [--format text|json]
 ```
 
 The CLI runs on `support-python`'s `ToolHarness`, so every action also accepts `-v`/`--verbose`, `--debug`,
 `--log-file <path>`, and `--log-level <level>`. Exit codes: `0` success, `1` failure, `2` invalid arguments.
+
+`greet` and `create` accept `--format text|json`; `text` is the default and keeps the plain output.
+In `json` mode, a successful run prints exactly one JSON object on stdout and sends all log entries to stderr.
+A failed run prints nothing on stdout and reports the error on stderr.
+
+| Action   | JSON fields                                                       |
+| :------- | :---------------------------------------------------------------- |
+| `greet`  | `name`: greeting target; `greeting`: the greeting text            |
+| `create` | `project_name`: new project's name; `path`: created project path  |
+
+```powershell
+myproject greet Gio --format json   # {"name": "Gio", "greeting": "Hello, Gio"}
+```
 
 `create` scaffolds a new project as a copy of this template at `<output-dir>/<project-name>` (current directory
 if `-o` is omitted), automating the renames described below in **Starting a new project from this template**.

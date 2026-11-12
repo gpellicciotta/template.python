@@ -34,6 +34,13 @@ Functional and technical requirements for the `template.python` repository.
   - `myproject version` / `--version`: outputs `{name} v{version} - {copyright}` and exits with code 0.
   - `myproject greet [<name>]`: sample business logic command; prints `Hello, world` when the name is omitted.
   - `myproject create <project-name>`: project scaffolding subcommand.
+- Accept `--format text|json` on `greet` and `create`, defaulting to `text`:
+  - `text`: prints the plain greeting or the `Created new project at {path}` line.
+  - `json`: prints exactly one JSON object on stdout and writes all log entries to stderr.
+  - `greet` JSON fields: `name` (greeting target) and `greeting` (greeting text).
+  - `create` JSON fields: `project_name` (new project's name) and `path` (created project directory).
+  - Failures print no JSON document; the error goes to stderr with exit code `1`.
+  - Renaming or removing a JSON field is a breaking change.
 - Maintain consistent exit codes across all commands:
   - `0`: Success.
   - `1`: Application or command execution failure.

@@ -22,6 +22,7 @@ DESCRIPTION = "Sample CLI for template.python providing greeting and project sca
 
 def _configure_greet(parser: argparse.ArgumentParser) -> None:
     parser.add_argument("name", nargs="?", default="world", help="name to greet (default: world)")
+    ToolHarness.add_format_option(parser)
 
 
 def _configure_create(parser: argparse.ArgumentParser) -> None:
@@ -33,12 +34,17 @@ def _configure_create(parser: argparse.ArgumentParser) -> None:
         metavar="DIR",
         help="directory to create the new project under (default: .)",
     )
+    ToolHarness.add_format_option(parser)
 
 
 def run_greet(args: argparse.Namespace, logger: CliLogger) -> int:
     """Print a greeting for the given name."""
     logger.progress(f"Greeting target: {args.name}")
-    logger.emit(greet(args.name))
+    greeting = greet(args.name)
+    if args.format == "json":
+        logger.emit_json({"name": args.name, "greeting": greeting})
+    else:
+        logger.emit(greeting)
     return 0
 
 
@@ -50,7 +56,10 @@ def run_create(args: argparse.Namespace, logger: CliLogger) -> int:
     except ScaffoldError as exc:
         logger.error(str(exc))
         return 1
-    logger.emit(f"Created new project at {destination}")
+    if args.format == "json":
+        logger.emit_json({"project_name": args.project_name, "path": str(destination)})
+    else:
+        logger.emit(f"Created new project at {destination}")
     return 0
 
 
@@ -61,8 +70,10 @@ def build_harness() -> ToolHarness:
         "greet",
         "print a greeting",
         run_greet,
-        detail="Prints 'Hello, NAME'; NAME defaults to 'world'.\nWith --verbose, also prints the greeting target.",
-        usage_suffix="[NAME]",
+        detail="Prints 'Hello, NAME'; NAME defaults to 'world'.\n"
+        "With --verbose, also prints the greeting target.\n"
+        "With --format json, prints the name and greeting as one JSON object.",
+        usage_suffix="[NAME] [--format FORMAT]",
         configure_parser=_configure_greet,
     )
     harness.add_action(
@@ -71,11 +82,12 @@ def build_harness() -> ToolHarness:
         run_create,
         detail="Copies this template into DIR/PROJECT_NAME, renaming the package, project, and title.\n"
         "PROJECT_NAME is the new project's name; DIR defaults to the current directory.\n"
+        "With --format json, prints the project name and path as one JSON object.\n"
         "Needs an editable install of template.python.",
-        usage_suffix="PROJECT_NAME [-o DIR]",
+        usage_suffix="PROJECT_NAME [-o DIR] [--format FORMAT]",
         configure_parser=_configure_create,
     )
-    harness.set_examples([f"{TOOL_NAME} greet Gio", f"{TOOL_NAME} create my-app -o ../"])
+    harness.set_examples([f"{TOOL_NAME} greet Gio", f"{TOOL_NAME} create my-app -o ../", f"{TOOL_NAME} greet Gio --format json"])
     return harness
 
 
