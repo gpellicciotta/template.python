@@ -12,8 +12,10 @@ review: agent
 preview: none
 protocol: standard
 usage:
-  worker: {turns: 2, duration_s: 658.8, input: 136, output: 26940, cache_read: 4522060, cache_write: 142556}
+  worker: {turns: 4, duration_s: 730.4, input: 160, output: 29740, cache_read: 5439962, cache_write: 153694}
 work_duration: 344.3
+review_status: pending
+review_round: 1
 ---
 # T0027: Add the standard --format text|json option to the myproject greet and create actions
 
@@ -58,4 +60,7 @@ Document the option and its JSON fields in README.md and docs/requirements.md.
 
 - [2026-11-12] **[Doc]**
   Documented --format and its JSON fields in README.md and docs/requirements.md; added a CHANGELOG.md entry.
+
+- [2026-11-12] **[Review]**
+  Round 1 requested (mode: agent).
 
