@@ -12,8 +12,10 @@ review: agent
 preview: none
 protocol: standard
 usage:
-  worker: {turns: 2, duration_s: 854.4, input: 102630, output: 18878, cache_read: 2370816, cache_write: 0}
+  worker: {turns: 4, duration_s: 973.6, input: 112554, output: 20696, cache_read: 3097088, cache_write: 0}
 work_duration: 443.3
+review_status: pending
+review_round: 1
 ---
 # T0029: Make myproject create initialize the new project's plan store with plan init --store branch
 
@@ -56,4 +58,7 @@ Update README.md and docs/requirements.md.
 
 - [2026-11-12] **[Doc]**
   Documented required tools and branch-store behavior; added the breaking CLI changelog entry.
+
+- [2026-11-12] **[Review]**
+  Round 1 requested (mode: agent).
 
