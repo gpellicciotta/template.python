@@ -5,15 +5,16 @@ session: codex-20261112-acac25
 needs: []
 branch: task/T0038-resolve-version-with-support-python-get-package-version
 worktree: .plan/work/T0038-resolve-version-with-support-python-get-package-version
-status: active
+status: completed
 started_at: "2026-11-12T09:27:49Z"
-ended_at: —
+ended_at: "2026-11-12T09:31:24Z"
 review: none
 preview: none
 protocol: adhoc
 usage:
-  worker: {turns: 2, duration_s: 301.6, input: 154332, output: 7348, cache_read: 878848, cache_write: 0}
-work_duration: 157.9
+  worker: {turns: 4, duration_s: 371.6, input: 179158, output: 9020, cache_read: 1408768, cache_write: 0}
+work_duration: 214.7
+completion-commit: 3ea6b8a051be58fa45d19fc7f93de01e1b6d4a04
 ---
 # T0038: Resolve __version__ with support_python.get_package_version so the CLI shows -pre instead of the rc0 form
 
@@ -51,4 +52,7 @@ Make sure `create` still rewrites the distribution name in new projects.
 
 - [2026-11-12] **[Doc]**
   Added the user-facing changelog entry and recorded failing-first and passing verification output in the validation proof.
+
+- [2026-11-12] **[Complete]**
+  Task completed successfully.
 
