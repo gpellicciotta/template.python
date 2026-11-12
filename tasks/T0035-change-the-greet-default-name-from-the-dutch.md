@@ -5,12 +5,16 @@ session: codex-20261112-e3813e
 needs: []
 branch: task/T0035-change-the-greet-default-name-from-the-dutch
 worktree: .plan/work/T0035-change-the-greet-default-name-from-the-dutch
-status: active
+status: completed
 started_at: "2026-11-12T09:36:35Z"
-ended_at: —
+ended_at: "2026-11-12T09:38:59Z"
 review: none
 preview: none
 protocol: adhoc
+usage:
+  worker: {turns: 2, duration_s: 259.4, input: 62484, output: 6218, cache_read: 631552, cache_write: 0}
+work_duration: 143.9
+completion-commit: df5237a43488977db1365aa233ada5abf2339ce6
 ---
 # T0035: Change the greet default name from the Dutch wereld to the US English world
 
@@ -43,3 +47,7 @@ Update its help text, tests, README.md, and docs/requirements.md where they ment
   - Files touched: 4
   - Lines touched: 12
   - Reopenings: 0
+
+- [2026-11-12] **[Complete]**
+  Task completed successfully.
+
