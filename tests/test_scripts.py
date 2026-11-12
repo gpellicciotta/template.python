@@ -209,6 +209,17 @@ def test_devops_builds_devops_cli_over_python_project():
 
 
 @pytest.mark.slow
+def test_devops_lint_fails_on_markdown_violations(tmp_path, monkeypatch):
+    project = load_devops().build_cli(tmp_path).project
+    monkeypatch.setattr(type(project), "venv_python", property(lambda self: Path(sys.executable)))
+    document = tmp_path / "notes.md"
+    document.write_text("# Notes\n\n* Star bullet.\n", encoding="utf-8")
+    assert project.lint() is False
+    document.write_text("# Notes\n\n- Dash bullet.\n", encoding="utf-8")
+    assert project.lint() is True
+
+
+@pytest.mark.slow
 def test_devops_help_lists_actions():
     result = run_script("devops.py", "help")
     assert result.returncode == 0

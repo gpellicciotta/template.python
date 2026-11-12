@@ -31,11 +31,25 @@ def venv_python() -> Path:
     return VENV_DIR / ("Scripts/python.exe" if sys.platform == "win32" else "bin/python")
 
 
+def build_project(root: Path = REPO_ROOT) -> Any:
+    """Build this project's PythonProject, whose lint also runs `lint-markdown check`."""
+    from support_python.devops import PythonProject
+
+    class TemplateProject(PythonProject):
+        def lint(self) -> bool:
+            """Run ruff and `lint-markdown check`; return whether all pass."""
+            python_ok = super().lint()
+            markdown_ok = self._python("-m", "support_python.tools.lint_markdown", "check")
+            return python_ok and markdown_ok
+
+    return TemplateProject(root)
+
+
 def build_cli(root: Path = REPO_ROOT) -> Any:
     """Build the devops command line: the standard DevopsCli actions."""
-    from support_python.devops import DevopsCli, PythonProject
+    from support_python.devops import DevopsCli
 
-    return DevopsCli(PythonProject(root), description=DESCRIPTION, copyright=COPYRIGHT)
+    return DevopsCli(build_project(root), description=DESCRIPTION, copyright=COPYRIGHT)
 
 
 def main(argv: Optional[Sequence[str]] = None) -> int:

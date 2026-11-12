@@ -142,7 +142,8 @@ ruff check --fix .
 ruff format .
 ```
 
-Lint Markdown with `lint-markdown`, configured by [.lint-markdown.json](../.lint-markdown.json):
+Lint Markdown with `lint-markdown`, configured by [.lint-markdown.json](../.lint-markdown.json).
+`devops.py lint`, `devops.py check`, and CI run `lint-markdown check`, so violations fail the build:
 
 ```bash
 lint-markdown check
@@ -159,7 +160,7 @@ The script re-runs itself with the `.venv` interpreter, so plain `python` works:
 
 ```bash
 python scripts/devops.py help      # list every action; add --verbose for details
-python scripts/devops.py lint      # ruff check + ruff format --check
+python scripts/devops.py lint      # ruff check + ruff format --check + lint-markdown check
 python scripts/devops.py format    # ruff format
 python scripts/devops.py test      # fast suite; selection: test tests/test_cli.py -- -k version
 python scripts/devops.py test --slow # slow suite with 120-second per-test timeouts
@@ -170,6 +171,7 @@ python scripts/devops.py versions  # compare pyproject.toml's version with the C
 python scripts/devops.py release   # freeze, tag, push, and publish a GitHub release
 ```
 
+`build_project()` subclasses `PythonProject` to extend `lint()` with `lint-markdown check`.
 Add project-specific actions in `build_cli()` with `cli.add_action(name, summary, handler)`.
 Projects that deploy enable deployment with `DevopsCli.set_deploy` in `build_cli()`, supplying project-local `DeployStep` actions.
 The support-python [DevOps scripts tutorial][devops-tutorial] documents every option.
@@ -229,6 +231,7 @@ The GitHub Actions workflow in [ci.yml](../.github/workflows/ci.yml) runs on eve
 - Python environment setup.
 - Editable installation with dev dependencies.
 - Code linting and formatting via `ruff`.
+- Markdown linting via `lint-markdown check`, installed from `scripts/requirements.txt`.
 - Separate fast and slow suite execution via `pytest`, with 30-second and 120-second per-test timeouts.
 - Package build via `build`.
 

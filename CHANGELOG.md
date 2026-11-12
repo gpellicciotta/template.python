@@ -12,7 +12,8 @@ A summarized overview of all changes, per version of this project.
 
 ---
 
-## v3.0.22-pre
+## v3.0.23-pre
+- DevEx: Made `devops.py lint`, `check`, and CI run `lint-markdown check`, failing the build on Markdown violations.
 - Docs: Fixed Markdown lint issues, `{{placeholder}}` syntax, cross-platform commands, and stale guideline links and layout.
 - DevEx: Added [.lint-markdown.json](.lint-markdown.json), checking owner GitHub links against sibling checkouts.
 - CLI: Read the version banner's copyright holder from the `pyproject.toml` authors instead of hardcoding it.
