@@ -1,7 +1,7 @@
 ---
 id: T0025
-owner: "@codex"
-session: codex-20261112-5631d0
+owner: "@claude"
+session: claude-20261112-9d968e
 needs: []
 branch: task/T0025-add-a-subprocess-end-to-end-test-that
 worktree: .plan/work/T0025-add-a-subprocess-end-to-end-test-that
@@ -11,6 +11,10 @@ ended_at: —
 review: none
 preview: none
 protocol: adhoc
+usage:
+  worker: {turns: 2, duration_s: 10.0}
+work_duration: 29.3
+contributors: "@codex"
 ---
 # T0025: Add a subprocess end-to-end test that runs the installed myproject entry point with realistic arguments
 
@@ -21,9 +25,16 @@ Assert exit codes 0, 1, and 2 and the expected stdout and stderr content.
 Locate the console script next to `sys.executable`, and mark the tests `slow`.
 
 ## Task Execution Steps
-- [ ] **[Implement]** Write the subprocess tests in tests/test_cli_e2e.py.
-- [ ] **[Verify]**    Run pytest -m slow tests/test_cli_e2e.py; record output in validation-proof.md.
+- [x] **[Implement]** Write the subprocess tests in tests/test_cli_e2e.py.
+- [x] **[Verify]**    Run pytest -m slow tests/test_cli_e2e.py; record output in validation-proof.md.
 
 ## Execution Log
 - [2026-11-10] **[Doc]**
   Companion task file scaffolded at task creation.
+- [2026-11-12] **[Implement]**
+  Added tests/test_cli_e2e.py: five slow subprocess tests of the console script next to `sys.executable`.
+  Covered `--version`, `help`, `greet Gio`, `create demo` then a repeated `create`, and `--bogus` (exit codes 0, 1, 2).
+  Added a DevEx entry to CHANGELOG.md.
+- [2026-11-12] **[Verify]**
+  `python -m pytest -m slow tests/test_cli_e2e.py`: 5 passed; `python -m pytest`: 33 passed; ruff clean.
+  Evidence in validation-proof.md.
