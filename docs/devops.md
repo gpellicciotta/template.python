@@ -4,15 +4,14 @@ Practical guidance on development environment setup, testing, validation, builds
 
 ---
 
-## Prerequisites and Environment
+## Development Environment
+### Prerequisites
 - **Python**: Python 3.15+, the latest stable release required by the Python guidelines
 - **Git**: Git 2.30+ supporting worktrees (`git worktree`)
 - **Shell**: PowerShell (Windows) or POSIX shell (Linux/macOS)
+- **GitHub CLI**: `gh`, authenticated, for publishing releases
 
----
-
-## Setup and Development Workflows
-### Initial Bootstrap (Windows/Linux/macOS)
+### Setup
 To initialize git, create the virtual environment, install in editable mode with dev tools, lint, run tests, and build:
 
 ```bash
@@ -23,7 +22,8 @@ Add `-v`/`--verbose` to print each step's command line; failed steps report `**[
 Run `help --verbose` for the full help, and `--version` for the version.
 The bootstrap has no `--debug`: it writes no operational logs, so it has no logging threshold to lower.
 
-### Manual Setup
+To set up the environment manually instead:
+
 ```bash
 # Create and activate virtual environment
 python -m venv .venv
@@ -38,32 +38,73 @@ source .venv/bin/activate
 pip install -e ".[dev]"
 ```
 
-### Task Coordination
-All planned and active work is tracked in `PLAN.md` and `.plan/tasks/`, changed only through the `plan` CLI.
-See `AGENTS.md` and the `plan-task-usage-guidelines` skill for the workflow.
+---
 
-### Common Operations
-[devops.py](../scripts/devops.py) is a thin script over `support-python`'s `DevopsCli` and `PythonProject`.
-`scripts/requirements.txt` pins `support-python`, and the bootstrap installs it into `.venv`.
-The script re-runs itself with the `.venv` interpreter, so plain `python` works:
+## Versioning and Releasing
+### Updating Versions
+`version` in [pyproject.toml](../pyproject.toml) is the single source of truth for the project version.
+The package reads `__version__` from the installed metadata, so no source file repeats it.
+The top [CHANGELOG.md](../CHANGELOG.md) heading must match it exactly, `-pre` suffix included (e.g. `## v1.3.1-pre`).
+Ongoing work accumulates under that heading until the next release.
+
+- Patch: `plan` task completion raises the patch in both files; never edit it by hand.
+- Minor or major: rename the `-pre` heading and `pyproject.toml`'s `version` together, in the same commit as the change.
+
+Check that both versions agree:
 
 ```bash
-python scripts/devops.py help      # list every action; add --verbose for details
-python scripts/devops.py lint      # ruff check + ruff format --check
-python scripts/devops.py format    # ruff format
-python scripts/devops.py test      # fast suite; selection: test tests/test_cli.py -- -k version
-python scripts/devops.py test --slow # slow suite with 120-second per-test timeouts
-python scripts/devops.py build     # sdist + wheel into dist/
-python scripts/devops.py check     # lint + fast tests + slow tests + build
-python scripts/devops.py clean     # remove dist/, build/, and src/*.egg-info
-python scripts/devops.py versions  # compare pyproject.toml's version with the CHANGELOG.md top heading
-python scripts/devops.py release   # freeze, tag, push, and publish a GitHub release
+python scripts/devops.py versions
 ```
 
-Add project-specific actions in `build_cli()` with `cli.add_action(name, summary, handler)`.
-The support-python [DevOps scripts tutorial][devops-tutorial] documents every option.
+### Making a Release
+The `release` action of [devops.py](../scripts/devops.py) automates the complete release process end-to-end:
+1. Validates preconditions: clean working tree, branch `main`, `gh` authenticated, fresh tags, no existing tag or release,
+   and non-empty release notes.
+2. Runs `check` (lint, test, build) as the quality check, unless `--skip-checks` is given.
+3. Asks for the typed confirmation `release v<version>`, unless `--yes` is given.
+4. Finalizes the version in `pyproject.toml` and `CHANGELOG.md` (removing `-pre` and stamping the release date) and commits.
+5. Rebuilds `dist/` from the frozen version, then tags `v<version>`.
+6. Pushes the commit and tag and creates the GitHub release with the wheel and sdist attached.
+7. Opens the next patch development version (`-pre`) in `pyproject.toml` and `CHANGELOG.md`, commits, and pushes it.
 
-[devops-tutorial]: https://github.com/gpellicciotta/support.python/blob/v3.0.0/docs/tutorials/devops-scripts.md
+```bash
+# Preview the release actions without making changes
+python scripts/devops.py release --dry-run
+
+# Create and publish the release
+python scripts/devops.py release
+
+# Create and publish while skipping pre-flight checks and the confirmation
+python scripts/devops.py release --skip-checks --yes
+```
+
+To release manually without the script:
+1. Confirm the top `CHANGELOG.md` heading's version and `pyproject.toml`'s `version` agree:
+   ```bash
+   python scripts/devops.py versions
+   ```
+2. Freeze the version: replace the heading's `-pre` suffix with `[released: <yyyy-mm-dd>]`,
+   and drop `-pre` from `pyproject.toml`'s `version`. Add no new `-pre` heading yet.
+3. Run lint, tests, and a clean build; `build` empties `dist/` first, so it holds only this version's packages:
+   ```bash
+   python scripts/devops.py check
+   ```
+4. Commit the release on its own, tag the release commit, and push both:
+   ```bash
+   git commit -am "Released version <version>."
+   git tag v<version>
+   git push origin main v<version>
+   ```
+5. Publish a GitHub Release for the pushed tag, attaching the wheel and sdist built in step 3:
+   ```bash
+   gh release create v<version> --verify-tag dist/*-<version>-py3-none-any.whl dist/*-<version>.tar.gz
+   ```
+6. Reopen development in a separate commit: add the next patch `## v<next-version>-pre` heading above the release,
+   set `pyproject.toml`'s `version` to `<next-version>-pre`, then commit and push:
+   ```bash
+   git commit -am "Started version <next-version>-pre after the <version> release."
+   git push origin main
+   ```
 
 ---
 
@@ -99,35 +140,40 @@ Keep unit tests isolated and safe for parallel execution. The fast suite should 
 
 ---
 
+## Common Operations
+[devops.py](../scripts/devops.py) is a thin script over `support-python`'s `DevopsCli` and `PythonProject`.
+`scripts/requirements.txt` pins `support-python`, and the bootstrap installs it into `.venv`.
+The script re-runs itself with the `.venv` interpreter, so plain `python` works:
+
+```bash
+python scripts/devops.py help      # list every action; add --verbose for details
+python scripts/devops.py lint      # ruff check + ruff format --check
+python scripts/devops.py format    # ruff format
+python scripts/devops.py test      # fast suite; selection: test tests/test_cli.py -- -k version
+python scripts/devops.py test --slow # slow suite with 120-second per-test timeouts
+python scripts/devops.py build     # sdist + wheel into dist/
+python scripts/devops.py check     # lint + fast tests + slow tests + build
+python scripts/devops.py clean     # remove dist/, build/, and src/*.egg-info
+python scripts/devops.py versions  # compare pyproject.toml's version with the CHANGELOG.md top heading
+python scripts/devops.py release   # freeze, tag, push, and publish a GitHub release
+```
+
+Add project-specific actions in `build_cli()` with `cli.add_action(name, summary, handler)`.
+Projects that deploy enable deployment with `DevopsCli.set_deploy` in `build_cli()`, supplying project-local `DeployStep` actions.
+The support-python [DevOps scripts tutorial][devops-tutorial] documents every option.
+
+[devops-tutorial]: https://github.com/gpellicciotta/support.python/blob/v3.0.0/docs/tutorials/devops-scripts.md
+
+### Task Coordination
+All planned and active work is tracked in `PLAN.md` and `.plan/tasks/`, changed only through the `plan` CLI.
+See [AGENTS.md](../AGENTS.md) and the `plan-task-usage-guidelines` skill for the workflow.
+
+---
+
 ## Development and Maintenance Scripts
 The root `scripts/` directory houses non-packaged development and maintenance tooling, including the
 `bootstrap-dev-environment.py` and `devops.py` scripts used above. These standalone scripts remain separate from the
-installable package and automated test suites. Projects such as `mail-utils` use this convention for
-bootstrap scripts, roundtrip testing, and migrations.
-
-Projects that deploy enable deployment with `DevopsCli.set_deploy` in `build_cli()`, supplying project-local `DeployStep` actions.
-
-### Creating a Release with `devops.py release`
-The `release` action of [devops.py](../scripts/devops.py) automates the complete release process end-to-end:
-1. Validates preconditions: clean working tree, branch `main`, `gh` authenticated, fresh tags, no existing tag or release,
-   and non-empty release notes.
-2. Runs `check` (lint, test, build) as the quality check, unless `--skip-checks` is given.
-3. Asks for the typed confirmation `release v<version>`, unless `--yes` is given.
-4. Finalizes the version in `pyproject.toml` and `CHANGELOG.md` (removing `-pre` and stamping the release date) and commits.
-5. Rebuilds `dist/` from the frozen version, then tags `v<version>`.
-6. Pushes the commit and tag and creates the GitHub release with the wheel and sdist attached.
-7. Opens the next patch development version (`-pre`) in `pyproject.toml` and `CHANGELOG.md` and pushes it.
-
-```shell
-# Preview the release actions without making changes
-python scripts/devops.py release --dry-run
-
-# Create and publish the release
-python scripts/devops.py release
-
-# Create and publish while skipping pre-flight checks and the confirmation
-python scripts/devops.py release --skip-checks --yes
-```
+installable package and automated test suites.
 
 ### Purpose and Scope
 Use `scripts/` for operational tasks that support developers rather than packaged library users:
@@ -163,49 +209,6 @@ python -m build
 ```
 
 Built packages are written to `dist/` — [bootstrap-dev-environment.py](../scripts/bootstrap-dev-environment.py)'s build step uses the same location.
-
----
-
-## Release Process
-Ongoing work accumulates under the top `CHANGELOG.md` heading while it carries a `-pre` SemVer suffix (e.g.
-`## v1.3.1-pre`), which must always match `version` in `pyproject.toml` (the single source of truth) exactly,
-`-pre` included.
-
-### Automated Release
-Use `scripts/devops.py release` to automate the complete release flow:
-
-```bash
-# Validate and preview release actions
-python scripts/devops.py release --dry-run
-
-# Run automated release
-python scripts/devops.py release
-```
-
-The steps are listed under **Creating a Release with `devops.py release`** above.
-
-### Manual Release Steps
-If releasing manually without the script:
-1. Confirm the top `CHANGELOG.md` heading's version and `pyproject.toml`'s `version` already agree.
-2. Freeze: replace the heading's `-pre` suffix with `[{{date}}]`, and drop `-pre` from `pyproject.toml`'s
-   `version` so both again match exactly. In the same commit, add the next patch version's `## vX.Y.Z-pre`
-   heading above it, but leave `pyproject.toml`'s `version` at the bare frozen version — bumping it to the next
-   `-pre` now would make the following publish step publish the wrong version. Only bump `pyproject.toml` to the next
-   `-pre` in the first real commit of the next dev cycle.
-3. Run lint, tests, and a clean build; `build` empties `dist/` first, so it holds only this version's packages:
-   ```bash
-   python scripts/devops.py check
-   ```
-4. Commit the changes, tag the release commit, and push both:
-   ```bash
-   git commit -am "Released version <version>."
-   git tag v<version>
-   git push origin main v<version>
-   ```
-5. Publish a GitHub Release for the pushed tag, attaching the wheel and sdist built in step 3:
-   ```bash
-   gh release create v<version> --verify-tag dist/*-<version>-py3-none-any.whl dist/*-<version>.tar.gz
-   ```
 
 ---
 
