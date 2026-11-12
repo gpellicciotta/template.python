@@ -7,7 +7,7 @@ An overview of all tasks and their planning.
 - [x] T0024 Add an autouse test fixture isolating HOME and configuration directories and failing on writes to real user state.
 - [x] T0029 Make myproject create initialize the new project's plan store with plan init --store branch.
 - [x] T0039 Fix the pre-existing lint-markdown issues in README.md and CHANGELOG.md.
-- [ ] T0033 Add module docstrings to the myproject modules and docstrings to the public script helper functions.
+- [x] T0033 Add module docstrings to the myproject modules and docstrings to the public script helper functions.
 - [ ] T0038 Resolve __version__ with support_python.get_package_version so the CLI shows -pre instead of the rc0 form.
 - [ ] T0030 Start scaffolded projects at version 0.1.0-pre with an area-prefixed first CHANGELOG entry.
 - [ ] T0035 Change the greet default name from the Dutch wereld to the US English world.
