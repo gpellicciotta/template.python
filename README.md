@@ -107,7 +107,7 @@ CI runs both suites separately. Mark new integration tests and tests exceeding f
 myproject help [<action>]      # or -h / --help (add --verbose for full option details)
 myproject version              # or --version
 myproject greet [<name>] [--format text|json]   # prints Hello, world when name is omitted
-myproject create <project-name> [-o <output-dir>] [--format text|json]
+myproject create <project-name> [-o <output-dir>] [--dry-run] [--format text|json]
 ```
 
 The CLI runs on `support-python`'s `ToolHarness`, so every action also accepts `-v`/`--verbose`, `--debug`,
@@ -117,10 +117,11 @@ The CLI runs on `support-python`'s `ToolHarness`, so every action also accepts `
 In `json` mode, a successful run prints exactly one JSON object on stdout and sends all log entries to stderr.
 A failed run prints nothing on stdout and reports the error on stderr.
 
-| Action   | JSON fields                                                       |
-| :------- | :---------------------------------------------------------------- |
-| `greet`  | `name`: greeting target; `greeting`: the greeting text            |
-| `create` | `project_name`: new project's name; `path`: created project path  |
+| Action               | JSON fields                                                                    |
+| :------------------- | :----------------------------------------------------------------------------- |
+| `greet`              | `name`: greeting target; `greeting`: the greeting text                         |
+| `create`             | `project_name`: new project's name; `path`: created project path               |
+| `create --dry-run`   | `create` fields, `dry_run`, `template`, and the planned changes (see below)    |
 
 ```powershell
 myproject greet Gio --format json   # {"name": "Gio", "greeting": "Hello, Gio"}
@@ -134,6 +135,19 @@ Install `git` and `plan` on `PATH` before running `create`.
 The command runs `git init` and `plan init --store branch` in the new project.
 Its plan store lives on the `plan` branch at `.plan/`, with an ignored root `PLAN.md` link.
 Initialization failures remove the generated directory and return exit code `1`.
+
+`create --dry-run` checks the same preconditions, reports every planned change, and writes nothing.
+It exits with code `1` where the real run would, such as on an existing destination or an invalid name.
+Text mode prints one `Would <change>: <item>` line per change; JSON mode lists them in these fields:
+- `copied`: template files to copy, relative to `template`.
+- `renamed`: `{"from", "to"}` directory renames, relative to the new project.
+- `rewritten`: new-project files whose placeholder names change.
+- `reset`: new-project files replaced or reset, such as `CHANGELOG.md` and `pyproject.toml`.
+- `commands`: commands to run in the new project, such as `plan init --store branch`.
+
+```powershell
+myproject create my-app -o ../ --dry-run   # Would create new project at ..., then one line per change
+```
 
 ## Building the Packages
 For building the source and binary (i.e. wheel) distribution packages:

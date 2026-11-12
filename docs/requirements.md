@@ -27,6 +27,9 @@ Functional and technical requirements for the `template.python` repository.
   - Creates a branch-backed plan store, an ignored root `PLAN.md` link, and exactly one plan-managed instructions block.
   - Returns exit code `1` for missing tools or initialization failures, leaving no generated project directory.
   - Refuses to overwrite existing target directories.
+  - Accepts `--dry-run` to report every planned change without writing anything:
+    - Reports the destination, copied files, renames, rewrites, reset files, and the `git init` and `plan init` steps.
+    - Fails with exit code `1` on the same preconditions as the real run, such as an existing destination or an invalid name.
 
 ### Command Line Interface (CLI)
 - Provide an action-oriented, subcommand-based CLI built on `support-python`'s `ToolHarness`:
@@ -39,6 +42,7 @@ Functional and technical requirements for the `template.python` repository.
   - `json`: prints exactly one JSON object on stdout and writes all log entries to stderr.
   - `greet` JSON fields: `name` (greeting target) and `greeting` (greeting text).
   - `create` JSON fields: `project_name` (new project's name) and `path` (created project directory).
+  - `create --dry-run` JSON fields: `project_name`, `path`, `dry_run` (`true`), `template`, `copied`, `renamed`, `rewritten`, `reset`, and `commands`.
   - Failures print no JSON document; the error goes to stderr with exit code `1`.
   - Renaming or removing a JSON field is a breaking change.
 - Maintain consistent exit codes across all commands:

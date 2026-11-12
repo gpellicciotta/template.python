@@ -255,6 +255,96 @@ def test_create_missing_plan_exits_one(tmp_path, monkeypatch, capsys):
     assert not (tmp_path / "demo").exists()
 
 
+def test_action_help_lists_dry_run_option(capsys):
+    assert main(["help", "create"]) == 0
+    out = capsys.readouterr().out
+    assert "--dry-run" in out
+    assert "PROJECT_NAME [-o DIR] [--dry-run]" in out
+
+
+@pytest.fixture
+def output_dir(tmp_path):
+    """Give a dry run an empty output directory beside the isolated home."""
+    directory = tmp_path / "out"
+    directory.mkdir()
+    return directory
+
+
+def test_create_dry_run_reports_changes_without_writing(output_dir, monkeypatch, capsys):
+    monkeypatch.setattr("myproject.scaffold.shutil.which", lambda name: name)
+    assert main(["create", "demo", "-o", str(output_dir), "--dry-run"]) == 0
+    lines = capsys.readouterr().out.splitlines()
+    assert lines[0] == f"Would create new project at {output_dir / 'demo'}"
+    for line in (
+        "Would copy: pyproject.toml",
+        "Would copy: src/myproject/cli.py",
+        "Would rename: src/myproject -> src/demo",
+        "Would rewrite: src/demo/cli.py",
+        "Would reset: CHANGELOG.md",
+        "Would reset: pyproject.toml",
+        "Would run: git init",
+        "Would run: plan init --store branch",
+    ):
+        assert line in lines
+    assert not any(line.startswith("Would copy: .plan/") for line in lines)
+    assert list(output_dir.iterdir()) == []
+
+
+def test_create_dry_run_json(output_dir, monkeypatch, capsys):
+    monkeypatch.setattr("myproject.scaffold.shutil.which", lambda name: name)
+    assert main(["create", "demo", "-o", str(output_dir), "--dry-run", "--format", "json"]) == 0
+    document = json.loads(capsys.readouterr().out)
+    assert set(document) == {"project_name", "path", "dry_run", "template", "copied", "renamed", "rewritten", "reset", "commands"}
+    assert document["project_name"] == "demo"
+    assert document["path"] == str(output_dir / "demo")
+    assert document["dry_run"] is True
+    assert Path(document["template"]) == Path(__file__).resolve().parents[1]
+    assert "pyproject.toml" in document["copied"]
+    assert document["renamed"] == [{"from": "src/myproject", "to": "src/demo"}]
+    assert "src/demo/cli.py" in document["rewritten"]
+    assert document["reset"][:2] == ["AGENTS.md", "CHANGELOG.md"]
+    assert document["commands"] == ["git init", "plan init --store branch"]
+    assert list(output_dir.iterdir()) == []
+
+
+@pytest.mark.parametrize("project_name, message", [("dup-app", "already exists"), ("123", "package name")])
+def test_create_dry_run_fails_like_real_run(output_dir, monkeypatch, capsys, project_name, message):
+    monkeypatch.setattr("myproject.scaffold.shutil.which", lambda name: name)
+    (output_dir / "dup-app").mkdir()
+    for output_format in ("text", "json"):
+        assert main(["create", project_name, "-o", str(output_dir), "--dry-run", "--format", output_format]) == 1
+        captured = capsys.readouterr()
+        assert captured.out == ""
+        assert message in captured.err
+    assert [path.name for path in output_dir.iterdir()] == ["dup-app"]
+
+
+def test_create_dry_run_missing_plan_exits_one(output_dir, monkeypatch, capsys):
+    monkeypatch.setenv("PATH", "")
+    assert main(["create", "demo", "-o", str(output_dir), "--dry-run"]) == 1
+    assert "plan" in capsys.readouterr().err
+
+
+@pytest.mark.slow
+@pytest.mark.skipif(shutil.which("plan") is None, reason="plan is not installed")
+def test_create_dry_run_entry_point_writes_nothing(output_dir, installed_plan):
+    result = subprocess.run(
+        [sys.executable, "-m", "myproject.cli", "create", "demo", "-o", str(output_dir), "--dry-run"],
+        capture_output=True,
+        text=True,
+        env={
+            **os.environ,
+            "PYTHONPATH": str(Path(__file__).resolve().parents[1] / "src") + os.pathsep + os.environ.get("PYTHONPATH", ""),
+        },
+    )
+    assert result.returncode == 0, result.stderr
+    lines = result.stdout.splitlines()
+    assert lines[0] == f"Would create new project at {output_dir / 'demo'}"
+    assert "Would rename: src/myproject -> src/demo" in lines
+    assert "Would run: plan init --store branch" in lines
+    assert list(output_dir.iterdir()) == []
+
+
 def test_invalid_args():
     assert main(["--invalid-option"]) == 2
     assert main(["unknown-action"]) == 2

@@ -172,3 +172,84 @@ def test_initialization_failure_cleans_destination(tmp_path, monkeypatch, error)
     with pytest.raises(scaffold.ScaffoldError, match="initialize"):
         create_project("demo", str(tmp_path / "out"), template_root=root)
     assert not (tmp_path / "out" / "demo").exists()
+
+
+def _planned_targets(plan) -> dict[str, str]:
+    """Map each planned copy's template path to its path in the new project."""
+    targets = {}
+    for path in plan.copied:
+        target = path
+        for old, new in plan.renamed:
+            if path.startswith(old + "/"):
+                target = new + path[len(old) :]
+        targets[path] = target
+    return targets
+
+
+def test_plan_project_reports_changes_without_writing(tmp_path, monkeypatch):
+    root = _fake_template_root(tmp_path / "template")
+    (root / ".plan").mkdir()
+    (root / ".plan" / "PLAN.md").write_text("- [ ] T0001 Template task.\n", encoding="utf-8")
+    (root / "AGENTS.md").write_text("<!-- BEGIN plan -->\nmanaged\n<!-- END plan -->\n# Template Python\n", encoding="utf-8")
+    (root / "logs").mkdir()
+    (root / "logs" / "run.log").write_text("myproject\n", encoding="utf-8")
+    monkeypatch.setattr(scaffold.shutil, "which", lambda name: name)
+
+    plan = scaffold.plan_project("demo", str(tmp_path / "out"), template_root=root)
+
+    assert plan.destination == (tmp_path / "out" / "demo").resolve()
+    assert plan.template_root == root
+    assert not (tmp_path / "out").exists()
+    assert plan.copied == [".gitignore", "AGENTS.md", "CHANGELOG.md", "pyproject.toml", "src/myproject/cli.py"]
+    assert plan.renamed == [("src/myproject", "src/demo")]
+    assert plan.rewritten == ["AGENTS.md", "pyproject.toml", "src/demo/cli.py"]
+    assert plan.reset == ["AGENTS.md", "CHANGELOG.md", "pyproject.toml"]
+    assert plan.commands == ["git init", "plan init --store branch"]
+
+
+def test_plan_project_keeps_package_name_without_rename(tmp_path, monkeypatch):
+    root = _fake_template_root(tmp_path / "template")
+    monkeypatch.setattr(scaffold.shutil, "which", lambda name: name)
+    plan = scaffold.plan_project("myproject", str(tmp_path / "out"), template_root=root)
+    assert plan.renamed == []
+    assert plan.reset == ["CHANGELOG.md", "pyproject.toml"]
+
+
+@pytest.mark.parametrize(
+    "project_name, missing, message",
+    [
+        ("dup-app", None, "already exists"),
+        ("123", None, "package name"),
+        ("demo", "plan", "plan.*PATH"),
+        ("demo", "git", "git.*PATH"),
+    ],
+)
+def test_plan_project_fails_like_real_run(tmp_path, monkeypatch, project_name, missing, message):
+    root = _fake_template_root(tmp_path / "template")
+    (tmp_path / "out" / "dup-app").mkdir(parents=True)
+    monkeypatch.setattr(scaffold.shutil, "which", lambda name: None if name == missing else name)
+    with pytest.raises(scaffold.ScaffoldError, match=message):
+        scaffold.plan_project(project_name, str(tmp_path / "out"), template_root=root)
+    with pytest.raises(scaffold.ScaffoldError, match=message):
+        create_project(project_name, str(tmp_path / "out"), template_root=root)
+    assert sorted(path.name for path in (tmp_path / "out").iterdir()) == ["dup-app"]
+
+
+def test_plan_project_matches_created_files(tmp_path, monkeypatch):
+    root = _fake_template_root(tmp_path / "template")
+    (root / "docs").mkdir()
+    (root / "docs" / "guide.md").write_text("Use template.python.\n", encoding="utf-8")
+    (root / "docs" / "logo.bin").write_bytes(b"\xff\xfe\x00myproject")
+    monkeypatch.setattr(scaffold.shutil, "which", lambda name: name)
+    monkeypatch.setattr(scaffold.subprocess, "run", lambda args, **kwargs: None)
+    plan = scaffold.plan_project("new-app", str(tmp_path / "out"), template_root=root)
+    template_text = {path: (root / path).read_bytes() for path in plan.copied}
+
+    destination = create_project("new-app", str(tmp_path / "out"), template_root=root)
+
+    created = sorted(path.relative_to(destination).as_posix() for path in destination.rglob("*") if path.is_file())
+    assert created == sorted(_planned_targets(plan).values())
+    changed = sorted(
+        target for source, target in _planned_targets(plan).items() if (destination / target).read_bytes() != template_text[source]
+    )
+    assert changed == sorted(set(plan.rewritten) | set(plan.reset))
