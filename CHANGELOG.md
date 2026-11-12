@@ -12,7 +12,9 @@ A summarized overview of all changes, per version of this project.
 
 ---
 
-## v3.0.18-pre
+## v3.0.19-pre
+- DevEx: **[breaking]** Made bootstrap `-v` mean `--verbose`, printing step commands; `--version` still prints the version.
+- DevEx: Added bootstrap `help --verbose` with the standard help sections, and moved script errors to stderr as `**[ERROR]**`.
 - CLI: Added `--dry-run` to `create`, reporting every planned change in text or JSON without writing anything.
 - CLI: Added the standard `--format text|json` option to the `greet` and `create` actions.
 - DevEx: Added slow end-to-end tests that run the installed `myproject` console script.

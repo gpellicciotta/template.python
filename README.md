@@ -19,7 +19,7 @@ template.python/
     bootstrap-dev-environment.py  # one-shot bootstrap: git init, venv, script requirements, editable install, lint, tests, build
     devops.py          # support-python DevopsCli: lint, test, build, check, release, ...
     requirements.txt   # pins support-python for the scripts; installed into .venv by the bootstrap
-    _cli_common.py     # stdlib-only version/help boilerplate for the bootstrap script
+    _cli_common.py     # stdlib-only version, help, and error output for the bootstrap script
   tests/
     test_core.py
     test_cli.py

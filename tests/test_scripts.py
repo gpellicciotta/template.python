@@ -65,6 +65,96 @@ def load_devops():
     return module
 
 
+def load_bootstrap(monkeypatch):
+    monkeypatch.syspath_prepend(str(SCRIPTS_DIR))
+    spec = importlib.util.spec_from_file_location("bootstrap", SCRIPTS_DIR / "bootstrap-dev-environment.py")
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    return module
+
+
+@pytest.fixture
+def bootstrap(monkeypatch):
+    module = load_bootstrap(monkeypatch)
+    calls = []
+    monkeypatch.setattr(module, "setup", lambda verbose=False: calls.append(verbose) or 0)
+    module.setup_calls = calls
+    return module
+
+
+def test_bootstrap_short_v_means_verbose_not_version(bootstrap, capsys):
+    assert bootstrap.main(["-v"]) == 0
+    assert bootstrap.setup_calls == [True]
+    assert " v" not in capsys.readouterr().out
+
+
+def test_bootstrap_version_uses_myproject_copyright(bootstrap, capsys):
+    from myproject.cli import COPYRIGHT
+
+    assert bootstrap.main(["--version"]) == 0
+    assert bootstrap.main(["version"]) == 0
+    expected = f"bootstrap-dev-environment v{bootstrap.get_project_version()} - {COPYRIGHT}\n"
+    assert capsys.readouterr().out == expected * 2
+    assert bootstrap.setup_calls == []
+
+
+def test_bootstrap_help_lists_standard_sections(bootstrap, capsys):
+    assert bootstrap.main(["help"]) == 0
+    out = capsys.readouterr().out
+    assert out.startswith("bootstrap-dev-environment v")
+    for section in ("Usage:", "Actions:", "Options:", "Exit codes:"):
+        assert f"\n{section}\n" in out
+    assert "-v, --verbose" in out
+    assert "Detailed Action Descriptions:" not in out
+
+
+def test_bootstrap_help_verbose_adds_details_and_exit_codes(bootstrap, capsys):
+    assert bootstrap.main(["help", "--verbose"]) == 0
+    assert bootstrap.main(["--help", "-v"]) == 0
+    out = capsys.readouterr().out
+    first, second = out[: len(out) // 2], out[len(out) // 2 :]
+    assert first == second
+    assert "Detailed Action Descriptions:" in first
+    exit_codes = first.split("Exit codes:\n")[1].split("\n\n")[0]
+    assert [line.split()[0] for line in exit_codes.splitlines()] == ["0", "1", "2"]
+    assert bootstrap.setup_calls == []
+
+
+def test_bootstrap_invalid_arguments_exit_2_on_stderr(bootstrap, capsys):
+    with pytest.raises(SystemExit) as exc:
+        bootstrap.main(["unknown"])
+    assert exc.value.code == 2
+    captured = capsys.readouterr()
+    assert captured.out == ""
+    assert captured.err.startswith("**[ERROR]** ")
+    assert "Usage: bootstrap-dev-environment" in captured.err
+
+
+def test_bootstrap_failed_step_reports_error_on_stderr(monkeypatch, capsys):
+    module = load_bootstrap(monkeypatch)
+    monkeypatch.setattr(module.subprocess, "run", lambda *args, **kwargs: subprocess.CompletedProcess(args, 3))
+    assert module.run_step("Linting", ["ruff", "check", "."]) is False
+    captured = capsys.readouterr()
+    assert "**[ERROR]** Linting failed (exit code 3)" in captured.err
+    assert "failed" not in captured.out
+
+
+def test_bootstrap_verbose_step_prints_command_line(monkeypatch, capsys):
+    module = load_bootstrap(monkeypatch)
+    monkeypatch.setattr(module.subprocess, "run", lambda *args, **kwargs: subprocess.CompletedProcess(args, 0))
+    assert module.run_step("Linting", ["ruff", "check", "."]) is True
+    assert "ruff check ." not in capsys.readouterr().out
+    assert module.run_step("Linting", ["ruff", "check", "."], verbose=True) is True
+    assert "$ ruff check ." in capsys.readouterr().out
+
+
+def test_cli_common_has_no_duplicate_version_reader(monkeypatch):
+    monkeypatch.syspath_prepend(str(SCRIPTS_DIR))
+    import _cli_common
+
+    assert not hasattr(_cli_common, "get_project_version")
+
+
 @pytest.mark.slow
 def test_bootstrap_version():
     result = run_script("bootstrap-dev-environment.py", "--version")
@@ -73,11 +163,12 @@ def test_bootstrap_version():
 
 
 @pytest.mark.slow
-def test_bootstrap_help():
-    result = run_script("bootstrap-dev-environment.py", "help")
-    assert result.returncode == 0
-    assert "usage:" in result.stdout
-    assert "Exit codes:" in result.stdout
+def test_bootstrap_help_verbose_subprocess():
+    result = run_script("bootstrap-dev-environment.py", "help", "--verbose")
+    assert result.returncode == 0, result.stderr
+    for section in ("Usage:", "Actions:", "Options:", "Exit codes:", "Detailed Action Descriptions:"):
+        assert f"\n{section}\n" in result.stdout
+    assert result.stderr == ""
 
 
 def test_requirements_pin_support_python_v3():
@@ -160,6 +251,20 @@ def test_devops_main_runs_in_process_when_reexecuted_or_without_venv(tmp_path, m
     assert calls == []
     assert devops.REEXEC_ENV not in devops.os.environ
     assert capsys.readouterr().out.count("devops v") == 2
+
+
+def test_devops_fallback_errors_on_stderr(tmp_path, monkeypatch, capsys):
+    devops = load_devops()
+    monkeypatch.setattr(devops, "venv_python", lambda: tmp_path / "missing-python.exe")
+
+    def missing():
+        raise ImportError("No module named 'support_python'")
+
+    monkeypatch.setattr(devops, "build_cli", missing)
+    assert devops.main(["check"]) == 1
+    captured = capsys.readouterr()
+    assert captured.out == ""
+    assert captured.err.startswith("**[ERROR]** No module named 'support_python'")
 
 
 def test_scripts_are_ascii_only_for_legacy_windows_consoles():

@@ -1,55 +1,82 @@
 """Shared CLI boilerplate for the standalone dev scripts under scripts/ - keeps their
-version/help output consistent with each other and with myproject.cli's own
-`{name} v{version} - {copyright}` + exit-codes template, per the CLI guideline.
+version/help/error output consistent with each other and with myproject's `ToolHarness`
+template, per the CLI guideline, using the standard library only.
 """
 
 from __future__ import annotations
 
 import argparse
-from pathlib import Path
+import sys
+from typing import NoReturn, Optional, Sequence
 
-#: Author credited in standalone script version banners.
-APP_AUTHOR = "Giovanni Pellicciotta"
-
-_REPO_ROOT = Path(__file__).resolve().parent.parent
-
-
-def get_project_version() -> str:
-    """Read the version from pyproject.toml so all scripts self-report consistently."""
-    import re
-
-    try:
-        text = (_REPO_ROOT / "pyproject.toml").read_text(encoding="utf-8")
-        m = re.search(r'^version\s*=\s*"([^"]+)"', text, re.MULTILINE)
-        if m:
-            return m.group(1)
-    except OSError:
-        pass
-    return "0.0.0+unknown"
+#: Copyright notice displayed in version banners; matches myproject.cli.COPYRIGHT.
+COPYRIGHT = "Copyright (c) 2026 Giovanni Pellicciotta"
+#: Severity tag prefixing error messages on stderr.
+ERROR_TAG = "**[ERROR]** "
+#: Width of the name column in help listings.
+NAME_WIDTH = 23
 
 
-def build_action_parser(prog: str, description: str, actions: list, default_action: str) -> argparse.ArgumentParser:
-    """Builds an action-oriented parser with its own -h/--help/-v/--version, so the caller
+def print_error(message: str, *details: str) -> None:
+    """Print a tagged error message to stderr, indenting each detail line under the message."""
+    print(ERROR_TAG + message, file=sys.stderr, flush=True)
+    for detail in details:
+        print(" " * len(ERROR_TAG) + detail, file=sys.stderr, flush=True)
+
+
+class ActionParser(argparse.ArgumentParser):
+    """Argument parser reporting syntax errors as tagged stderr messages with exit code 2."""
+
+    def error(self, message: str) -> NoReturn:
+        print_error(message, f"Usage: {self.prog} {{{'|'.join(self.action_names)}}} [options]")
+        sys.exit(2)
+
+
+def build_action_parser(prog: str, actions: Sequence[str], default_action: str) -> ActionParser:
+    """Build an action-oriented parser with -h/--help, --version, and -v/--verbose, so the caller
     can print the shared version/help template instead of argparse's default output."""
-    parser = argparse.ArgumentParser(prog=prog, description=description, add_help=False)
-    parser.add_argument("action", nargs="?", default=default_action, choices=actions, help="Action to perform")
-    parser.add_argument("-h", "--help", action="store_true", help="Show this help message and exit")
-    parser.add_argument("-v", "--version", action="store_true", help="Show version information and exit")
+    parser = ActionParser(prog=prog, add_help=False)
+    parser.action_names = list(actions)
+    parser.add_argument("action", nargs="?", default=default_action, choices=parser.action_names)
+    parser.add_argument("-h", "--help", action="store_true")
+    parser.add_argument("--version", action="store_true")
+    parser.add_argument("-v", "--verbose", action="store_true")
     return parser
 
 
 def print_version(prog: str, version: str) -> None:
     """Print the program name, version, and shared copyright notice."""
-    print(f"{prog} v{version} - Copyright (c) {APP_AUTHOR}")
+    print(f"{prog} v{version} - {COPYRIGHT}")
 
 
-def print_help(prog: str, version: str, description: str, parser: argparse.ArgumentParser, exit_codes: list) -> None:
-    """Print the version banner, description, parser help, and exit code meanings."""
+def _print_section(title: str, rows: Sequence[tuple], width: int = NAME_WIDTH) -> None:
+    print(f"\n{title}:")
+    for name, text in rows:
+        print(f"  {str(name):<{width}}{text}")
+
+
+def print_help(
+    prog: str,
+    version: str,
+    description: str,
+    usage: Sequence[str],
+    actions: Sequence[tuple],
+    options: Sequence[tuple],
+    exit_codes: Sequence[tuple],
+    details: Optional[Sequence[tuple]] = None,
+) -> None:
+    """Print the version header, description, usage, actions, options, and exit codes, plus the
+    detailed action descriptions when `details` is given (`help --verbose`)."""
     print_version(prog, version)
-    print()
-    print(description)
-    print()
-    parser.print_help()
-    print("\nExit codes:")
-    for code, meaning in exit_codes:
-        print(f"  {code}  {meaning}")
+    print(f"\n{description}\n\nUsage:")
+    for line in usage:
+        print(f"  {prog} {line}")
+    _print_section("Actions", actions)
+    _print_section("Options", options)
+    _print_section("Exit codes", exit_codes, width=4)
+    if details:
+        print("\nDetailed Action Descriptions:")
+        for name, lines in details:
+            print(f"  {name}")
+            for line in lines:
+                print(f"      {line}")

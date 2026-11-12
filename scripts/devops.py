@@ -48,12 +48,12 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
         try:
             return subprocess.call([str(python), str(Path(__file__).resolve()), *args], env={**os.environ, REEXEC_ENV: "1"})
         except OSError as exc:
-            print(f"[!] Cannot run {python}: {exc}; {BOOTSTRAP_HINT}", file=sys.stderr)
+            print(f"**[ERROR]** Cannot run {python}: {exc}; {BOOTSTRAP_HINT}", file=sys.stderr)
             return 1
     try:
         cli = build_cli()
     except ImportError as exc:
-        print(f"[!] {exc}; {BOOTSTRAP_HINT}", file=sys.stderr)
+        print(f"**[ERROR]** {exc}; {BOOTSTRAP_HINT}", file=sys.stderr)
         return 1
     return cli.run(args)
 

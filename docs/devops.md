@@ -19,6 +19,10 @@ To initialize git, create the virtual environment, install in editable mode with
 python scripts/bootstrap-dev-environment.py
 ```
 
+Add `-v`/`--verbose` to print each step's command line; failed steps report `**[ERROR]**` lines on stderr.
+Run `help --verbose` for the full help, and `--version` for the version.
+The bootstrap has no `--debug`: it writes no operational logs, so it has no logging threshold to lower.
+
 ### Manual Setup
 ```bash
 # Create and activate virtual environment
