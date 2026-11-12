@@ -12,7 +12,8 @@ A summarized overview of all changes, per version of this project.
 
 ---
 
-## v3.0.5-pre
+## v3.0.6-pre
+- Docs: Corrected Markdown formatting and repaired links in [README.md](README.md) and [CHANGELOG.md](CHANGELOG.md).
 - CLI: Removed partially initialized projects even when Git object files were read-only.
 - CLI: **[breaking]** Initialized scaffolded projects with Git and branch-backed plan stores, requiring `git` and `plan` on `PATH`.
 - DevEx: Isolated test home and configuration directories and added guards against writes to persistent user and repository state.
@@ -21,21 +22,21 @@ A summarized overview of all changes, per version of this project.
 - **[breaking]** CLI: Rebuilt `myproject` on the `support-python` v2.0.0 `ToolHarness`; `-v` now means `--verbose`, so use `--version`.
 - Build: Upgraded the `support-python` dependency from v1.0.0 to v3.0.0, passing the `devops.py` copyright banner that v3.0.0 no longer defaults.
 - Test: Added `pytest-timeout` and a registered `slow` marker, since v3.0.0 `check` runs `pytest -m slow --timeout=120` and fails on an empty slow suite.
-- **[breaking]** DevEx: Replaced `scripts/devops.py` with a thin support-python `DevopsCli` script that re-runs itself in `.venv`.
+- **[breaking]** DevEx: Replaced [devops.py](scripts/devops.py) with a thin support-python `DevopsCli` script that re-runs itself in `.venv`.
   - `-v` now means `--verbose`; use `--version`. Exit code 2 now means invalid arguments, not a failed release step.
   - `release` asks for the typed confirmation `release v<version>` (`--yes` skips it) and attaches the wheel and sdist.
   - `release --dry-run` checks every precondition, including an authenticated `gh` and fresh tags.
   - `deploy` needs the `v<version>` tag on `origin` at HEAD, a green CI run (`--skip-ci-check` skips it), and a typed confirmation.
 - **[breaking]** Build: Removed `.github/workflows/publish.yml`; `devops.py release` attaches the wheel and sdist instead.
 - DevEx: Added `format` and `versions` actions, and `scripts/requirements.txt`, which the bootstrap installs into `.venv`.
-- **[breaking]** DevEx: Merged `scripts/create-github-release.py` and `scripts/deploy-to-production.py` into `scripts/devops.py` as `release` and `deploy` actions.
+- **[breaking]** DevEx: Merged `scripts/create-github-release.py` and `scripts/deploy-to-production.py` into [devops.py](scripts/devops.py) as `release` and `deploy` actions.
 - **[breaking]** DevEx: Removed `scripts/install-from-github-release.py`; install releases with `pip` from the release wheel or Git tag.
 
 ## v2.0.0 [released: 2026-10-31]
 - **[breaking]** DevEx: Renamed the distribution to `template-python` and the repository to `template.python`; update install URLs and pins.
 - **[breaking]** DevEx: Replaced the `hinolugi-support` dependency with `support-python` (`support_python`).
 - DevEx: Fixed `create` failing to find the template root, and made it scaffold `PLAN.md` and `.plan/tasks/` instead of `TODO.md` and `tasks/`.
-- DevEx: Added `scripts/devops.py` with lint, test, build, check, and clean actions.
+- DevEx: Added [devops.py](scripts/devops.py) with lint, test, build, check, and clean actions.
 - Build: Declared the license as an SPDX expression and raised the setuptools floor to 77.
 - Docs: Replaced `TODO.md` references with `PLAN.md` and dropped `hinolugi` from project prose.
 - DevEx: Improved `scripts/create-github-release.py` with pre-flight quality and state checks, and fixed its crash on Windows cp1252 consoles.
@@ -69,7 +70,7 @@ A summarized overview of all changes, per version of this project.
 ## v1.2.0 [2026-08-24]
 - DevEx: Scope pytest to `tests/` so it no longer collides with sibling task worktrees under `work/`.
 - DevEx: Add Python 3.10 to the CI test matrix so it matches what `requires-python` actually allows.
-- Aligned project with latest [development guidelines](https://github.com/gpellicciotta/dev-guidelines):
+- Aligned project with the latest development guidelines:
   - Renamed `LICENSE` to `LICENSE.md` and `RELEASES.md` to `CHANGELOG.md` with version status tags.
   - Restructured `TODO.md` with milestone sections (`## Next Milestone`, `### Backlog`) per coordinating work guidelines, and added `work/` to `.gitignore`.
   - Added mandatory documentation files `docs/requirements.md` and `docs/devops.md`, and updated `docs/index.md`, `README.md`, and `CLAUDE.md`.
@@ -87,7 +88,7 @@ A summarized overview of all changes, per version of this project.
 
 ## v1.0.0 [released: 2026-08-19]
 - First stable release. Published the repo to GitHub
-  (https://github.com/gpellicciotta/python-project-template).
+  ([python-project-template](https://github.com/gpellicciotta/python-project-template)).
 - Added a `docs/` folder (with a short explainer) so it exists from the start rather than only being
   documented as "created as needed".
 - Fixed `setup.ps1`'s build step: the `dev` extra never included the `build` package, so `python -m build`

@@ -3,12 +3,11 @@
 A minimal example project to get Python development started quickly using the src-layout.
 
 Includes pytest for testing, ruff for linting/formatting, build support with build/wheel, a GitHub Actions CI
-workflow, and the docs/versioning conventions (`CHANGELOG.md`, `PLAN.md`, `AGENTS.md`) following the cross-project
-[Development Guidelines](https://github.com/gpellicciotta/dev-guidelines) — see [AGENTS.md](AGENTS.md) for the project instructions coding agents read.
+workflow, and the docs/versioning conventions (`CHANGELOG.md`, `PLAN.md`, `AGENTS.md`).
+See [AGENTS.md](AGENTS.md) for development guidelines and project instructions for coding agents.
 
 ## Directory Layout
-
-```
+```text
 template.python/
   src/
     myproject/
@@ -59,7 +58,6 @@ Alternatives:
 - App-specific layouts: can vary depending on project type (CLI, web app, library).
 
 ### Useful Resources
-- [Development Guidelines](https://github.com/gpellicciotta/dev-guidelines)
 - [Python Packaging User Guide — Packaging Projects](https://packaging.python.org/en/latest/tutorials/packaging-projects/)
 - [PyPA sampleproject (src-layout example)](https://github.com/pypa/sampleproject)
 - [Real Python — Python application layouts](https://realpython.com/python-application-layouts/)
@@ -80,20 +78,17 @@ project in editable mode with the `dev` extra (pytest), runs the test suite, and
 `dist/`.
 
 ## Running Tests
-
 ```powershell
 .venv\Scripts\python -m pytest
 ```
 
 ## Linting
-
 ```powershell
 .venv\Scripts\ruff check .
 .venv\Scripts\ruff format --check .
 ```
 
 ## CLI
-
 ```powershell
 myproject help [<action>]      # or -h / --help (add --verbose for full option details)
 myproject version              # or --version
@@ -114,22 +109,19 @@ Its plan store lives on the `plan` branch at `.plan/`, with an ignored root `PLA
 Initialization failures remove the generated directory and return exit code `1`.
 
 ## Building the Packages
-
 For building the source and binary (i.e. wheel) distribution packages:
 
 ```powershell
 python -m build
 ```
 
-The built packages will be in the `dist/` directory — the same location `scripts/bootstrap-dev-environment.py`'s build step uses.
+The built packages will be in the `dist/` directory — the same location [bootstrap-dev-environment.py](scripts/bootstrap-dev-environment.py)'s build step uses.
 
 ## Installation and Releases
-
 `python scripts/devops.py release` builds the source and wheel packages from the released version and
 attaches them to the GitHub release as downloadable assets.
 
 ### Installing from a release
-
 Install directly from a published GitHub release wheel asset:
 
 ```bash
@@ -151,7 +143,6 @@ dependencies = [
 ```
 
 ## Starting a new project from this template
-
 Preferred: run `myproject create <project-name> [-o <output-dir>]` (see **CLI** above) — it does the copy and
 every rename below for you.
 
@@ -159,10 +150,9 @@ To do it by hand instead: copy this folder, then rename every occurrence of the 
 they're easy to miss because nothing enforces consistency between them, and a leftover mismatch (e.g.
 `pyproject.toml`'s `name` not matching the actual `src/` package directory) breaks the build/install step
 silently rather than loudly:
-
 - `src/myproject/` → `src/<your_package_name>/`
 - `pyproject.toml`: `name = "template-python"` and `[project.scripts]`'s `myproject = "myproject.cli:main"`
-- `tests/test_core.py`'s `from myproject...` imports
+- [test_core.py](tests/test_core.py)'s `from myproject...` imports
 - This README's title, and `AGENTS.md`'s summary, Architecture, Project Conventions, and Boundaries sections
 - `CHANGELOG.md` — replace the placeholder with your project's actual first entry once there's something real to release
 - Skip `.plan/`, `PLAN.md`, and `plan.code-workspace` when copying; preserve their ignore rules.
