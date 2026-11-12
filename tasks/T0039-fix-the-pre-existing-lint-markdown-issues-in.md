@@ -11,6 +11,9 @@ ended_at: —
 review: agent
 preview: none
 protocol: standard
+usage:
+  worker: {turns: 2, duration_s: 225.0, input: 65558, output: 5310, cache_read: 794368, cache_write: 0}
+work_duration: 119.8
 ---
 # T0039: Fix the pre-existing lint-markdown issues in README.md and CHANGELOG.md
 
@@ -38,4 +41,14 @@ Fix the pre-existing lint-markdown issues in README.md and CHANGELOG.md.
   Repaired formatting and links; both documents passed lint-markdown. Evidence: companion validation-proof.md.
   - Counted scope: README.md, 21 changed lines; CHANGELOG.md excluded.
   - Reopenings: 0. No executable changes; no unit tests apply.
+
+- [2026-11-12] **[Verify]**
+  Completion validation found 1 errors; pending fix turn 1 of 2.
+  - TF020.
+
+- [2026-11-12] **[Implement]**
+  Corrected heading spacing, added the directory block language, and repaired repository references and unavailable guidelines links.
+
+- [2026-11-12] **[Doc]**
+  Updated the active changelog with the documentation repairs and recorded verbatim linter evidence in validation-proof.md.
 
