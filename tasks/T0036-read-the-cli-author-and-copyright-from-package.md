@@ -11,6 +11,9 @@ ended_at: —
 review: none
 preview: none
 protocol: adhoc
+usage:
+  worker: {turns: 2, duration_s: 586.4, input: 108, output: 36184, cache_read: 3050186, cache_write: 117674}
+work_duration: 318.6
 ---
 # T0036: Read the CLI author and copyright from package metadata instead of hardcoding them in cli.py and _cli_common.py
 
@@ -30,18 +33,32 @@ Record whether the copyright year stays a literal or moves into configuration.
 ## Execution Log
 - [2026-11-10] **[Doc]**
   Companion task file scaffolded at task creation.
+
 - [2026-11-12] **[Implement]**
   Added failing tests: 6 metadata-author cases in test_cli.py, 4 pyproject cases in test_scripts.py.
+
 - [2026-11-12] **[Verify]**
   Captured 11 expected failures before implementing; see validation-proof.md.
+
 - [2026-11-12] **[Implement]**
   cli.py reads Author and Author-email metadata; _cli_common.py reads pyproject authors with tomllib.
   Both fall back to `the template-python authors`.
+
+- [2026-11-12] **[Implement]**
   **[Decided]** The copyright year stays a literal `COPYRIGHT_YEAR = 2026`, the first-publication year in LICENSE.md.
   Configuration would add a custom pyproject table that package metadata cannot carry.
+
+- [2026-11-12] **[Implement]**
   **[Decided]** Replaced the `myproject.cli.COPYRIGHT` and `_cli_common.COPYRIGHT` constants with `copyright_notice()`.
   scripts/devops.py still hardcodes its COPYRIGHT; it is outside this task's declared files.
+
 - [2026-11-12] **[Verify]**
   Fast suite 71 passed, completion check 52 passed, slow suite 26 passed, ruff clean.
+
 - [2026-11-12] **[Doc]**
   Updated docs/requirements.md and added a CHANGELOG.md entry.
+
+- [2026-11-12] **[Verify]**
+  Completion validation found 1 errors; pending fix turn 1 of 2.
+  - TF016.
+
