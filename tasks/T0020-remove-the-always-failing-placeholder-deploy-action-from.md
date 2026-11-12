@@ -5,12 +5,16 @@ session: codex-20261112-847011
 needs: []
 branch: task/T0020-remove-the-always-failing-placeholder-deploy-action-from
 worktree: .plan/work/T0020-remove-the-always-failing-placeholder-deploy-action-from
-status: active
+status: completed
 started_at: "2026-11-12T09:50:06Z"
-ended_at: —
+ended_at: "2026-11-12T09:53:01Z"
 review: none
 preview: none
 protocol: adhoc
+usage:
+  worker: {turns: 2, duration_s: 319.8, input: 89140, output: 8404, cache_read: 1040640, cache_write: 0}
+work_duration: 174.8
+completion-commit: 4b7ef6a7f8bc750e16400ac2c3762a465f1c3b42
 ---
 # T0020: Remove the always-failing placeholder deploy action from scripts/devops.py, its tests, and its docs
 
@@ -43,3 +47,7 @@ Remove the deploy documentation from scripts/devops.py, docs/devops.md, and READ
 - [2026-11-12] **[Verify]**
   Python lint, formatting, Markdown lint, and help checks passed.
   Files touched: 5; lines touched: 99; reopenings: 0.
+
+- [2026-11-12] **[Complete]**
+  Task completed successfully.
+
