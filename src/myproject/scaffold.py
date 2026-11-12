@@ -8,9 +8,13 @@ import stat
 import subprocess
 from pathlib import Path
 
+#: Python package placeholder replaced with the new project's import name.
 PACKAGE_NAME = "myproject"
+#: Distribution name placeholder replaced with the new project's slug.
 PROJECT_SLUG = "template-python"
+#: Repository name placeholder replaced with the new project's slug.
 REPO_SLUG = "template.python"
+#: Display title placeholder replaced with the new project's title.
 TITLE_PLACEHOLDER = "Template Python"
 
 _MARKER_FILES = ("pyproject.toml", "CHANGELOG.md")

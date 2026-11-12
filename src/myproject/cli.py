@@ -1,3 +1,5 @@
+"""Register and run the greeting and project scaffolding CLI actions."""
+
 from __future__ import annotations
 
 import argparse
@@ -10,8 +12,11 @@ from . import __version__
 from .core import greet
 from .scaffold import ScaffoldError, create_project
 
+#: Command name used in CLI help, examples, and version output.
 TOOL_NAME = "myproject"
+#: Copyright notice displayed by the CLI harness.
 COPYRIGHT = "Copyright (c) 2026 Giovanni Pellicciotta"
+#: Summary displayed in CLI help.
 DESCRIPTION = "Sample CLI for template.python providing greeting and project scaffolding."
 
 

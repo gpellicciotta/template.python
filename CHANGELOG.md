@@ -12,7 +12,8 @@ A summarized overview of all changes, per version of this project.
 
 ---
 
-## v3.0.6-pre
+## v3.0.7-pre
+- Docs: Documented module responsibilities, public constants, and development script helpers.
 - Docs: Corrected Markdown formatting and repaired links in [README.md](README.md) and [CHANGELOG.md](CHANGELOG.md).
 - CLI: Removed partially initialized projects even when Git object files were read-only.
 - CLI: **[breaking]** Initialized scaffolded projects with Git and branch-backed plan stores, requiring `git` and `plan` on `PATH`.

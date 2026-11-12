@@ -20,15 +20,22 @@ from pathlib import Path
 
 from _cli_common import build_action_parser, print_help, print_version
 
+#: Program name displayed in help and version output.
 PROG = "bootstrap-dev-environment"
+#: Bootstrap summary displayed in help output.
 DESCRIPTION = (
     "Creates the virtual environment, installs scripts/requirements.txt and the project in editable mode, lints, tests,"
     " and builds distributable artifacts."
 )
+#: Exit statuses and their meanings for bootstrap help.
 EXIT_CODES = [(0, "Success"), (1, "One or more bootstrap steps failed")]
+#: Checkout root containing the project configuration.
 REPO_ROOT = Path(__file__).resolve().parent.parent
+#: Directory containing standalone development scripts and their requirements.
 SCRIPTS_DIR = REPO_ROOT / "scripts"
+#: Virtual environment used for project dependencies and checks.
 VENV_DIR = REPO_ROOT / ".venv"
+#: Output directory for built source distributions and wheels.
 DIST_DIR = REPO_ROOT / "dist"
 
 
@@ -64,6 +71,7 @@ def run_step(description: str, args: list) -> bool:
 
 
 def setup() -> int:
+    """Prepare the development environment, run checks, and build artifacts; return zero when all steps succeed."""
     if not (REPO_ROOT / ".git").exists():
         run_step("Initializing git repository", ["git", "init"])
 
@@ -89,6 +97,7 @@ def setup() -> int:
 
 
 def main() -> int:
+    """Dispatch setup, help, or version requests and return the corresponding exit status."""
     version = get_project_version()
     parser = build_action_parser(PROG, DESCRIPTION, ["setup", "version", "help"], "setup")
     args = parser.parse_args()

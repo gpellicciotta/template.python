@@ -8,6 +8,7 @@ from __future__ import annotations
 import argparse
 from pathlib import Path
 
+#: Author credited in standalone script version banners.
 APP_AUTHOR = "Giovanni Pellicciotta"
 
 _REPO_ROOT = Path(__file__).resolve().parent.parent
@@ -38,10 +39,12 @@ def build_action_parser(prog: str, description: str, actions: list, default_acti
 
 
 def print_version(prog: str, version: str) -> None:
+    """Print the program name, version, and shared copyright notice."""
     print(f"{prog} v{version} - Copyright (c) {APP_AUTHOR}")
 
 
 def print_help(prog: str, version: str, description: str, parser: argparse.ArgumentParser, exit_codes: list) -> None:
+    """Print the version banner, description, parser help, and exit code meanings."""
     print_version(prog, version)
     print()
     print(description)
