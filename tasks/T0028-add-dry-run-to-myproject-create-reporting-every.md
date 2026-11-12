@@ -13,9 +13,11 @@ preview: none
 protocol: standard
 usage:
   worker: {turns: 4, duration_s: 1271.8, input: 220, output: 83852, cache_read: 10154174, cache_write: 226406}
-work_duration: 628.5
-review_status: pending
+  review: {turns: 2, duration_s: 234.4, input: 48, output: 14840, cache_read: 1017902, cache_write: 90252}
+work_duration: 807.2
+review_status: rejected
 review_round: 1
+reviewed_by: "@claude-2"
 ---
 # T0028: Add --dry-run to myproject create, reporting every planned change without writing anything
 
@@ -57,4 +59,11 @@ Document the option in README.md and docs/requirements.md.
 
 - [2026-11-12] **[Review]**
   Round 1 requested (mode: agent).
+
+- [2026-11-12] **[Review]**
+  Round 1 rejected by @claude-2: The implementation meets every functional goal and the CLI guidelines' dry-run rule.
+  - Findings: [review-findings-1.md](T0028-add-dry-run-to-myproject-create-reporting-every/review-findings-1.md).
+
+- [2026-11-12] **[Doc]**
+  Addressed review round 1: moved the README initialization-failure sentence back to the real-run create paragraph; lint passes.
 

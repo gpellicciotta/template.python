@@ -118,5 +118,14 @@ Exit code: 0.
 All 2 markdown files passed linting.
 ```
 
+### Review round 1 rework
+The "Initialization failures ..." sentence moved back to the end of the real-run `create` paragraph in README.md.
+Command: `.venv/Scripts/lint-markdown check README.md`
+Exit code: 0. The change is documentation-only, so no test inputs changed.
+
+```text
+All 1 markdown files passed linting.
+```
+
 `docs/requirements.md` reports four issues (MD015 at lines 7 and 60, MD018 at lines 11 and 69).
 All four are in unchanged lines; `HEAD`'s copy of the file reports the same four.
