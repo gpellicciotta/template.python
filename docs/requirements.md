@@ -32,7 +32,7 @@ Functional and technical requirements for the `template.python` repository.
 - Provide an action-oriented, subcommand-based CLI built on `support-python`'s `ToolHarness`:
   - `myproject help [<action>]` / `-h` / `--help`: displays standardized multi-line help with usage, subcommands, options, and exit codes (supports `--verbose` for detailed usage).
   - `myproject version` / `--version`: outputs `{name} v{version} - {copyright}` and exits with code 0.
-  - `myproject greet [<name>]`: sample business logic command demonstrating subcommands and arguments.
+  - `myproject greet [<name>]`: sample business logic command; prints `Hello, world` when the name is omitted.
   - `myproject create <project-name>`: project scaffolding subcommand.
 - Maintain consistent exit codes across all commands:
   - `0`: Success.

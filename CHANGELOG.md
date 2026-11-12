@@ -12,7 +12,8 @@ A summarized overview of all changes, per version of this project.
 
 ---
 
-## v3.0.9-pre
+## v3.0.10-pre
+- CLI: Changed the default greeting target to `world`; pass `wereld` explicitly to retain the previous greeting.
 - CLI: Started scaffolded projects at `0.1.0-pre` with an area-prefixed initial changelog entry.
 - CLI: Restored the `-pre` suffix in the public package version using the shared version resolver.
 - Docs: Documented module responsibilities, public constants, and development script helpers.

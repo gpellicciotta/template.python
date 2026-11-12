@@ -21,7 +21,7 @@ DESCRIPTION = "Sample CLI for template.python providing greeting and project sca
 
 
 def _configure_greet(parser: argparse.ArgumentParser) -> None:
-    parser.add_argument("name", nargs="?", default="wereld", help="name to greet (default: wereld)")
+    parser.add_argument("name", nargs="?", default="world", help="name to greet (default: world)")
 
 
 def _configure_create(parser: argparse.ArgumentParser) -> None:
@@ -57,7 +57,7 @@ def build_harness() -> ToolHarness:
         "greet",
         "print a greeting",
         run_greet,
-        detail="Prints 'Hello, NAME'; NAME defaults to 'wereld'.\nWith --verbose, also prints the greeting target.",
+        detail="Prints 'Hello, NAME'; NAME defaults to 'world'.\nWith --verbose, also prints the greeting target.",
         usage_suffix="[NAME]",
         configure_parser=_configure_greet,
     )

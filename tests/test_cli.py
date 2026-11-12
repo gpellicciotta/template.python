@@ -63,7 +63,7 @@ def test_action_help_describes_greet_argument(capsys):
     assert main(["help", "greet"]) == 0
     out = capsys.readouterr().out
     assert "myproject greet [NAME]" in out
-    assert "NAME defaults to 'wereld'" in out
+    assert "NAME defaults to 'world'" in out
 
 
 def test_version_action_and_flag(capsys):
@@ -79,7 +79,7 @@ def test_greet(capsys):
     assert capsys.readouterr().out.strip() == "Hello, Gio"
 
     assert main(["greet"]) == 0
-    assert capsys.readouterr().out.strip() == "Hello, wereld"
+    assert capsys.readouterr().out.strip() == "Hello, world"
 
 
 def test_greet_verbose(capsys):

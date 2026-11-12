@@ -92,7 +92,7 @@ project in editable mode with the `dev` extra (pytest), runs the test suite, and
 ```powershell
 myproject help [<action>]      # or -h / --help (add --verbose for full option details)
 myproject version              # or --version
-myproject greet [<name>]       # sample business logic
+myproject greet [<name>]       # prints Hello, world when name is omitted
 myproject create <project-name> [-o <output-dir>]
 ```
 
