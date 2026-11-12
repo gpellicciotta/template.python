@@ -1,11 +1,12 @@
 ---
 id: T0025
-owner: ~
-needs: ['T0023']
-branch: —
-worktree: —
-status: ready
-started_at: —
+owner: "@codex"
+session: codex-20261112-5631d0
+needs: []
+branch: task/T0025-add-a-subprocess-end-to-end-test-that
+worktree: .plan/work/T0025-add-a-subprocess-end-to-end-test-that
+status: active
+started_at: "2026-11-12T10:02:28Z"
 ended_at: —
 review: none
 preview: none
