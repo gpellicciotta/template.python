@@ -5,15 +5,16 @@ session: codex-20261112-3ad534
 needs: []
 branch: task/T0031-scaffold-and-index-docs-tutorials-alongside-the-other
 worktree: .plan/work/T0031-scaffold-and-index-docs-tutorials-alongside-the-other
-status: active
+status: completed
 started_at: "2026-11-12T09:45:34Z"
-ended_at: —
+ended_at: "2026-11-12T09:49:43Z"
 review: none
 preview: none
 protocol: adhoc
 usage:
-  worker: {turns: 2, duration_s: 282.4, input: 75716, output: 6686, cache_read: 975104, cache_write: 0}
-work_duration: 153.0
+  worker: {turns: 4, duration_s: 409.6, input: 83948, output: 8254, cache_read: 1523968, cache_write: 0}
+work_duration: 247.6
+completion-commit: d99d4d30cca547a61024520beadce1551082cd79
 ---
 # T0031: Scaffold and index docs/tutorials/ alongside the other standard documentation subdirectories
 
