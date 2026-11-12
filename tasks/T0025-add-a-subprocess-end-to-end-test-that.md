@@ -5,16 +5,17 @@ session: claude-20261112-9d968e
 needs: []
 branch: task/T0025-add-a-subprocess-end-to-end-test-that
 worktree: .plan/work/T0025-add-a-subprocess-end-to-end-test-that
-status: active
+status: completed
 started_at: "2026-11-12T10:02:28Z"
-ended_at: —
+ended_at: "2026-11-12T10:06:19Z"
 review: none
 preview: none
 protocol: adhoc
 usage:
-  worker: {turns: 2, duration_s: 10.0}
-work_duration: 29.3
+  worker: {turns: 4, duration_s: 358.2, input: 84, output: 13816, cache_read: 1920936, cache_write: 79740}
+work_duration: 230.6
 contributors: "@codex"
+completion-commit: e35716a866ca5b509493b4be4539baf12335d661
 ---
 # T0025: Add a subprocess end-to-end test that runs the installed myproject entry point with realistic arguments
 
@@ -31,10 +32,16 @@ Locate the console script next to `sys.executable`, and mark the tests `slow`.
 ## Execution Log
 - [2026-11-10] **[Doc]**
   Companion task file scaffolded at task creation.
+
 - [2026-11-12] **[Implement]**
   Added tests/test_cli_e2e.py: five slow subprocess tests of the console script next to `sys.executable`.
   Covered `--version`, `help`, `greet Gio`, `create demo` then a repeated `create`, and `--bogus` (exit codes 0, 1, 2).
   Added a DevEx entry to CHANGELOG.md.
+
 - [2026-11-12] **[Verify]**
   `python -m pytest -m slow tests/test_cli_e2e.py`: 5 passed; `python -m pytest`: 33 passed; ruff clean.
   Evidence in validation-proof.md.
+
+- [2026-11-12] **[Complete]**
+  Task completed successfully.
+
