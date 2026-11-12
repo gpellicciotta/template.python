@@ -17,7 +17,7 @@ template.python/
       scaffold.py      # `create` subcommand: copies + renames this template into a new project
   scripts/
     bootstrap-dev-environment.py  # one-shot bootstrap: git init, venv, script requirements, editable install, lint, tests, build
-    devops.py          # support-python DevopsCli: lint, test, build, check, release, deploy, ...
+    devops.py          # support-python DevopsCli: lint, test, build, check, release, ...
     requirements.txt   # pins support-python for the scripts; installed into .venv by the bootstrap
     _cli_common.py     # stdlib-only version/help boilerplate for the bootstrap script
   tests/
@@ -28,7 +28,7 @@ template.python/
   docs/
     index.md           # documentation index
     requirements.md    # high-level goals, functional & technical requirements
-    devops.md          # environment prerequisites, build/test/deploy procedures
+    devops.md          # environment prerequisites, build/test/release procedures
     specs/             # interface, format, and protocol specifications
     adrs/              # architectural decision records
     issues/            # root cause analysis and resolution records

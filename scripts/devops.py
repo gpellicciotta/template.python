@@ -8,10 +8,6 @@ Usage:
   python scripts/devops.py help [--verbose]
   python scripts/devops.py check
   python scripts/devops.py release --dry-run
-  python scripts/devops.py deploy --dry-run
-
-`deploy` is an example for projects derived from this template that deploy a running service. This template has no
-deployment target, so its only step fails; replace `no_deployment_target` with the project's deployment steps.
 """
 
 from __future__ import annotations
@@ -24,7 +20,7 @@ from typing import Any, Optional, Sequence
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 VENV_DIR = REPO_ROOT / ".venv"
-DESCRIPTION = "Runs the lint, format, test, build, check, clean, versions, release, and deploy operations of this project."
+DESCRIPTION = "Runs the lint, format, test, build, check, clean, versions, and release operations of this project."
 COPYRIGHT = "Copyright (c) 2026 Giovanni Pellicciotta"
 REEXEC_ENV = "DEVOPS_REEXECUTED"
 BOOTSTRAP_HINT = "run `python scripts/bootstrap-dev-environment.py` first."
@@ -35,22 +31,11 @@ def venv_python() -> Path:
     return VENV_DIR / ("Scripts/python.exe" if sys.platform == "win32" else "bin/python")
 
 
-def no_deployment_target(context: Any) -> bool:
-    """Placeholder deploy step: this template has no production deployment target."""
-    context.logger.error(
-        "No production deployment target is configured for this template; nothing was deployed.\n"
-        "Replace the 'deploy to production' step in scripts/devops.py with the project's deployment."
-    )
-    return False
-
-
 def build_cli(root: Path = REPO_ROOT) -> Any:
-    """Build the devops command line: the standard DevopsCli actions plus the placeholder deploy."""
-    from support_python.devops import DeployStep, DevopsCli, PythonProject
+    """Build the devops command line: the standard DevopsCli actions."""
+    from support_python.devops import DevopsCli, PythonProject
 
-    cli = DevopsCli(PythonProject(root), description=DESCRIPTION, copyright=COPYRIGHT)
-    cli.set_deploy([DeployStep("deploy to production", action=no_deployment_target)])
-    return cli
+    return DevopsCli(PythonProject(root), description=DESCRIPTION, copyright=COPYRIGHT)
 
 
 def main(argv: Optional[Sequence[str]] = None) -> int:

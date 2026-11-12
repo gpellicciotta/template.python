@@ -12,7 +12,8 @@ A summarized overview of all changes, per version of this project.
 
 ---
 
-## v3.0.13-pre
+## v3.0.14-pre
+- DevEx: **[breaking]** Removed the placeholder `deploy` action; deploying projects enable it with `DevopsCli.set_deploy`.
 - Docs: Added and indexed the tutorials directory, included automatically in newly scaffolded projects.
 - DevEx: Formatted multiline Python calls with one argument per line and trailing commas.
 - CLI: Changed the default greeting target to `world`; pass `wereld` explicitly to retain the previous greeting.
@@ -27,12 +28,11 @@ A summarized overview of all changes, per version of this project.
 - CLI: **[breaking]** Rebuilt `myproject` on `support-python`'s `ToolHarness`; `-v` now means `--verbose`, so use `--version`.
 - Build: Upgraded `support-python` from v1.0.0 to v3.0.0 and explicitly supplied the copyright banner in [devops.py](scripts/devops.py).
 - DevEx: Added `pytest-timeout` and a `slow` marker; `check` now requires slow tests passing `pytest -m slow --timeout=120`.
-- DevEx: **[breaking]** Replaced `scripts/create-github-release.py` and `scripts/deploy-to-production.py` with [devops.py](scripts/devops.py)'s `DevopsCli` actions, automatically using `.venv`.
+- DevEx: **[breaking]** Replaced `scripts/create-github-release.py` and `scripts/deploy-to-production.py` with [devops.py](scripts/devops.py)'s standard `DevopsCli` actions, automatically using `.venv`.
 - DevEx: **[breaking]** Changed [devops.py](scripts/devops.py) flags: `-v` means `--verbose`; use `--version`; exit code 2 indicates invalid arguments.
 - Build: **[breaking]** Replaced `.github/workflows/publish.yml` with [devops.py](scripts/devops.py)'s `release` action, attaching wheel and sdist assets.
 - DevEx: Required typed `release v{{version}}` confirmation for `release`; `--yes` skips confirmation.
 - DevEx: Made `release --dry-run` validate all preconditions, including authenticated `gh` and fresh tags.
-- DevEx: Required deployment tags on `origin` at HEAD, green CI, and typed confirmation; `--skip-ci-check` bypasses CI checks.
 - DevEx: Added `format` and `versions` actions and bootstrap installation of [requirements.txt](scripts/requirements.txt) into `.venv`.
 - DevEx: **[breaking]** Removed `scripts/install-from-github-release.py`; install releases with `pip` from the release wheel or Git tag.
 

@@ -8,10 +8,7 @@ import importlib.util
 import subprocess
 import sys
 from pathlib import Path
-from types import SimpleNamespace
 
-import pytest
-from support_python import CliLogger
 from support_python.devops import DevopsCli, PythonProject
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
@@ -58,14 +55,16 @@ def test_devops_builds_devops_cli_over_python_project():
     assert isinstance(cli, DevopsCli)
     assert isinstance(cli.project, PythonProject)
     assert Path(cli.project.root).resolve() == REPO_ROOT
+    assert cli.run(["deploy"]) == 2
 
 
 def test_devops_help_lists_actions():
     result = run_script("devops.py", "help")
     assert result.returncode == 0
     action_lines = {line.split()[0] for line in result.stdout.splitlines() if line.startswith("  ") and line.strip()}
-    assert {"lint", "format", "test", "build", "check", "clean", "versions", "release", "deploy"} <= action_lines
-    assert "deploy operations of this project" in result.stdout
+    assert {"lint", "format", "test", "build", "check", "clean", "versions", "release"} <= action_lines
+    assert "deploy" not in action_lines
+    assert "deploy" not in result.stdout
 
 
 def test_devops_version():
@@ -74,25 +73,10 @@ def test_devops_version():
     assert result.stdout.startswith("devops v")
 
 
-@pytest.mark.slow
-def test_devops_deploy_refuses_pre_release_version(tmp_path, capsys):
-    (tmp_path / "pyproject.toml").write_text('[project]\nname = "demo"\nversion = "1.0.0-pre"\n', encoding="utf-8")
-    git = [
-        "git",
-        "-c",
-        "user.name=test",
-        "-c",
-        "user.email=test@example.com",
-        "-c",
-        "commit.gpgsign=false",
-        "-c",
-        "core.hooksPath=",
-    ]
-    for args in (["init", "-q"], ["add", "."], ["commit", "-q", "-m", "init"]):
-        subprocess.run([*git, *args], cwd=tmp_path, check=True)
-
-    assert load_devops().build_cli(tmp_path).run(["deploy", "--dry-run"]) == 1
-    assert "1.0.0-pre is still in development" in capsys.readouterr().err
+def test_devops_rejects_unconfigured_deploy():
+    result = run_script("devops.py", "deploy")
+    assert result.returncode == 2
+    assert "deploy" in result.stderr
 
 
 def _fake_call(calls):
@@ -138,12 +122,6 @@ def test_devops_main_runs_in_process_when_reexecuted_or_without_venv(tmp_path, m
     assert calls == []
     assert devops.REEXEC_ENV not in devops.os.environ
     assert capsys.readouterr().out.count("devops v") == 2
-
-
-def test_devops_deploy_step_reports_missing_target(capsys):
-    context = SimpleNamespace(logger=CliLogger(), dry_run=False)
-    assert load_devops().no_deployment_target(context) is False
-    assert "No production deployment target" in capsys.readouterr().err
 
 
 def test_scripts_are_ascii_only_for_legacy_windows_consoles():

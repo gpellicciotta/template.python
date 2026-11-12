@@ -5,7 +5,6 @@ Practical guidance on development environment setup, testing, validation, builds
 ---
 
 ## Prerequisites and Environment
-
 - **Python**: Python 3.15+, the latest stable release required by the Python guidelines
 - **Git**: Git 2.30+ supporting worktrees (`git worktree`)
 - **Shell**: PowerShell (Windows) or POSIX shell (Linux/macOS)
@@ -13,7 +12,6 @@ Practical guidance on development environment setup, testing, validation, builds
 ---
 
 ## Setup and Development Workflows
-
 ### Initial Bootstrap (Windows/Linux/macOS)
 To initialize git, create the virtual environment, install in editable mode with dev tools, lint, run tests, and build:
 
@@ -41,7 +39,7 @@ All planned and active work is tracked in `PLAN.md` and `.plan/tasks/`, changed 
 See `AGENTS.md` and the `plan-task-usage-guidelines` skill for the workflow.
 
 ### Common Operations
-`scripts/devops.py` is a thin script over `support-python`'s `DevopsCli` and `PythonProject`.
+[devops.py](../scripts/devops.py) is a thin script over `support-python`'s `DevopsCli` and `PythonProject`.
 `scripts/requirements.txt` pins `support-python`, and the bootstrap installs it into `.venv`.
 The script re-runs itself with the `.venv` interpreter, so plain `python` works:
 
@@ -55,7 +53,6 @@ python scripts/devops.py check     # lint + test + build
 python scripts/devops.py clean     # remove dist/, build/, and src/*.egg-info
 python scripts/devops.py versions  # compare pyproject.toml's version with the CHANGELOG.md top heading
 python scripts/devops.py release   # freeze, tag, push, and publish a GitHub release
-python scripts/devops.py deploy    # example production deployment
 ```
 
 Add project-specific actions in `build_cli()` with `cli.add_action(name, summary, handler)`.
@@ -66,7 +63,6 @@ The support-python [DevOps scripts tutorial][devops-tutorial] documents every op
 ---
 
 ## Testing and Code Quality
-
 ### Running Tests
 ```bash
 .venv\Scripts\python -m pytest
@@ -85,26 +81,15 @@ The support-python [DevOps scripts tutorial][devops-tutorial] documents every op
 ---
 
 ## Development and Maintenance Scripts
-
 The root `scripts/` directory houses non-packaged development and maintenance tooling, including the
 `bootstrap-dev-environment.py` and `devops.py` scripts used above. These standalone scripts remain separate from the
 installable package and automated test suites. Projects such as `mail-utils` use this convention for
 bootstrap scripts, roundtrip testing, and migrations.
 
-The `deploy` action of `devops.py` is scaffolded as an example for projects derived from this template that
-deploy a running service. It checks the preconditions first: a clean tree, a version without `-pre`, the
-`v<version>` tag on `origin` at HEAD, and a successful CI run for HEAD. It then asks for the typed confirmation
-`deploy v<version>`. This template has no deployment target, so its single step, `no_deployment_target`, fails.
-Replace it in `build_cli()` with the project's `DeployStep`s:
-
-```bash
-python scripts/devops.py deploy --dry-run
-```
+Projects that deploy enable deployment with `DevopsCli.set_deploy` in `build_cli()`, supplying project-local `DeployStep` actions.
 
 ### Creating a Release with `devops.py release`
-
-The `release` action of `scripts/devops.py` automates the complete release process end-to-end:
-
+The `release` action of [devops.py](../scripts/devops.py) automates the complete release process end-to-end:
 1. Validates preconditions: clean working tree, branch `main`, `gh` authenticated, fresh tags, no existing tag or release,
    and non-empty release notes.
 2. Runs `check` (lint, test, build) as the quality check, unless `--skip-checks` is given.
@@ -137,7 +122,7 @@ Use `scripts/` for operational tasks that support developers rather than package
 Follow standard project conventions when adding tools under `scripts/`:
 - Keep scripts standalone and executable directly with Python.
 - Structure command-line interfaces around action-oriented subcommands.
-- Standardize version and help output per cross-project [CLI guidelines](https://github.com/gpellicciotta/dev-guidelines/blob/main/guidelines/general-guidelines.md#cli).
+- Standardize version and help output per cross-project [DevOps scripts tutorial][devops-tutorial].
 - Return explicit exit codes indicating success or failure.
 - Prefix non-executable shared modules with an underscore, such as `_cli_common.py`.
 - Lint and format scripts with `ruff` alongside application code.
@@ -152,19 +137,17 @@ python scripts/<script-name>.py --help
 ---
 
 ## Build and Distribution
-
 To build source distributions (`sdist`) and wheels (`bdist_wheel`):
 
 ```bash
 python -m build
 ```
 
-Built packages are written to `dist/` — `scripts/bootstrap-dev-environment.py`'s build step uses the same location.
+Built packages are written to `dist/` — [bootstrap-dev-environment.py](../scripts/bootstrap-dev-environment.py)'s build step uses the same location.
 
 ---
 
 ## Release Process
-
 Ongoing work accumulates under the top `CHANGELOG.md` heading while it carries a `-pre` SemVer suffix (e.g.
 `## v1.3.1-pre`), which must always match `version` in `pyproject.toml` (the single source of truth) exactly,
 `-pre` included.
@@ -208,8 +191,7 @@ If releasing manually without the script:
 ---
 
 ## Continuous Integration
-
-The GitHub Actions workflow in `.github/workflows/ci.yml` runs on every push and pull request to validate:
+The GitHub Actions workflow in [ci.yml](../.github/workflows/ci.yml) runs on every push and pull request to validate:
 - Python environment setup.
 - Editable installation with dev dependencies.
 - Code linting and formatting via `ruff`.
