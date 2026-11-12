@@ -5,12 +5,16 @@ session: codex-20261112-061531
 needs: []
 branch: task/T0034-put-one-argument-per-line-in-every-call
 worktree: .plan/work/T0034-put-one-argument-per-line-in-every-call
-status: active
+status: completed
 started_at: "2026-11-12T09:42:12Z"
-ended_at: —
+ended_at: "2026-11-12T09:45:14Z"
 review: none
 preview: none
 protocol: adhoc
+usage:
+  worker: {turns: 2, duration_s: 339.6, input: 76172, output: 8256, cache_read: 1279232, cache_write: 0}
+work_duration: 183.1
+completion-commit: fbff1cd44a48416ec620c83dfe45bdc227aa92b3
 ---
 # T0034: Put one argument per line in every call or signature split across lines
 
