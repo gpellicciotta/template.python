@@ -12,8 +12,10 @@ review: agent
 preview: none
 protocol: standard
 usage:
-  worker: {turns: 2, duration_s: 1209.2, input: 200, output: 80718, cache_read: 8875188, cache_write: 213688}
+  worker: {turns: 4, duration_s: 1271.8, input: 220, output: 83852, cache_read: 10154174, cache_write: 226406}
 work_duration: 628.5
+review_status: pending
+review_round: 1
 ---
 # T0028: Add --dry-run to myproject create, reporting every planned change without writing anything
 
@@ -52,4 +54,7 @@ Document the option in README.md and docs/requirements.md.
 
 - [2026-11-12] **[Doc]**
   Documented create --dry-run in README.md and docs/requirements.md and added a CHANGELOG.md entry.
+
+- [2026-11-12] **[Review]**
+  Round 1 requested (mode: agent).
 
