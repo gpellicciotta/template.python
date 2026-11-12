@@ -6,10 +6,10 @@ Practical guidance on development environment setup, testing, validation, builds
 
 ## Development Environment
 ### Prerequisites
-- **Python**: Python 3.15+, the latest stable release required by the Python guidelines
-- **Git**: Git 2.30+ supporting worktrees (`git worktree`)
-- **Shell**: PowerShell (Windows) or POSIX shell (Linux/macOS)
-- **GitHub CLI**: `gh`, authenticated, for publishing releases
+- Python 3.15 or later, the latest stable release required by the Python guidelines.
+- Git 2.30 or later, supporting worktrees (`git worktree`).
+- PowerShell on Windows, or a POSIX shell on Linux and macOS.
+- The GitHub CLI (`gh`), authenticated, for publishing releases.
 
 ### Setup
 To initialize git, create the virtual environment, install in editable mode with dev tools, lint, run tests, and build:
@@ -28,8 +28,8 @@ To set up the environment manually instead:
 # Create and activate virtual environment
 python -m venv .venv
 
-# Windows activation
-.venv\Scripts\Activate.ps1
+# Windows (PowerShell) activation
+.venv/Scripts/Activate.ps1
 
 # Linux/macOS activation
 source .venv/bin/activate
@@ -61,9 +61,9 @@ The `release` action of [devops.py](../scripts/devops.py) automates the complete
 1. Validates preconditions: clean working tree, branch `main`, `gh` authenticated, fresh tags, no existing tag or release,
    and non-empty release notes.
 2. Runs `check` (lint, test, build) as the quality check, unless `--skip-checks` is given.
-3. Asks for the typed confirmation `release v<version>`, unless `--yes` is given.
+3. Asks for the typed confirmation `release v{{version}}`, unless `--yes` is given.
 4. Finalizes the version in `pyproject.toml` and `CHANGELOG.md` (removing `-pre` and stamping the release date) and commits.
-5. Rebuilds `dist/` from the frozen version, then tags `v<version>`.
+5. Rebuilds `dist/` from the frozen version, then tags `v{{version}}`.
 6. Pushes the commit and tag and creates the GitHub release with the wheel and sdist attached.
 7. Opens the next patch development version (`-pre`) in `pyproject.toml` and `CHANGELOG.md`, commits, and pushes it.
 
@@ -83,7 +83,7 @@ To release manually without the script:
    ```bash
    python scripts/devops.py versions
    ```
-2. Freeze the version: replace the heading's `-pre` suffix with `[released: <yyyy-mm-dd>]`,
+2. Freeze the version: replace the heading's `-pre` suffix with `[released: {{date}}]` (`YYYY-MM-DD`),
    and drop `-pre` from `pyproject.toml`'s `version`. Add no new `-pre` heading yet.
 3. Run lint, tests, and a clean build; `build` empties `dist/` first, so it holds only this version's packages:
    ```bash
@@ -91,18 +91,18 @@ To release manually without the script:
    ```
 4. Commit the release on its own, tag the release commit, and push both:
    ```bash
-   git commit -am "Released version <version>."
-   git tag v<version>
-   git push origin main v<version>
+   git commit -am "Released version {{version}}."
+   git tag v{{version}}
+   git push origin main v{{version}}
    ```
 5. Publish a GitHub Release for the pushed tag, attaching the wheel and sdist built in step 3:
    ```bash
-   gh release create v<version> --verify-tag dist/*-<version>-py3-none-any.whl dist/*-<version>.tar.gz
+   gh release create v{{version}} --verify-tag dist/*-{{version}}-py3-none-any.whl dist/*-{{version}}.tar.gz
    ```
-6. Reopen development in a separate commit: add the next patch `## v<next-version>-pre` heading above the release,
-   set `pyproject.toml`'s `version` to `<next-version>-pre`, then commit and push:
+6. Reopen development in a separate commit: add the next patch `## v{{next-version}}-pre` heading above the release,
+   set `pyproject.toml`'s `version` to `{{next-version}}-pre`, then commit and push:
    ```bash
-   git commit -am "Started version <next-version>-pre after the <version> release."
+   git commit -am "Started version {{next-version}}-pre after the {{version}} release."
    git push origin main
    ```
 
@@ -113,7 +113,9 @@ To release manually without the script:
 The default suite runs in parallel, excludes `slow` tests, and applies a 30-second timeout per test.
 
 ```bash
-.venv\Scripts\python -m pytest
+python scripts/devops.py test
+# Or, with the virtual environment active:
+python -m pytest
 ```
 
 Run the slow suite with the virtual environment active:
@@ -129,13 +131,23 @@ Keep unit tests isolated and safe for parallel execution. The fast suite should 
 `python scripts/devops.py check` and release checks run both suites before building.
 
 ### Linting and Formatting
+With the virtual environment active:
+
 ```bash
-.venv\Scripts\ruff check .
-.venv\Scripts\ruff format --check .
+ruff check .
+ruff format --check .
 
 # To automatically apply formatting and safe fixes:
-.venv\Scripts\ruff check --fix .
-.venv\Scripts\ruff format .
+ruff check --fix .
+ruff format .
+```
+
+Lint Markdown with `lint-markdown`, configured by [.lint-markdown.json](../.lint-markdown.json):
+
+```bash
+lint-markdown check
+# To fix safe formatting issues in place:
+lint-markdown fix
 ```
 
 ---
@@ -196,7 +208,7 @@ Follow standard project conventions when adding tools under `scripts/`:
 Run scripts directly using the virtual environment interpreter:
 
 ```bash
-python scripts/<script-name>.py --help
+python scripts/{{script-name}}.py --help
 ```
 
 ---

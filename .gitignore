@@ -27,12 +27,14 @@ htmlcov/
 .vscode/
 .idea/
 
-# Task worktrees (coordinating-work-guidelines.md)
+# Task worktrees (plan-task-usage-guidelines)
 work/
 
 # Log files
 logs/
 **/*.log
+
+# Plan store on the orphan plan branch, including its .plan/work/ task worktrees
 .plan/
 /PLAN.md
 /plan.code-workspace

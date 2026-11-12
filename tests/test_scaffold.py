@@ -21,6 +21,12 @@ def test_fresh_changelog_starts_at_first_minor_with_area_prefixed_entry():
     assert changelog.split("\n## ")[1:] == ["v0.1.0-pre\n- DevEx: Created the initial scaffold for the Sample App project.\n"]
 
 
+def test_fresh_changelog_keeps_the_template_preamble():
+    template_changelog = (Path(__file__).resolve().parents[1] / "CHANGELOG.md").read_text(encoding="utf-8")
+    changelog = scaffold._fresh_changelog_md("Sample App")
+    assert changelog.split("\n## ")[0] == template_changelog.split("\n## ")[0]
+
+
 @pytest.fixture
 def installed_plan(monkeypatch):
     """Select an installed launcher that works with the isolated test home."""

@@ -5,19 +5,19 @@ Functional and technical requirements for the `template.python` repository.
 ---
 
 ## High-Level Goals
-
 - Provide a clean, modern template to start Python projects quickly using the standard `src/` layout.
 - Include out-of-the-box support for testing (`pytest`), linting and formatting (`ruff`), packaging (`build`/`wheel`), and CI (`GitHub Actions`).
-- Follow cross-project [Development Guidelines](https://github.com/gpellicciotta/dev-guidelines), including task coordination, documentation standards, and CLI conventions.
-- Provide an automated scaffolding command (`myproject create <project-name>`) to clone and rename the template into a fresh, independent project with its own clean history and configuration.
+- Follow cross-project [Development Guidelines](https://github.com/gpellicciotta/dev-guidelines), including documentation standards and [CLI conventions](https://github.com/gpellicciotta/dev-guidelines/blob/main/guidelines/cli-guidelines.md).
+- Coordinate tasks with the `plan` CLI, following the [Plan Task Usage Guidelines](https://github.com/gpellicciotta/plan/blob/main/src/plan/skills/plan-task-usage-guidelines/SKILL.md).
+- Provide an automated scaffolding command (`myproject create {{project-name}}`) to clone and rename the template into a fresh, independent project with its own clean history and configuration.
 
 ---
 
 ## Functional Requirements
 
 ### Template Structure and Scaffolding
-- Support the standard `src/{{package_name}}/` layout to avoid import conflicts during testing.
-- Include a built-in `create` subcommand (`myproject create <project-name> [-o <output-dir>]`) that:
+- Support the standard `src/{{package-name}}/` layout to avoid import conflicts during testing.
+- Include a built-in `create` subcommand (`myproject create {{project-name}} [-o {{output-dir}}]`) that:
   - Validates and derives valid Python package names from project slugs.
   - Copies template files while excluding cache/build artifacts.
   - Rewrites placeholders (`template-python`, `template.python`, `myproject`, title) across documentation and configuration.
@@ -33,13 +33,13 @@ Functional and technical requirements for the `template.python` repository.
 
 ### Command Line Interface (CLI)
 - Provide an action-oriented, subcommand-based CLI built on `support-python`'s `ToolHarness`:
-  - `myproject help [<action>]` / `-h` / `--help`: displays standardized multi-line help with usage, subcommands, options, and exit codes (supports `--verbose` for detailed usage).
-  - `myproject version` / `--version`: outputs `{name} v{version} - {copyright}` and exits with code 0.
+  - `myproject help [{{action}}]` / `-h` / `--help`: displays standardized multi-line help with usage, subcommands, options, and exit codes (supports `--verbose` for detailed usage).
+  - `myproject version` / `--version`: outputs `{{name}} v{{version}} - {{copyright}}` and exits with code 0.
     The copyright names the `pyproject.toml` authors through package metadata, after a literal first-publication year.
-  - `myproject greet [<name>]`: sample business logic command; prints `Hello, world` when the name is omitted.
-  - `myproject create <project-name>`: project scaffolding subcommand.
+  - `myproject greet [{{name}}]`: sample business logic command; prints `Hello, world` when the name is omitted.
+  - `myproject create {{project-name}}`: project scaffolding subcommand.
 - Accept `--format text|json` on `greet` and `create`, defaulting to `text`:
-  - `text`: prints the plain greeting or the `Created new project at {path}` line.
+  - `text`: prints the plain greeting or the `Created new project at {{path}}` line.
   - `json`: prints exactly one JSON object on stdout and writes all log entries to stderr.
   - `greet` JSON fields: `name` (greeting target) and `greeting` (greeting text).
   - `create` JSON fields: `project_name` (new project's name) and `path` (created project directory).
@@ -52,19 +52,19 @@ Functional and technical requirements for the `template.python` repository.
   - `2`: Invalid command-line arguments.
 
 ### Logging
-- Support operational and CLI logging adhering to cross-project guidelines (`general-guidelines.md`):
+- Support operational and CLI logging adhering to the cross-project [Logging Guidelines](https://github.com/gpellicciotta/dev-guidelines/blob/main/guidelines/logging-guidelines.md):
   - Utilize `support-python`'s `support_python.logging.CliLogger` and `LogLevel` rather than reimplementing local logging utilities.
   - Support `--log-file`, dual-destination output, startup and completion lifecycle banners, padded severity indicators, and debug filtering.
 
 ---
 
 ## Technical Requirements
-
-- **Python Version**: Python >=3.15.
-- **Packaging**: Standard `pyproject.toml` with `setuptools.build_meta` backend.
-- **Code Quality**:
-  - Code formatted and linted with `ruff` (132-character line length, rules pinned to `E4`, `E7`, `E9`, `F`).
-  - Editor settings configured via `.editorconfig` (4 spaces, UTF-8, LF line endings).
-- **Testing**: Test suite run via `pytest` covering core logic, CLI subcommands, options, exit codes, and scaffolding behavior.
-- **Portability**: Cross-platform support for Windows, Linux, and macOS.
-- **Documentation**: All documentation written in US English and Markdown, adhering to [Markdown Guidelines](https://github.com/gpellicciotta/dev-guidelines/blob/main/guidelines/markdown-guidelines.md).
+- Require Python 3.15 or later.
+- Package with a standard [pyproject.toml](../pyproject.toml) using the `setuptools.build_meta` backend.
+- Enforce code quality with shared tool settings:
+  - Format and lint code with `ruff` (132-character line length, rules pinned to `E4`, `E7`, `E9`, `F`).
+  - Configure editors through [.editorconfig](../.editorconfig) (4 spaces, UTF-8, LF line endings).
+- Test core logic, CLI actions, options, exit codes, and scaffolding behavior with `pytest`.
+- Support Windows, Linux, and macOS.
+- Write all documentation in US English Markdown, following the [Markdown Guidelines](https://github.com/gpellicciotta/dev-guidelines/blob/main/guidelines/markdown-guidelines.md).
+- Validate Markdown with `lint-markdown check`, configured by [.lint-markdown.json](../.lint-markdown.json).

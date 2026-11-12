@@ -136,7 +136,7 @@ def _fresh_changelog_md(title: str) -> str:
         "> Entries will be added in reverse chronological order, so with the most recent at the top.\n"
         ">\n"
         "> Status codes used are:\n"
-        "> - `vX.Y.Z-pre` - actively being developed (suffix on the heading itself, not a bracket tag)\n"
+        "> - `v{{version}}-pre` - actively being developed (suffix on the heading itself, not a bracket tag)\n"
         "> - `[{{date}}]` - frozen/finalized on {{date}}\n"
         "> - `[released: {{date}}]` - released to package manager or production on {{date}}\n"
         "> - `[broken]` - considered broken and not be used\n\n"

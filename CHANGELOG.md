@@ -3,16 +3,18 @@
 A summarized overview of all changes, per version of this project.
 
 > Entries will be added in reverse chronological order, so with the most recent at the top.
-> 
+>
 > Status codes used are:
-> - `vX.Y.Z-pre` - actively being developed (suffix on the heading itself, not a bracket tag)
+> - `v{{version}}-pre` - actively being developed (suffix on the heading itself, not a bracket tag)
 > - `[{{date}}]` - frozen/finalized on {{date}}
 > - `[released: {{date}}]` - released to package manager or production on {{date}}
 > - `[broken]` - considered broken and not be used
 
 ---
 
-## v3.0.21-pre
+## v3.0.22-pre
+- Docs: Fixed Markdown lint issues, `{{placeholder}}` syntax, cross-platform commands, and stale guideline links and layout.
+- DevEx: Added [.lint-markdown.json](.lint-markdown.json), checking owner GitHub links against sibling checkouts.
 - CLI: Read the version banner's copyright holder from the `pyproject.toml` authors instead of hardcoding it.
 - Docs: Restructured [devops.md](docs/devops.md) into the standard sections, releasing manually with a separate reopen commit.
 - DevEx: **[breaking]** Made bootstrap `-v` mean `--verbose`, printing step commands; `--version` still prints the version.
