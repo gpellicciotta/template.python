@@ -1,11 +1,12 @@
 ---
 id: T0036
-owner: ~
+owner: "@claude"
+session: claude-20261112-5639c1
 needs: []
-branch: —
-worktree: —
-status: ready
-started_at: —
+branch: task/T0036-read-the-cli-author-and-copyright-from-package
+worktree: .plan/work/T0036-read-the-cli-author-and-copyright-from-package
+status: active
+started_at: "2026-11-12T10:42:16Z"
 ended_at: —
 review: none
 preview: none
@@ -20,12 +21,27 @@ Make scripts/_cli_common.py read the author from pyproject.toml with the standar
 Record whether the copyright year stays a literal or moves into configuration.
 
 ## Task Execution Steps
-- [ ] **[Implement]** Write the tests listed in the technical spec.
-- [ ] **[Verify]**    Run the new tests and capture the expected failures.
-- [ ] **[Implement]** Implement the change until the new tests pass.
-- [ ] **[Verify]**    Run the fast suite and the completion check; record output in validation-proof.md.
-- [ ] **[Doc]**       Update the affected documentation and add a CHANGELOG.md entry.
+- [x] **[Implement]** Write the tests listed in the technical spec.
+- [x] **[Verify]**    Run the new tests and capture the expected failures.
+- [x] **[Implement]** Implement the change until the new tests pass.
+- [x] **[Verify]**    Run the fast suite and the completion check; record output in validation-proof.md.
+- [x] **[Doc]**       Update the affected documentation and add a CHANGELOG.md entry.
 
 ## Execution Log
 - [2026-11-10] **[Doc]**
   Companion task file scaffolded at task creation.
+- [2026-11-12] **[Implement]**
+  Added failing tests: 6 metadata-author cases in test_cli.py, 4 pyproject cases in test_scripts.py.
+- [2026-11-12] **[Verify]**
+  Captured 11 expected failures before implementing; see validation-proof.md.
+- [2026-11-12] **[Implement]**
+  cli.py reads Author and Author-email metadata; _cli_common.py reads pyproject authors with tomllib.
+  Both fall back to `the template-python authors`.
+  **[Decided]** The copyright year stays a literal `COPYRIGHT_YEAR = 2026`, the first-publication year in LICENSE.md.
+  Configuration would add a custom pyproject table that package metadata cannot carry.
+  **[Decided]** Replaced the `myproject.cli.COPYRIGHT` and `_cli_common.COPYRIGHT` constants with `copyright_notice()`.
+  scripts/devops.py still hardcodes its COPYRIGHT; it is outside this task's declared files.
+- [2026-11-12] **[Verify]**
+  Fast suite 71 passed, completion check 52 passed, slow suite 26 passed, ruff clean.
+- [2026-11-12] **[Doc]**
+  Updated docs/requirements.md and added a CHANGELOG.md entry.
