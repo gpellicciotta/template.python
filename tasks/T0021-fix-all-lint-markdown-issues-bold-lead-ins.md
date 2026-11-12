@@ -5,15 +5,16 @@ session: claude-20261112-745bbb
 needs: []
 branch: task/T0021-fix-all-lint-markdown-issues-bold-lead-ins
 worktree: .plan/work/T0021-fix-all-lint-markdown-issues-bold-lead-ins
-status: active
+status: completed
 started_at: "2026-11-12T10:49:26Z"
-ended_at: —
+ended_at: "2026-11-12T10:59:26Z"
 review: none
 preview: none
 protocol: adhoc
 usage:
-  worker: {turns: 2, duration_s: 777.0, input: 260, output: 56008, cache_read: 9662338, cache_write: 168992}
-work_duration: 415.2
+  worker: {turns: 4, duration_s: 1090.2, input: 328, output: 70352, cache_read: 13253344, cache_write: 223840}
+work_duration: 600.4
+completion-commit: d81c9987853456d7358f78215d35c216243de92b
 ---
 # T0021: Fix all lint-markdown issues, bold lead-ins, placeholder syntax, backslash paths, and stale references in the docs
 
@@ -84,4 +85,7 @@ Size estimate: 7 files, 150 lines
   - Files touched: 7.
   - Lines touched: 222.
   - Reopenings: 0.
+
+- [2026-11-12] **[Complete]**
+  Task completed successfully.
 
