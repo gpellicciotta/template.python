@@ -5,15 +5,16 @@ session: claude-20261112-ad105b
 needs: []
 branch: task/T0032-make-the-bootstrap-script-cli-follow-the-cli
 worktree: .plan/work/T0032-make-the-bootstrap-script-cli-follow-the-cli
-status: active
+status: completed
 started_at: "2026-11-12T10:32:27Z"
-ended_at: —
+ended_at: "2026-11-12T10:38:11Z"
 review: none
 preview: none
 protocol: adhoc
 usage:
-  worker: {turns: 2, duration_s: 559.0, input: 108, output: 37596, cache_read: 2888262, cache_write: 135304}
-work_duration: 289.7
+  worker: {turns: 4, duration_s: 614.4, input: 124, output: 39866, cache_read: 3596120, cache_write: 147462}
+work_duration: 343.9
+completion-commit: 5ba0cdc422b61c9df27e837bba8f9f2c8942a44f
 ---
 # T0032: Make the bootstrap script CLI follow the CLI guidelines: -v as --verbose, help --verbose, errors on stderr
 
@@ -59,4 +60,7 @@ Use the same copyright line as `myproject`, and remove the unused duplicate `get
 
 - [2026-11-12] **[Doc]**
   Updated docs/devops.md, README.md, and CHANGELOG.md with the bootstrap verbose, help, and stderr behavior.
+
+- [2026-11-12] **[Complete]**
+  Task completed successfully.
 
